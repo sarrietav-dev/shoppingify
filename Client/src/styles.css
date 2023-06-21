@@ -4,5 +4,10 @@
 @tailwind utilities;
 
 body {
-  @apply h-screen overflow-hidden;
+  @apply h-screen overflow-hidden font-quicksand;
+}
+
+html,
+body {
+  height: 100%;
 }
