@@ -2,3 +2,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply h-screen overflow-hidden;
+}
+
+.link-active {
+  @apply before:absolute before:inset-y-0 before:-left-1 before:inline-block before:h-full before:w-2.5 before:rounded-full before:bg-primary;
+}
