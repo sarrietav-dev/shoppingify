@@ -8,4 +8,10 @@ import { Component, Input } from '@angular/core';
 export class ShoppingListItemComponent {
   @Input() name!: string;
   @Input() amount!: number;
+
+  isEditing = false;
+
+  toggleEdit() {
+    this.isEditing = !this.isEditing;
+  }
 }
