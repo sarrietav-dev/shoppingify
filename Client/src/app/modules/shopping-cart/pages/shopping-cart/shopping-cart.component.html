@@ -1,4 +1,4 @@
-<div class="h-full bg-shopping-list px-4 py-10">
+<div class="relative flex h-full flex-col bg-shopping-list px-4 py-10">
   <app-create-item-banner></app-create-item-banner>
   <h1 class="my-10 text-2xl font-bold text-somewhat-black">Shopping list</h1>
   <section>
@@ -14,4 +14,19 @@
       ></app-shopping-list-item>
     </ul>
   </section>
+  <div class="absolute bottom-0 left-0 h-24 w-full bg-white px-6 py-4">
+    <form class="relative h-full w-full">
+      <input
+        type="text"
+        class="h-full w-full rounded-xl border-2 border-primary px-6 placeholder:text-sm placeholder:font-semibold placeholder:text-gray-300 focus:border-secondary focus:outline-none focus:ring-0"
+        placeholder="Enter a name"
+      />
+      <button
+        class="absolute right-0 h-full rounded-xl bg-primary px-6 py-2 font-semibold text-white"
+        type="submit"
+      >
+        Save
+      </button>
+    </form>
+  </div>
 </div>
