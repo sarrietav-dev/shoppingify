@@ -1,0 +1,35 @@
+<li class="flex items-center justify-between">
+  <span
+    class="overflow-hidden text-ellipsis whitespace-nowrap font-semibold"
+    [ngClass]="isEditing ? 'basis-1/5' : ''"
+    >{{ name }}</span
+  >
+  <button
+    (click)="toggleEdit()"
+    class="rounded-full border-2 border-primary px-5 py-1 text-sm font-semibold text-primary"
+    *ngIf="!isEditing; else editItem"
+  >
+    {{ amount }} pcs
+  </button>
+</li>
+
+<ng-template #editItem>
+  <div class="roundex-xl flex items-center gap-1 rounded-2xl bg-white">
+    <div
+      class="flex grow-0 items-center justify-center self-stretch rounded-xl bg-primary p-2"
+    >
+      <span class="material-symbols-outlined text-white">delete</span>
+    </div>
+    <div class="flex grow items-center gap-1 px-2 py-2">
+      <span class="material-symbols-outlined text-primary"> remove </span>
+      <button
+        (click)="toggleEdit()"
+        class="rounded-full border-2 border-primary bg-transparent px-5 py-1 text-sm font-semibold text-primary"
+      >
+        {{ amount }} pc
+      </button>
+
+      <span class="material-symbols-outlined text-primary"> add </span>
+    </div>
+  </div>
+</ng-template>
