@@ -1,20 +1,67 @@
-<div class="relative flex h-full flex-col bg-shopping-list px-4 py-10">
-  <app-create-item-banner></app-create-item-banner>
-  <h1 class="my-10 text-2xl font-bold text-somewhat-black">Shopping list</h1>
-  <section>
-    <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
-    <ul class="flex flex-col gap-8">
-      <app-shopping-list-item
-        name="Avocado"
-        [amount]="3"
-      ></app-shopping-list-item>
-      <app-shopping-list-item
-        name="Pre-cooked corn 450g"
-        [amount]="3"
-      ></app-shopping-list-item>
-    </ul>
-  </section>
-  <div class="absolute bottom-0 left-0 h-24 w-full bg-white px-6 py-4">
+<div class="relative flex h-screen flex-col bg-shopping-list pt-10">
+  <div class="flex flex-col overflow-hidden px-4">
+    <div>
+      <app-create-item-banner></app-create-item-banner>
+      <h1 class="my-10 text-2xl font-bold text-somewhat-black">
+        Shopping list
+      </h1>
+    </div>
+    <div class="overflow-y-scroll">
+      <section>
+        <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
+        <ul class="flex flex-col gap-8">
+          <app-shopping-list-item
+            name="Avocado"
+            [amount]="3"
+          ></app-shopping-list-item>
+          <app-shopping-list-item
+            name="Pre-cooked corn 450g"
+            [amount]="3"
+          ></app-shopping-list-item>
+        </ul>
+      </section>
+      <section>
+        <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
+        <ul class="flex flex-col gap-8">
+          <app-shopping-list-item
+            name="Avocado"
+            [amount]="3"
+          ></app-shopping-list-item>
+          <app-shopping-list-item
+            name="Pre-cooked corn 450g"
+            [amount]="3"
+          ></app-shopping-list-item>
+        </ul>
+      </section>
+      <section>
+        <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
+        <ul class="flex flex-col gap-8">
+          <app-shopping-list-item
+            name="Avocado"
+            [amount]="3"
+          ></app-shopping-list-item>
+          <app-shopping-list-item
+            name="Pre-cooked corn 450g"
+            [amount]="3"
+          ></app-shopping-list-item>
+        </ul>
+      </section>
+      <section>
+        <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
+        <ul class="flex flex-col gap-8">
+          <app-shopping-list-item
+            name="Avocado"
+            [amount]="3"
+          ></app-shopping-list-item>
+          <app-shopping-list-item
+            name="Pre-cooked corn 450g"
+            [amount]="3"
+          ></app-shopping-list-item>
+        </ul>
+      </section>
+    </div>
+  </div>
+  <div class="w-full basis-24 bg-white px-6 py-4">
     <form class="relative h-full w-full">
       <input
         type="text"
