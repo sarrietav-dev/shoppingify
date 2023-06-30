@@ -7,6 +7,7 @@ import { CoreModule } from './core/core.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ItemListModule } from './modules/item-list/item-list.module';
 import { ShoppingCartModule } from './modules/shopping-cart/shopping-cart.module';
+import { CreateItemFormModule } from './modules/create-item-form/create-item-form.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +17,8 @@ import { ShoppingCartModule } from './modules/shopping-cart/shopping-cart.module
     CoreModule,
     BrowserAnimationsModule,
     ItemListModule,
-    ShoppingCartModule
+    ShoppingCartModule,
+    CreateItemFormModule
   ],
   providers: [],
   bootstrap: [AppComponent],
