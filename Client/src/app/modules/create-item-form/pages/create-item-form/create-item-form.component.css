@@ -1,0 +1,12 @@
+input,
+textarea {
+  @apply rounded-lg border-2 border-gray-400 bg-transparent py-4 text-sm font-medium text-somewhat-black placeholder:text-gray-400 focus:border-primary focus:ring-0;
+}
+
+label {
+  @apply text-sm font-semibold text-somewhat-black;
+}
+
+li {
+  @apply cursor-pointer rounded-md px-4 py-2 font-medium hover:bg-gray-200;
+}
