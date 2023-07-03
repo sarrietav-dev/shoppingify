@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-item-form',
@@ -10,10 +10,13 @@ export class CreateItemFormComponent {
   constructor(private fb: FormBuilder) {}
 
   createItemForm = this.fb.group({
-    name: [''],
+    name: ['', Validators.required],
     note: [''],
-    image: [''],
-    category: [''],
+    image: [
+      '',
+      Validators.pattern('(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)'),
+    ],
+    category: ['', Validators.required],
   });
 
   onSubmit() {
