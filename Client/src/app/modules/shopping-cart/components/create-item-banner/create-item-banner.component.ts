@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-create-item-banner',
@@ -6,5 +6,9 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./create-item-banner.component.css'],
 })
 export class CreateItemBannerComponent {
-  @Input("click") onClick!: () => void;
+  @Output() click = new EventEmitter<void>();
+
+  onClick() {
+    this.click.emit();
+  }
 }

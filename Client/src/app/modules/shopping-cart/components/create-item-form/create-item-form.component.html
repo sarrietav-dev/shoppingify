@@ -54,7 +54,13 @@
     </div>
   </div>
   <div class="mt-auto flex justify-center gap-8">
-    <button class="rounded-md p-3 font-semibold">Cancel</button>
+    <button
+      class="rounded-md p-3 font-semibold"
+      type="button"
+      (click)="onCancel()"
+    >
+      Cancel
+    </button>
     <button
       class="rounded-md bg-primary px-5 py-2 font-medium text-white"
       type="submit"
@@ -63,4 +69,3 @@
     </button>
   </div>
 </form>
-

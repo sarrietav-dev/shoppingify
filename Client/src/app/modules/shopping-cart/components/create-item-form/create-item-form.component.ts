@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class CreateItemFormComponent {
   constructor(private fb: FormBuilder) {}
+
+  @Output() cancelForm = new EventEmitter<void>();
 
   createItemForm = this.fb.group({
     name: ['', Validators.required],
@@ -21,5 +23,9 @@ export class CreateItemFormComponent {
 
   onSubmit() {
     console.log(this.createItemForm.value);
+  }
+
+  onCancel() {
+    this.cancelForm.emit();
   }
 }

@@ -84,5 +84,7 @@
 </div>
 
 <ng-template #createForm>
-  <app-create-item-form></app-create-item-form>
+  <app-create-item-form
+    (cancelForm)="toggleCreateItemForm()"
+  ></app-create-item-form>
 </ng-template>
