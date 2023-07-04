@@ -5,6 +5,8 @@ import { CreateItemBannerComponent } from './components/create-item-banner/creat
 import { ShoppingListItemComponent } from './components/shopping-list-item/shopping-list-item.component';
 import { CreateItemFormComponent } from './components/create-item-form/create-item-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LayoutWithSaveComponent } from './layout/layout-with-save/layout-with-save.component';
+import { EditShoppingListComponent } from './components/edit-shopping-list/edit-shopping-list.component';
 
 @NgModule({
   exports: [ShoppingCartComponent],
@@ -13,6 +15,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CreateItemBannerComponent,
     ShoppingListItemComponent,
     CreateItemFormComponent,
+    LayoutWithSaveComponent,
+    EditShoppingListComponent,
   ],
   imports: [CommonModule, ReactiveFormsModule],
 })

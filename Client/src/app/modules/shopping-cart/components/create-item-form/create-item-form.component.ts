@@ -9,7 +9,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class CreateItemFormComponent {
   constructor(private fb: FormBuilder) {}
 
-  @Output() cancelForm = new EventEmitter<void>();
+  @Output() cancelForm = new EventEmitter<ShoppingCartState>();
 
   createItemForm = this.fb.group({
     name: ['', Validators.required],
@@ -26,6 +26,6 @@ export class CreateItemFormComponent {
   }
 
   onCancel() {
-    this.cancelForm.emit();
+    this.cancelForm.emit("editing");
   }
 }
