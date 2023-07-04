@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./shopping-cart.component.css']
 })
 export class ShoppingCartComponent {
+  isCreateItemFormVisible = false;
 
+  toggleCreateItemForm() {
+    this.isCreateItemFormVisible = !this.isCreateItemFormVisible;
+  }
 }

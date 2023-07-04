@@ -1,7 +1,12 @@
-<div class="relative flex h-screen flex-col bg-shopping-list pt-10">
+<div
+  *ngIf="!isCreateItemFormVisible; else createForm"
+  class="relative flex h-screen flex-col bg-shopping-list pt-10"
+>
   <div class="flex flex-col overflow-hidden px-4">
     <div>
-      <app-create-item-banner></app-create-item-banner>
+      <app-create-item-banner
+        (click)="toggleCreateItemForm()"
+      ></app-create-item-banner>
       <h1 class="my-10 text-2xl font-bold text-somewhat-black">
         Shopping list
       </h1>
@@ -77,3 +82,9 @@
     </form>
   </div>
 </div>
+
+<ng-template #createForm>
+  <app-create-item-form
+    (cancelForm)="toggleCreateItemForm()"
+  ></app-create-item-form>
+</ng-template>
