@@ -26,6 +26,6 @@ export class CreateItemFormComponent {
   }
 
   onCancel() {
-    this.cancelForm.emit("editing");
+    this.cancelForm.emit('editing');
   }
 }
