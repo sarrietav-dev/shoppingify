@@ -1,5 +1,9 @@
 <ng-container [ngSwitch]="state">
-  <ng-container *ngSwitchCase="'empty'"></ng-container>
+  <ng-container *ngSwitchCase="'empty'">
+    <app-layout-with-save (createClick)="changeState($event)">
+      <app-empty-list></app-empty-list>
+    </app-layout-with-save>
+  </ng-container>
   <ng-container *ngSwitchCase="'editing'">
     <app-layout-with-save (createClick)="changeState($event)">
       <app-edit-shopping-list></app-edit-shopping-list>

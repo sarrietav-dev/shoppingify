@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class ShoppingCartComponent {
   isCreateItemFormVisible = false;
-  state: ShoppingCartState = 'editing';
+  state: ShoppingCartState = 'empty';
 
   changeState(state: ShoppingCartState) {
     this.state = state;

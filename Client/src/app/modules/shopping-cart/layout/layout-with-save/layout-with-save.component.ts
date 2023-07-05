@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
           (click)="toggleCreateItemForm()"
         ></app-create-item-banner>
       </div>
-      <div class="overflow-hidden">
+      <div class="overflow-hidden grow">
         <ng-content></ng-content>
       </div>
       <div class="w-full flex-shrink-0 basis-24 bg-white px-6 py-4">
