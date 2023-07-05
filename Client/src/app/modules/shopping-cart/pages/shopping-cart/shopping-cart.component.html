@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="state">
+<div class="max-w-sm min-w-[300px] w-full" [ngSwitch]="state">
   <ng-container *ngSwitchCase="'empty'">
     <app-layout-with-save (createClick)="changeState($event)">
       <app-empty-list></app-empty-list>
@@ -17,4 +17,4 @@
   <ng-container *ngSwitchDefault>
     <ng-template #createForm> </ng-template>
   </ng-container>
-</ng-container>
+</div>
