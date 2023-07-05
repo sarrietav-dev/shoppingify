@@ -1,7 +1,7 @@
 <form
   [formGroup]="createItemForm"
   (ngSubmit)="onSubmit()"
-  class="flex h-full flex-col px-5 pb-10"
+  class="flex h-full w-full flex-col px-5 pb-10"
 >
   <h1 class="my-5 text-xl font-semibold text-somewhat-black">Add a new item</h1>
   <div class="space-y-6">
@@ -44,7 +44,7 @@
         required
       />
       <ul
-        class="mt-2 max-h-36 overflow-y-auto rounded-lg bg-white px-1 py-2 shadow"
+        class="sm mt-2 max-h-36 overflow-y-auto rounded-lg bg-white px-1 py-2 shadow"
       >
         <li>Fruits and Vegetables</li>
         <li>Meat and Fish</li>
