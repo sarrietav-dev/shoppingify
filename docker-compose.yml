@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  shoppingify:
+    image: shoppingify
+    build:
+      context: .
+      dockerfile: shoppingify/Dockerfile
+  db: 
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: shoppingify
+    ports:
+        - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+        - "5050:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+volumes:
+    pgadmin:
