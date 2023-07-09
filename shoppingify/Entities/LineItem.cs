@@ -2,14 +2,7 @@
 
 class LineItem
 {
-    private Guid _id;
-    private Product _product;
-    private int _quantity;
-    
-    public LineItem(Guid id, Product product, int quantity)
-    {
-        _id = id;
-        _product = product;
-        _quantity = quantity;
-    }
+    public Guid Id { get; private set; }
+    public Product Product { get; private set; } = null!;
+    public int Quantity { get; private set; }
 }

@@ -2,14 +2,8 @@
 
 class ShoppingCart
 {
-    private Guid _id;
-    private string _name;
-    private ICollection<LineItem> _lineItems;
-    
-    public ShoppingCart(Guid id, string name, ICollection<LineItem> lineItems)
-    {
-        _id = id;
-        _name = name;
-        _lineItems = lineItems;
-    }
+    public Guid Id { get; }
+
+    public string Name { get; private set; } = default!;
+    public ICollection<LineItem> LineItems { get; private set; } = new List<LineItem>();
 }

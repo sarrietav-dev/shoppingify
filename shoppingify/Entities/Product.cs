@@ -2,16 +2,9 @@
 
 class Product
 {
-    private Guid _id;
-    private string _name;
-    private string _note;
-    private string _category;
-
-    public Product(Guid id, string name, string note, string category)
-    {
-        _id = id;
-        _name = name;
-        _note = note;
-        _category = category;
-    }
+    public Guid Id { get; private set; }
+    public string Name { get; private set; }
+    public string Note { get; private set; }
+    public string Category { get; private set; }
+    public string Image { get; private set; }
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using shoppingify;
+using shoppingify.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ShoppingContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("ShoppingContext")));
+builder.Services.AddDbContext<ShoppingContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
@@ -19,6 +20,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGet("/", () => "Hello World!");
+
+app.MapGet("/db", async (ShoppingContext context) =>
+{
+    await context.Database.EnsureCreatedAsync();
+    return Results.Ok("Database created");
+});
 
 app.UseHttpsRedirection();
 
