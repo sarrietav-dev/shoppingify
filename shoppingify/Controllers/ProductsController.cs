@@ -4,9 +4,8 @@ using shoppingify.Services;
 
 namespace shoppingify.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-class ProductsController : ControllerBase
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;
 
@@ -28,7 +27,7 @@ class ProductsController : ControllerBase
     }
     
     [HttpPost(Name = "CreateProduct")]
-    public async Task<Product> Post([FromBody] Product product)
+    public async Task<Product> Post([FromBody] ProductInput product)
     {
         return await _productService.CreateProductAsync(product);
     }

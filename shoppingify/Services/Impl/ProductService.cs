@@ -1,10 +1,10 @@
-﻿using shoppingify;
-using shoppingify.Entities;
-using shoppingify.Services;
+﻿using shoppingify.Entities;
+
+namespace shoppingify.Services.Impl;
 
 class ProductService : IProductService
 {
-    private ShoppingContext _context;
+    private readonly ShoppingContext _context;
     
     public ProductService(ShoppingContext context)
     {
@@ -21,11 +21,18 @@ class ProductService : IProductService
         return await _context.Products.FindAsync(id) ?? throw new KeyNotFoundException();
     }
 
-    public async Task<Product> CreateProductAsync(Product product)
+    public async Task<Product> CreateProductAsync(ProductInput product)
     {
-        _context.Products.Add(product);
+        var newProduct = new Product
+        {
+            Name = product.Name,
+            Note = product.Note,
+            Category = product.Category,
+            Image = product.Image
+        };
+        _context.Products.Add(newProduct);
         await _context.SaveChangesAsync();
-        return product;
+        return newProduct;
     }
 
     public async Task DeleteProductAsync(int id)
