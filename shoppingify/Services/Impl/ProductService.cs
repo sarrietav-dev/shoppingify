@@ -16,9 +16,9 @@ class ProductService : IProductService
         return _context.Products;
     }
 
-    public async Task<Product> GetProductByIdAsync(int id)
+    public async Task<Product> GetProductByIdAsync(string id)
     {
-        return await _context.Products.FindAsync(id) ?? throw new KeyNotFoundException();
+        return await _context.Products.FindAsync(Guid.Parse(id)) ?? throw new KeyNotFoundException();
     }
 
     public async Task<Product> CreateProductAsync(ProductInput product)

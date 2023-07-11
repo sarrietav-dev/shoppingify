@@ -5,7 +5,7 @@ namespace shoppingify.Services;
 public interface IProductService
 {
     IEnumerable<Product> GetProductsAsync();
-    Task<Product> GetProductByIdAsync(int id);
+    Task<Product> GetProductByIdAsync(string id);
     Task<Product> CreateProductAsync(ProductInput product);
     Task DeleteProductAsync(int id);
 }
