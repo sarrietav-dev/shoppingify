@@ -1,8 +1,13 @@
 ﻿namespace shoppingify.Entities;
 
-class LineItem
+public class LineItem
 {
     public Guid Id { get; private set; }
-    public Product Product { get; private set; } = null!;
-    public int Quantity { get; private set; }
+    public Product Product { get; init; } = null!;
+    public int Quantity { get; private set; } = 1;
+    
+    public void IncreaseQuantity()
+    {
+        Quantity++;
+    }
 }
