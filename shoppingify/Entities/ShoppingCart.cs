@@ -9,11 +9,12 @@ public class ShoppingCart
 
     public ICollection<LineItem> LineItems
     {
-        get => _lineItems;
+        get => _lineItems.ToList();
         private set => _lineItems = value;
     }
     
     public int CartCount => LineItems.Count;
+    public int ItemCount => LineItems.Sum(i => i.Quantity);
 
     public void AddItem(Product item)
     {
