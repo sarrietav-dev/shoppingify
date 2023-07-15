@@ -40,4 +40,9 @@ public class LineItem
     {
         return HashCode.Combine(Id);
     }
+
+    public void Uncheck()
+    {
+        IsChecked = false;
+    }
 }

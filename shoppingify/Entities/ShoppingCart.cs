@@ -13,7 +13,7 @@ public class ShoppingCart
     public int ItemCount => LineItems.Sum(i => i.Quantity);
     public int CheckedItems => LineItems.Count(i => i.IsChecked);
 
-    public void AddItem(Product item)
+    public void AddItem(Product item, int itemCount = 1)
     {
         var lineItem = LineItems.FirstOrDefault(i => Equals(i.Product, item));
         
@@ -26,6 +26,7 @@ public class ShoppingCart
             _lineItems.Add(new LineItem
             {
                 Product = item,
+                Quantity = itemCount
             });
         }
     }
@@ -78,5 +79,12 @@ public class ShoppingCart
         var lineItem = _lineItems.FirstOrDefault(i => Equals(i.Product, item));
 
         lineItem?.Check();
+    }
+    
+    public void UncheckItem(Product item)
+    {
+        var lineItem = _lineItems.FirstOrDefault(i => Equals(i.Product, item));
+
+        lineItem?.Uncheck();
     }
 }

@@ -3,7 +3,7 @@ using shoppingify.Entities;
 
 namespace shoppingify;
 
-internal class ShoppingContext : DbContext
+public class ShoppingContext : DbContext
 {
     public ShoppingContext(DbContextOptions<ShoppingContext> options) : base(options)
     {
