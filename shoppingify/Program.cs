@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using shoppingify;
+using shoppingify.Repositories;
+using shoppingify.Repositories.Impl;
 using shoppingify.Services;
 using shoppingify.Services.Impl;
 
@@ -13,6 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ShoppingContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 
 var app = builder.Build();
 
