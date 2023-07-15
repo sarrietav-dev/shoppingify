@@ -14,51 +14,51 @@ public class ShoppingCartService : IShoppingCartService
         _productRepository = productRepository;
     }
     
-    public void AddItemToCart(string cartId, string productId)
+    public async Task AddItemToCart(string cartId, string productId)
     {
         var cart = _cartRepository.GetCart(cartId);
-        var product = _productRepository.GetProductById(productId);
+        var product = await _productRepository.GetProductById(productId);
         
         cart.AddItem(product);
         
         _cartRepository.SaveCart();
     }
 
-    public void RemoveItemFromCart(string cartId, string productId)
+    public async Task RemoveItemFromCart(string cartId, string productId)
     {
         var cart = _cartRepository.GetCart(cartId);
-        var product = _productRepository.GetProductById(productId);
+        var product = await _productRepository.GetProductById(productId);
         
         cart.RemoveItem(product);
         
         _cartRepository.SaveCart();
     }
 
-    public void EditItemsCount(string cartId, IEnumerable<SetItemCountInput> items)
+    public async Task EditItemsCount(string cartId, IEnumerable<SetItemCountInput> items)
     {
         var cart = _cartRepository.GetCart(cartId);
         foreach (var item in items)
         {
-            var product = _productRepository.GetProductById(item.ProductId);
+            var product = await _productRepository.GetProductById(item.ProductId);
             cart.ChangeItemQuantity(product, item.Count);
         }
         _cartRepository.SaveCart();
     }
 
-    public void CheckItem(string cartId, string productId)
+    public async Task CheckItem(string cartId, string productId)
     {
         var cart = _cartRepository.GetCart(cartId);
-        var product = _productRepository.GetProductById(productId);
+        var product = await _productRepository.GetProductById(productId);
         
         cart.CheckItem(product);
         
         _cartRepository.SaveCart();
     }
 
-    public void UncheckItem(string cartId, string productId)
+    public async Task UncheckItem(string cartId, string productId)
     {
         var cart = _cartRepository.GetCart(cartId);
-        var product = _productRepository.GetProductById(productId);
+        var product = await _productRepository.GetProductById(productId);
         
         cart.UncheckItem(product);
         

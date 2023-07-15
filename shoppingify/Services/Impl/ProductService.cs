@@ -1,24 +1,27 @@
 ﻿using shoppingify.Entities;
+using shoppingify.Repositories;
 
 namespace shoppingify.Services.Impl;
 
 class ProductService : IProductService
 {
     private readonly ShoppingContext _context;
+    private readonly IProductRepository _repository;
     
-    public ProductService(ShoppingContext context)
+    public ProductService(ShoppingContext context, IProductRepository repository)
     {
         _context = context;
+        _repository = repository;
     }
     
     public IEnumerable<Product> GetProductsAsync()
     {
-        return _context.Products;
+        return _repository.GetAllProducts();
     }
 
     public async Task<Product> GetProductByIdAsync(string id)
     {
-        return await _context.Products.FindAsync(Guid.Parse(id)) ?? throw new KeyNotFoundException();
+        return await _repository.GetProductById(id);
     }
 
     public async Task<Product> CreateProductAsync(ProductInput product)
@@ -30,15 +33,12 @@ class ProductService : IProductService
             Category = product.Category,
             Image = product.Image
         };
-        _context.Products.Add(newProduct);
-        await _context.SaveChangesAsync();
+        await _repository.CreateProductAsync(newProduct);
         return newProduct;
     }
 
     public async Task DeleteProductAsync(int id)
     {
-        _context
-            .Products.Remove(await _context.Products.FindAsync(id) ?? throw new KeyNotFoundException());
-        await _context.SaveChangesAsync();
+        await _repository.DeleteProduct(id);
     }
 }
