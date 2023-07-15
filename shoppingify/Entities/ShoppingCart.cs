@@ -29,23 +29,19 @@ public class ShoppingCart
             });
         }
     }
-
-    public void IncreaseQuantity(Product item, int quantity = 1)
-    {
-        var lineItem = _lineItems.FirstOrDefault(i => Equals(i.Product, item));
-
-        lineItem?.IncreaseQuantity(quantity);
-    }
     
-    public void DecreaseQuantity(Product item, int quantity = 1)
+    public void ChangeItemQuantity(Product item, int quantity)
     {
+        if (quantity < 1)
+        {
+            throw new ArgumentException("Quantity must be greater than 0");
+        }
+        
         var lineItem = _lineItems.FirstOrDefault(i => Equals(i.Product, item));
 
-        lineItem?.DecreaseQuantity(quantity);
-        
-        if (lineItem?.Quantity == 0)
+        if (lineItem != null)
         {
-            RemoveItem(item);
+            lineItem.Quantity = quantity;
         }
     }
 

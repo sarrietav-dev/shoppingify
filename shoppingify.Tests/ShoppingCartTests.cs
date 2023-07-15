@@ -50,7 +50,7 @@ public class ShoppingCartTests
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(100)]
-    public void IncreaseItemCount(int increaseValue)
+    public void ChangeItemQuantity(int increaseValue)
     {
         // Arrange
         var cart = new ShoppingCart();
@@ -64,7 +64,7 @@ public class ShoppingCartTests
 
         // Act
         cart.AddItem(item);
-        cart.IncreaseQuantity(item, increaseValue);
+        cart.ChangeItemQuantity(item, increaseValue);
 
         // Assert
         Assert.Equal(1, cart.CartCount);
@@ -96,7 +96,7 @@ public class ShoppingCartTests
         cart.AddItem(item);
         cart.AddItem(item2);
 
-        cart.DecreaseQuantity(item);
+        cart.RemoveItem(item);
 
         // Assert
         Assert.Equal(1, cart.CartCount);
