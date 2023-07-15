@@ -4,9 +4,9 @@ public class Product
 {
     private Guid Id { get; } = Guid.NewGuid();
     public required string Name { get; init; }
-    public required string Note { get; init; }
+    public string? Note { get; init; }
     public required string Category { get; init; }
-    public required string Image { get; init; }
+    public string? Image { get; init; }
 
     public override bool Equals(object? obj)
     {
