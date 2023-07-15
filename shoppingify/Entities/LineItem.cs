@@ -5,6 +5,7 @@ public class LineItem
     private Guid Id { get; } = Guid.NewGuid();
     public Product Product { get; init; } = null!;
     public int Quantity { get; private set; } = 1;
+    public bool IsChecked { get; private set; } = false;
     
     public void IncreaseQuantity(int quantity = 1)
     {
@@ -20,6 +21,11 @@ public class LineItem
     {
         return obj is LineItem item &&
                EqualityComparer<Guid>.Default.Equals(Id, item.Id);
+    }
+
+    public void Check()
+    {
+        IsChecked = true;
     }
 
     public override int GetHashCode()

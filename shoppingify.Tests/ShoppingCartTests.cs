@@ -124,4 +124,22 @@ public class ShoppingCartTests
         Assert.Equal(0, cart.CartCount);
         Assert.Equal(0, cart.ItemCount);
     }
+
+    [Fact]
+    public void CheckItem()
+    {
+        var cart = new ShoppingCart();
+        var item = new Product
+        {
+            Name = "Test",
+            Note = "",
+            Category = "null",
+            Image = "null"
+        };
+        
+        cart.AddItem(item);
+        cart.CheckItem(item);
+        
+        Assert.Equal(1, cart.CheckedItems);
+    }
 }

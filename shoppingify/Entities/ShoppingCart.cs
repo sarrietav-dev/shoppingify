@@ -2,19 +2,16 @@
 
 public class ShoppingCart
 {
-    private ICollection<LineItem> _lineItems = new List<LineItem>();
+    private readonly ICollection<LineItem> _lineItems = new List<LineItem>();
     private Guid Id { get; } = Guid.NewGuid();
 
     public string Name { get; private set; } = default!;
 
-    public ICollection<LineItem> LineItems
-    {
-        get => _lineItems.ToList();
-        private set => _lineItems = value;
-    }
-    
+    public ICollection<LineItem> LineItems => _lineItems.ToList();
+
     public int CartCount => LineItems.Count;
     public int ItemCount => LineItems.Sum(i => i.Quantity);
+    public int CheckedItems => LineItems.Count(i => i.IsChecked);
 
     public void AddItem(Product item)
     {
@@ -78,5 +75,12 @@ public class ShoppingCart
         {
             _lineItems.Remove(lineItem);
         }
+    }
+
+    public void CheckItem(Product item)
+    {
+        var lineItem = _lineItems.FirstOrDefault(i => Equals(i.Product, item));
+
+        lineItem?.Check();
     }
 }
