@@ -62,5 +62,5 @@ public class ShoppingCartController : ControllerBase
 
 public record EditItemsCountInput(string CartId, IEnumerable<SetItemCountInput> Items);
 
-public abstract record AddItemToCartInput(string CartId, string ProductId);
-public abstract record RemoveItemFromCartInput(string CartId, string ProductId);
+public record AddItemToCartInput(string CartId, string ProductId);
+public record RemoveItemFromCartInput(string CartId, string ProductId);
