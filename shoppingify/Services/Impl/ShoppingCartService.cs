@@ -65,7 +65,7 @@ public class ShoppingCartService : IShoppingCartService
         _cartRepository.SaveCart();
     }
 
-    public Task<SaveCartOutput> SaveCart(SaveCartInput cart)
+    public async Task<SaveCartOutput> SaveCart(SaveCartInput cart)
     {
         var newCart = new ShoppingCart
         {
@@ -79,8 +79,8 @@ public class ShoppingCartService : IShoppingCartService
             newCart.AddItem(product, item.Count);
         }
 
-        var createdCart = _cartRepository.CreateCart(newCart);
-        return Task.FromResult(SaveCartOutput.FromCart(createdCart));
+        var createdCart = await _cartRepository.CreateCart(newCart);
+        return SaveCartOutput.FromCart(createdCart);
     }
 
     public Task<ShoppingCart> GetCart(string cartId)

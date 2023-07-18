@@ -28,6 +28,9 @@ namespace shoppingify.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("IsChecked")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 

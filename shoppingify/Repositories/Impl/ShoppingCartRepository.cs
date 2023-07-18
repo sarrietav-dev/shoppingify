@@ -14,8 +14,11 @@ public class ShoppingCartRepository : IShoppingCartRepository
 
     public ShoppingCart GetCart(string id)
     {
-        var foundCart = _context.ShoppingCarts.Include(cart => cart.LineItems).ToList().Find(cart => cart.Id.ToString() == id) ?? throw new KeyNotFoundException();
-        return foundCart;
+        // Find the cart with the given id and populate its line items
+        return _context.ShoppingCarts
+            .Include(sc => sc.LineItems)
+            .ThenInclude(li => li.Product).ToList()
+            .FirstOrDefault(sc => sc.Id.ToString() == id) ?? throw new KeyNotFoundException();
     }
 
     public void SaveCart()
@@ -23,10 +26,10 @@ public class ShoppingCartRepository : IShoppingCartRepository
         _context.SaveChangesAsync();
     }
 
-    public ShoppingCart CreateCart(ShoppingCart cart)
+    public async Task<ShoppingCart> CreateCart(ShoppingCart cart)
     {
         var newCart = _context.ShoppingCarts.Add(cart);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         return newCart.Entity;
     }
 }

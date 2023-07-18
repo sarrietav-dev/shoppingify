@@ -34,6 +34,7 @@ public class ShoppingContext : DbContext
         {
             lineItem.HasKey("Id");
             lineItem.Property(li => li.Quantity).IsRequired();
+            lineItem.Property(li => li.IsChecked).HasDefaultValue(false);
             lineItem.HasOne<Product>(li => li.Product).WithMany().IsRequired();
         });
     }
