@@ -9,9 +9,16 @@ public interface IShoppingCartService
     public Task EditItemsCount(string cartId, IEnumerable<SetItemCountInput> items);
     public Task CheckItem(string cartId, string productId);
     public Task UncheckItem(string cartId, string productId);
-    public void SaveCart(SaveCartInput cart);
+    public Task<SaveCartOutput> SaveCart(SaveCartInput cart);
     public Task<ShoppingCart> GetCart(string cartId);
 }
 
 public record SetItemCountInput(string ProductId, int Count);
 public record SaveCartInput(string CartName, IEnumerable<SetItemCountInput> Items);
+public record SaveCartOutput(string CartId)
+{
+    public static SaveCartOutput FromCart(ShoppingCart createdCart)
+    {
+        return new SaveCartOutput(createdCart.Id.ToString());
+    }
+}

@@ -52,9 +52,11 @@ public class ShoppingCartController : ControllerBase
     }
     
     [HttpPost("save", Name = "SaveCart")]
-    public void SaveCart([FromBody] SaveCartInput cart)
+    public async Task<ActionResult<SaveCartOutput>> SaveCart([FromBody] SaveCartInput cart)
     {
-        _shoppingCartService.SaveCart(cart);
+        var newCart = await _shoppingCartService.SaveCart(cart);
+        return Created(newCart.CartId, newCart);
+
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using shoppingify.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using shoppingify.Entities;
 
 namespace shoppingify.Repositories.Impl;
 
@@ -13,7 +14,8 @@ public class ShoppingCartRepository : IShoppingCartRepository
 
     public ShoppingCart GetCart(string id)
     {
-        return _context.ShoppingCarts.Find(Guid.Parse(id)) ?? throw new KeyNotFoundException();
+        var foundCart = _context.ShoppingCarts.Include(cart => cart.LineItems).ToList().Find(cart => cart.Id.ToString() == id) ?? throw new KeyNotFoundException();
+        return foundCart;
     }
 
     public void SaveCart()
@@ -21,9 +23,10 @@ public class ShoppingCartRepository : IShoppingCartRepository
         _context.SaveChangesAsync();
     }
 
-    public void CreateCart(ShoppingCart cart)
+    public ShoppingCart CreateCart(ShoppingCart cart)
     {
-        _context.ShoppingCarts.Add(cart);
+        var newCart = _context.ShoppingCarts.Add(cart);
         _context.SaveChangesAsync();
+        return newCart.Entity;
     }
 }

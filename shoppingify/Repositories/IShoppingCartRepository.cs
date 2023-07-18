@@ -6,5 +6,5 @@ public interface IShoppingCartRepository
 {
     public ShoppingCart GetCart(string id);
     public void SaveCart();
-    public void CreateCart(ShoppingCart cart);
+    public ShoppingCart CreateCart(ShoppingCart cart);
 }
