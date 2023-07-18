@@ -29,14 +29,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/", () => "Hello World!");
-
-app.MapGet("/db", async (ShoppingContext context) =>
-{
-    await context.Database.EnsureCreatedAsync();
-    return Results.Ok("Database created");
-});
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
