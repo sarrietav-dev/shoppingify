@@ -9,7 +9,7 @@ public class ShoppingCartController : ControllerBase
 {
     private readonly IShoppingCartService _shoppingCartService;
 
-    protected ShoppingCartController(IShoppingCartService shoppingCartService)
+    public ShoppingCartController(IShoppingCartService shoppingCartService)
     {
         _shoppingCartService = shoppingCartService;
     }

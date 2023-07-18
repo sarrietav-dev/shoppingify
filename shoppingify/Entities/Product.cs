@@ -2,7 +2,7 @@
 
 public class Product
 {
-    internal Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; } = Guid.NewGuid();
     public required string Name { get; init; }
     public string? Note { get; init; }
     public required string Category { get; init; }

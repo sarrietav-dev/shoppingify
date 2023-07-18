@@ -3,9 +3,9 @@
 public class ShoppingCart
 {
     private readonly ICollection<LineItem> _lineItems = new List<LineItem>();
-    private Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; } = Guid.NewGuid();
 
-    public string Name { get; private set; } = default!;
+    public string Name { get; init; } = default!;
 
     public ICollection<LineItem> LineItems => _lineItems.ToList();
 

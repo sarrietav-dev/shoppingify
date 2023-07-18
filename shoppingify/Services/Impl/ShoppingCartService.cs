@@ -67,7 +67,10 @@ public class ShoppingCartService : IShoppingCartService
 
     public void SaveCart(SaveCartInput cart)
     {
-        var newCart = new ShoppingCart();
+        var newCart = new ShoppingCart
+        {
+            Name = cart.CartName
+        };
         var products = _productRepository.GetProductsById(cart.Items.Select(i => i.ProductId)).ToList();
         
         foreach (var item in cart.Items)
