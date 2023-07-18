@@ -81,4 +81,9 @@ public class ShoppingCartService : IShoppingCartService
 
         _cartRepository.CreateCart(newCart);
     }
+
+    public Task<ShoppingCart> GetCart(string cartId)
+    {
+        return Task.FromResult(_cartRepository.GetCart(cartId));
+    }
 }

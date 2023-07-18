@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using shoppingify.Entities;
 using shoppingify.Services;
 
 namespace shoppingify.Controllers;
@@ -12,6 +13,12 @@ public class ShoppingCartController : ControllerBase
     public ShoppingCartController(IShoppingCartService shoppingCartService)
     {
         _shoppingCartService = shoppingCartService;
+    }
+    
+    [HttpGet("{id}", Name = "GetCart")]
+    public Task<ShoppingCart> GetCart(string id)
+    {
+        return _shoppingCartService.GetCart(id);
     }
     
     [HttpPatch(Name = "AddItemToCart")]

@@ -1,4 +1,6 @@
-﻿namespace shoppingify.Services;
+﻿using shoppingify.Entities;
+
+namespace shoppingify.Services;
 
 public interface IShoppingCartService
 {
@@ -8,6 +10,7 @@ public interface IShoppingCartService
     public Task CheckItem(string cartId, string productId);
     public Task UncheckItem(string cartId, string productId);
     public void SaveCart(SaveCartInput cart);
+    public Task<ShoppingCart> GetCart(string cartId);
 }
 
 public record SetItemCountInput(string ProductId, int Count);
