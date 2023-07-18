@@ -21,9 +21,9 @@ public class ShoppingCartRepository : IShoppingCartRepository
             .FirstOrDefault(sc => sc.Id.ToString() == id) ?? throw new KeyNotFoundException();
     }
 
-    public void SaveCart()
+    public async Task SaveCart()
     {
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 
     public async Task<ShoppingCart> CreateCart(ShoppingCart cart)

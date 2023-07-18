@@ -21,7 +21,7 @@ public class ShoppingCartService : IShoppingCartService
         
         cart.AddItem(product);
         
-        _cartRepository.SaveCart();
+        await _cartRepository.SaveCart();
     }
 
     public async Task RemoveItemFromCart(string cartId, string productId)

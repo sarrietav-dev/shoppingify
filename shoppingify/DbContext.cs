@@ -18,6 +18,7 @@ public class ShoppingContext : DbContext
         modelBuilder.Entity<ShoppingCart>(shoppingCart =>
         {
             shoppingCart.HasKey("Id");
+            shoppingCart.Property("Id").ValueGeneratedNever();
             shoppingCart.Property(sc => sc.Name).IsRequired();
             shoppingCart.HasMany(sc => sc.LineItems).WithOne().IsRequired();
         });
@@ -25,6 +26,7 @@ public class ShoppingContext : DbContext
         modelBuilder.Entity<Product>(product =>
         {
             product.HasKey("Id");
+            product.Property("Id").ValueGeneratedNever();
             product.Property(p => p.Name).IsRequired();
             product.Property(p => p.Note).IsRequired();
             product.Property(p => p.Image).IsRequired();
@@ -33,6 +35,7 @@ public class ShoppingContext : DbContext
         modelBuilder.Entity<LineItem>(lineItem =>
         {
             lineItem.HasKey("Id");
+            lineItem.Property("Id").ValueGeneratedNever();
             lineItem.Property(li => li.Quantity).IsRequired();
             lineItem.Property(li => li.IsChecked).HasDefaultValue(false);
             lineItem.HasOne<Product>(li => li.Product).WithMany().IsRequired();
