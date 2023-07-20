@@ -1,10 +1,21 @@
 ﻿namespace shoppingify.Entities;
 
-class Product
+public class Product
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Note { get; private set; }
-    public string Category { get; private set; }
-    public string Image { get; private set; }
+    public Guid Id { get; } = Guid.NewGuid();
+    public required string Name { get; init; }
+    public string? Note { get; init; }
+    public required string Category { get; init; }
+    public string? Image { get; init; }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Product product &&
+               EqualityComparer<Guid>.Default.Equals(Id, product.Id);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id);
+    }
 }

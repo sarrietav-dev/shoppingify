@@ -3,21 +3,18 @@ using shoppingify.Entities;
 
 namespace shoppingify;
 
-internal class ShoppingContext : DbContext
+public class ShoppingContext : DbContext
 {
-    public ShoppingContext(DbContextOptions<ShoppingContext> options) : base(options)
-    {
-    }
-    
-    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
-    public DbSet<Product> Products { get; set; }
-    public DbSet<LineItem> LineItems { get; set; }
+    public DbSet<ShoppingCart>? ShoppingCarts { get; set; }
+    public DbSet<Product>? Products { get; set; }
+    public DbSet<LineItem>? LineItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ShoppingCart>(shoppingCart =>
         {
             shoppingCart.HasKey("Id");
+            shoppingCart.Property("Id").ValueGeneratedNever();
             shoppingCart.Property(sc => sc.Name).IsRequired();
             shoppingCart.HasMany(sc => sc.LineItems).WithOne().IsRequired();
         });
@@ -25,6 +22,7 @@ internal class ShoppingContext : DbContext
         modelBuilder.Entity<Product>(product =>
         {
             product.HasKey("Id");
+            product.Property("Id").ValueGeneratedNever();
             product.Property(p => p.Name).IsRequired();
             product.Property(p => p.Note).IsRequired();
             product.Property(p => p.Image).IsRequired();
@@ -33,8 +31,14 @@ internal class ShoppingContext : DbContext
         modelBuilder.Entity<LineItem>(lineItem =>
         {
             lineItem.HasKey("Id");
+            lineItem.Property("Id").ValueGeneratedNever();
             lineItem.Property(li => li.Quantity).IsRequired();
+            lineItem.Property(li => li.IsChecked).HasDefaultValue(false);
             lineItem.HasOne<Product>(li => li.Product).WithMany().IsRequired();
         });
+    }
+
+    public ShoppingContext(DbContextOptions<ShoppingContext> options) : base(options)
+    {
     }
 }

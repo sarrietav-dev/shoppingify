@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using shoppingify;
-using shoppingify.Entities;
+using shoppingify.Repositories;
+using shoppingify.Repositories.Impl;
+using shoppingify.Services;
+using shoppingify.Services.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ShoppingContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddDbContext<ShoppingContext>(options => options.UseInMemoryDatabase("Shoppingify"));
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 
 var app = builder.Build();
 
@@ -20,14 +28,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.MapGet("/", () => "Hello World!");
-
-app.MapGet("/db", async (ShoppingContext context) =>
-{
-    await context.Database.EnsureCreatedAsync();
-    return Results.Ok("Database created");
-});
 
 app.UseHttpsRedirection();
 
