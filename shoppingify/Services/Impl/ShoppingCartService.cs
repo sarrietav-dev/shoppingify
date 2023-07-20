@@ -28,10 +28,10 @@ public class ShoppingCartService : IShoppingCartService
     {
         var cart = _cartRepository.GetCart(cartId);
         var product = await _productRepository.GetProductById(productId);
-        
+            
         cart.RemoveItem(product);
-        
-        _cartRepository.SaveCart();
+            
+        await _cartRepository.SaveCart();
     }
 
     public async Task EditItemsCount(string cartId, IEnumerable<SetItemCountInput> items)
@@ -42,7 +42,7 @@ public class ShoppingCartService : IShoppingCartService
             var product = await _productRepository.GetProductById(item.ProductId);
             cart.ChangeItemQuantity(product, item.Count);
         }
-        _cartRepository.SaveCart();
+        await _cartRepository.SaveCart();
     }
 
     public async Task CheckItem(string cartId, string productId)
@@ -52,7 +52,7 @@ public class ShoppingCartService : IShoppingCartService
         
         cart.CheckItem(product);
         
-        _cartRepository.SaveCart();
+        await _cartRepository.SaveCart();
     }
 
     public async Task UncheckItem(string cartId, string productId)
@@ -62,7 +62,7 @@ public class ShoppingCartService : IShoppingCartService
         
         cart.UncheckItem(product);
         
-        _cartRepository.SaveCart();
+        await _cartRepository.SaveCart();
     }
 
     public async Task<SaveCartOutput> SaveCart(SaveCartInput cart)

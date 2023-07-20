@@ -5,13 +5,9 @@ namespace shoppingify;
 
 public class ShoppingContext : DbContext
 {
-    public ShoppingContext(DbContextOptions<ShoppingContext> options) : base(options)
-    {
-    }
-    
-    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
-    public DbSet<Product> Products { get; set; }
-    public DbSet<LineItem> LineItems { get; set; }
+    public DbSet<ShoppingCart>? ShoppingCarts { get; set; }
+    public DbSet<Product>? Products { get; set; }
+    public DbSet<LineItem>? LineItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,5 +36,9 @@ public class ShoppingContext : DbContext
             lineItem.Property(li => li.IsChecked).HasDefaultValue(false);
             lineItem.HasOne<Product>(li => li.Product).WithMany().IsRequired();
         });
+    }
+
+    public ShoppingContext(DbContextOptions<ShoppingContext> options) : base(options)
+    {
     }
 }
