@@ -41,4 +41,9 @@ class ProductService : IProductService
     {
         await _repository.DeleteProduct(id);
     }
+
+    public IEnumerable<string> GetCategories()
+    {
+        return _repository.GetCategories();
+    }
 }

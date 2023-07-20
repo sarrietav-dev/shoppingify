@@ -31,4 +31,10 @@ public class ProductsController : ControllerBase
     {
         return await _productService.CreateProductAsync(product);
     }
+
+    [HttpGet("categories", Name = "GetCategories")]
+    public ActionResult<IEnumerable<string>> GetCategories()
+    {
+        return Ok(_productService.GetCategories());
+    }
 }

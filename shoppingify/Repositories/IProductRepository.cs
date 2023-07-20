@@ -9,4 +9,5 @@ public interface IProductRepository
     public IEnumerable<Product> GetAllProducts();
     public Task CreateProductAsync(Product newProduct);
     public Task DeleteProduct(int id);
+    IEnumerable<string> GetCategories();
 }

@@ -39,4 +39,9 @@ public class ProductRepository : IProductRepository
         _context.Products.Remove(product);
         await _context.SaveChangesAsync();
     }
+
+    public IEnumerable<string> GetCategories()
+    {
+        return _context.Products?.Select(p => p.Category).Distinct().ToList() ?? new List<string>();
+    }
 }
