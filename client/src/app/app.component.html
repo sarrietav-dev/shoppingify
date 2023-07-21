@@ -1,6 +1,11 @@
 <div class="flex h-full">
   <app-navbar></app-navbar>
-  <main class="grow overflow-y-auto bg-slate-100">
-    <app-shopping-cart></app-shopping-cart>
-  </main>
+  <div class="relative grow">
+    <main class="grow overflow-y-auto bg-slate-100">
+      <item-dashboard></item-dashboard>
+    </main>
+    <aside class="absolute top-0 left-full hidden">
+      <app-shopping-cart></app-shopping-cart>
+    </aside>
+  </div>
 </div>
