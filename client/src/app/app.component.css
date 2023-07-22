@@ -1,0 +1,7 @@
+.cart-shown {
+  @apply right-0 block;
+}
+
+.cart-hidden {
+  @apply left-full hidden;
+}

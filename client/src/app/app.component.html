@@ -1,10 +1,16 @@
-<div class="flex h-full">
-  <app-navbar></app-navbar>
-  <div class="relative grow">
-    <main class="grow overflow-y-auto bg-slate-100">
+<div class="flex h-full overflow-x-hidden">
+  <app-navbar (cartClicked)="handleNavbarCartClick()"></app-navbar>
+  <div
+    [ngClass]="cartOpen ? 'overflow-hidden' : 'overflow-y-auto'"
+    class="relative grow overflow-x-hidden"
+  >
+    <main class="grow bg-slate-100">
       <item-dashboard></item-dashboard>
     </main>
-    <aside class="absolute top-0 left-full hidden">
+    <aside
+      class="fixed top-0"
+      [ngClass]="cartOpen ? 'cart-shown' : 'cart-hidden'"
+    >
       <app-shopping-cart></app-shopping-cart>
     </aside>
   </div>
