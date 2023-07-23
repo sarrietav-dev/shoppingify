@@ -7,7 +7,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 })
 export class AppComponent {
   title = 'client';
-  cartOpen = false;
+  cartOpen: boolean | undefined = undefined;
   scrollOffset = 0;
 
   get cartTopPosition() {
@@ -20,6 +20,6 @@ export class AppComponent {
   }
 
   handleNavbarCartClick() {
-    this.cartOpen = !this.cartOpen;
+    this.cartOpen = !this.cartOpen ?? true;
   }
 }

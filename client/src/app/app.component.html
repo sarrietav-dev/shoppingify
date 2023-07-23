@@ -11,7 +11,7 @@
     <aside
       class="absolute left-full w-full top-0"
       [style.top]="cartTopPosition"
-      [ngClass]="cartOpen ? 'cart-shown' : 'cart-hidden'"
+      [ngClass]="cartOpen === undefined ? '' : cartOpen ? 'cart-shown' : 'cart-hidden'"
     >
       <app-shopping-cart></app-shopping-cart>
     </aside>
