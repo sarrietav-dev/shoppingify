@@ -19,7 +19,7 @@ export class ProductsService {
     return this.http.get<Product>(`${this.baseUrl}/api/products/${id}`);
   }
 
-  createProduct(product: Product) {
+  createProduct(product: Omit<Product, 'id'>) {
     return this.http.post<Product>(`${this.baseUrl}/api/products`, product);
   }
 

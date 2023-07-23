@@ -3,5 +3,5 @@ export type Product = {
   name: string;
   category: string;
   note?: string;
-  link?: string;
+  image?: string;
 };
