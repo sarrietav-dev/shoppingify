@@ -3,15 +3,12 @@
   <div
     [ngClass]="cartOpen ? 'overflow-hidden' : 'overflow-y-auto'"
     class="relative grow overflow-x-hidden"
-    [ngSwitch]="cartOpen"
   >
-    <!-- TODO: Look for a way for the cart sidebar to appear from the right side. It cannot take the space of the navbar  -->
-    <main *ngSwitchCase="false" class="grow bg-slate-100">
+    <main class="grow bg-slate-100">
       <item-dashboard></item-dashboard>
     </main>
     <aside
-      *ngSwitchCase="true"
-      class=""
+      class="absolute left-full w-full top-0"
       [ngClass]="cartOpen ? 'cart-shown' : 'cart-hidden'"
     >
       <app-shopping-cart></app-shopping-cart>

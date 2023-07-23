@@ -16,20 +16,19 @@ module.exports = {
         quicksand: ["Quicksand", "sans-serif"],
       },
       animation: {
-        "slide-in": "slide-in 0.5s ease-in-out",
+        "slide-in": "slide-in 0.5s ease-in-out forwards",
         "slide-out": "slide-out 0.5s ease-in-out forwards",
       },
       keyframes: {
         "slide-in": {
-          "0%": { transform: "translateX(100%)" },
-          "100%": { transform: "translateX(0)" },
+          "0%": { left: "100%" },
+          "100%": { transform: "translateX(-100%)" },
         },
         "slide-out": {
-          "0%": { transform: "translateX(0)" },
-          "99%": { transform: "translateX(100%)", opacity: 1 },
-          "100%": { opacity: 0, display: "none" },
-        }
-      }
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { left: "100%"},
+        },
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
