@@ -2,6 +2,7 @@
   <app-navbar (cartClicked)="handleNavbarCartClick()"></app-navbar>
   <div
     [ngClass]="cartOpen ? 'overflow-hidden' : 'overflow-y-auto'"
+    (scroll)="handleScroll($event)"
     class="relative grow overflow-x-hidden"
   >
     <main class="grow bg-slate-100">
@@ -9,6 +10,7 @@
     </main>
     <aside
       class="absolute left-full w-full top-0"
+      [style.top]="cartTopPosition"
       [ngClass]="cartOpen ? 'cart-shown' : 'cart-hidden'"
     >
       <app-shopping-cart></app-shopping-cart>

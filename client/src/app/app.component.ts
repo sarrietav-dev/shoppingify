@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +8,16 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent {
   title = 'client';
   cartOpen = false;
+  scrollOffset = 0;
+
+  get cartTopPosition() {
+    return this.scrollOffset + 'px';
+  }
+
+  handleScroll(event: Event) {
+    const target = event.target as HTMLElement;
+    this.scrollOffset = target.scrollTop;
+  }
 
   handleNavbarCartClick() {
     this.cartOpen = !this.cartOpen;
