@@ -1,0 +1,35 @@
+<div
+  class="flex h-screen w-full min-w-[300px] max-w-sm flex-col border-l border-l-black bg-white px-8 py-6"
+>
+  <div class="font-semibold text-primary"><- back</div>
+  <div class="mb-10 mt-6">
+    <img class="rounded-3xl" [src]="product.image" />
+  </div>
+  <div class="space-y-6">
+    <div class="space-y-1">
+      <p class="text-gray-400">name</p>
+      <p class="text-xl font-bold text-somewhat-black">{{ product.name }}</p>
+    </div>
+    <div class="space-y-1">
+      <p class="text-gray-400">category</p>
+      <p class="text-md font-bold text-somewhat-black">
+        {{ product.category }}
+      </p>
+    </div>
+    <div class="space-y-1 ">
+      <p class="text-gray-400">note</p>
+      <p class="text-md font-bold text-somewhat-black line-clamp-[10] w-full">
+
+        {{ product.note }}
+      </p>
+    </div>
+    <p>
+    </p>
+  </div>
+  <div class="mt-auto space-x-5 self-center">
+    <button class="px-5 py-3 font-bold text-somewhat-black">delete</button>
+    <button class="rounded-lg bg-primary px-5 py-3 font-semibold text-white">
+      Add to list
+    </button>
+  </div>
+</div>

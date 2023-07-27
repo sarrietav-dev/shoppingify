@@ -13,7 +13,7 @@
       [style.top]="cartTopPosition"
       [ngClass]="cartOpen === undefined ? '' : cartOpen ? 'cart-shown' : 'cart-hidden'"
     >
-      <app-shopping-cart></app-shopping-cart>
+      <app-product-overview [product]="product"></app-product-overview>
     </aside>
   </div>
 </div>
