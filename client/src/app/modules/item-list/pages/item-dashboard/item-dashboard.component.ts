@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Product } from 'src/app/core/models/Product';
 import { ProductsService } from 'src/app/core/services/products/products.service';
 
@@ -9,6 +9,7 @@ import { ProductsService } from 'src/app/core/services/products/products.service
 })
 export class ItemDashboardComponent implements OnInit {
   products: ProductsGroupedByCategory[] = []
+  @Output() itemClicked = new EventEmitter<Product>();
 
   constructor(private productService: ProductsService) {}
 
@@ -17,6 +18,11 @@ export class ItemDashboardComponent implements OnInit {
       this.products = this.groupProductsByCategory(products);
     });
   }
+
+  onItemClicked(product: Product) {
+    this.itemClicked.emit(product);
+  }
+
   groupProductsByCategory(products: Product[]): ProductsGroupedByCategory[] {
     const groupedProducts = products.reduce((groupedProducts, product) => {
       const category = product.category;
