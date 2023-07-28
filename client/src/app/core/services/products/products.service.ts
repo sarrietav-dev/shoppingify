@@ -26,4 +26,8 @@ export class ProductsService {
   getCategories() {
     return this.http.get<string[]>(`${this.baseUrl}/api/products/categories`);
   }
+
+  deleteProduct(id: string) {
+    return this.http.delete(`${this.baseUrl}/api/products/${id}`);
+  }
 }

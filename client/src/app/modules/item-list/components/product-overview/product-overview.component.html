@@ -1,7 +1,7 @@
 <div
   class="flex h-screen min-w-[300px] max-w-sm flex-col  bg-white px-8 py-6"
 >
-  <div class="font-semibold text-primary flex items-center">
+  <div class="font-semibold text-primary flex items-center" (click)="backClick.emit()">
     <span class="material-symbols-outlined"> keyboard_backspace </span>
     back
   </div>
@@ -28,8 +28,8 @@
     <p></p>
   </div>
   <div class="mt-auto space-x-5 self-center">
-    <button class="px-5 py-3 font-bold text-somewhat-black">delete</button>
-    <button class="rounded-lg bg-primary px-5 py-3 font-semibold text-white">
+    <button class="px-5 py-3 font-bold text-somewhat-black" (click)="handleDeleteClick()">delete</button>
+    <button class="rounded-lg bg-primary px-5 py-3 font-semibold text-white" (click)="handleToCartClick()">
       Add to list
     </button>
   </div>

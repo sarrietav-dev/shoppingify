@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Product } from './core/models/Product';
+import { ProductsService } from './core/services/products/products.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,8 @@ import { Product } from './core/models/Product';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'client';
+  constructor(private productService: ProductsService) {}
+
   cartOpen: boolean | undefined = undefined;
   productOverviewOpen: boolean | undefined = undefined;
   scrollOffset = 0;
@@ -52,5 +54,15 @@ export class AppComponent {
     if (this.cartOpen !== undefined && this.cartOpen) {
       this.cartOpen = false;
     }
+  }
+
+  handleBackClick() {
+    this.productOverviewOpen = false;
+  }
+
+  handleDeleteClick(product: Product) {
+    this.productService
+      .deleteProduct(product.id)
+      .subscribe(() => (this.productOverviewOpen = false));
   }
 }

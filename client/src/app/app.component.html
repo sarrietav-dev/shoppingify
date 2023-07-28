@@ -20,7 +20,7 @@
       [style.top]="cartTopPosition"
       [ngClass]="productOverviewOpen === undefined ? '' : productOverviewOpen ? 'cart-shown' : 'cart-hidden'"
     >
-      <app-product-overview [product]="product"></app-product-overview>
+      <app-product-overview (deleteClick)="handleDeleteClick($event)" (backClick)="handleBackClick()" [product]="product"></app-product-overview>
     </aside>
   </div>
 </div>
