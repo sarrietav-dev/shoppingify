@@ -32,9 +32,9 @@ public class ProductRepository : IProductRepository
         return _context.SaveChangesAsync();
     }
 
-    public async Task DeleteProduct(int id)
+    public async Task DeleteProduct(string id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products.FindAsync(Guid.Parse(id));
         if (product == null) return;
         _context.Products.Remove(product);
         await _context.SaveChangesAsync();

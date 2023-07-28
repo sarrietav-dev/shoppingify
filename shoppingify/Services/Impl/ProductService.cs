@@ -37,7 +37,7 @@ class ProductService : IProductService
         return newProduct;
     }
 
-    public async Task DeleteProductAsync(int id)
+    public async Task DeleteProductAsync(string id)
     {
         await _repository.DeleteProduct(id);
     }

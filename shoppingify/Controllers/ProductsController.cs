@@ -37,4 +37,11 @@ public class ProductsController : ControllerBase
     {
         return Ok(_productService.GetCategories());
     }
+
+    [HttpDelete("{id}", Name = "DeleteProduct")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        await _productService.DeleteProductAsync(id);
+        return NoContent();
+    }
 }
