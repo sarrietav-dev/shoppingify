@@ -1,7 +1,10 @@
 <div
   class="flex h-screen w-full min-w-[300px] max-w-sm flex-col border-l border-l-black bg-white px-8 py-6"
 >
-  <div class="font-semibold text-primary"><- back</div>
+  <div class="font-semibold text-primary flex items-center">
+    <span class="material-symbols-outlined"> keyboard_backspace </span>
+    back
+  </div>
   <div class="mb-10 mt-6">
     <img class="rounded-3xl" [src]="product.image" />
   </div>
@@ -16,15 +19,13 @@
         {{ product.category }}
       </p>
     </div>
-    <div class="space-y-1 ">
+    <div class="space-y-1">
       <p class="text-gray-400">note</p>
-      <p class="text-md font-bold text-somewhat-black line-clamp-[10] w-full">
-
+      <p class="text-md line-clamp-[10] w-full font-bold text-somewhat-black">
         {{ product.note }}
       </p>
     </div>
-    <p>
-    </p>
+    <p></p>
   </div>
   <div class="mt-auto space-x-5 self-center">
     <button class="px-5 py-3 font-bold text-somewhat-black">delete</button>
