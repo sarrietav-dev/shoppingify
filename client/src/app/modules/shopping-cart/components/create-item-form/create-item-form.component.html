@@ -45,11 +45,9 @@
       />
       <ul
         class="sm mt-2 max-h-36 overflow-y-auto rounded-lg bg-white px-1 py-2 shadow"
+        [ngClass]="{ 'hidden': !shouldShowAutocomplete }"
       >
-        <li>Fruits and Vegetables</li>
-        <li>Meat and Fish</li>
-        <li>Beverages</li>
-        <li>Dairy and Eggs</li>
+        <li class="cursor-pointer" (click)="setCategory(category)" *ngFor="let category of matchingCategories">{{category}}</li>
       </ul>
     </div>
   </div>
