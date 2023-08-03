@@ -9,14 +9,18 @@ export class ShoppingListItemComponent {
   @Input() name!: string;
   @Input() amount: number = 0;
   @Input() id: string = '';
+  @Input() isChecked: boolean = false;
+  @Input() state: 'editing' | 'completing' = 'editing';
 
   @Output('increment') incrementEvent = new EventEmitter<string>();
   @Output('decrement') decrementEvent = new EventEmitter<string>();
   @Output('delete') deleteEvent = new EventEmitter<string>();
+  @Output('toggleCheck') toggleCheckEvent = new EventEmitter<string>();
 
   isEditing = false;
 
   toggleEdit() {
+    if (this.state === 'completing') return;
     this.isEditing = !this.isEditing;
   }
 
@@ -34,5 +38,10 @@ export class ShoppingListItemComponent {
 
   delete() {
     this.deleteEvent.emit(this.id ?? 'id');
+  }
+
+  toggleCheck() {
+    this.isChecked = !this.isChecked;
+    this.toggleCheckEvent.emit(this.id ?? 'id');
   }
 }

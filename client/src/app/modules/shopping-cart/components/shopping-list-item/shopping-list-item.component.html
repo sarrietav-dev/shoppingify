@@ -1,9 +1,11 @@
 <li class="flex items-center justify-between">
-  <span
-    class="overflow-hidden text-ellipsis whitespace-nowrap font-semibold"
-    [ngClass]="isEditing ? 'basis-1/5' : ''"
-    >{{ name }}</span
-  >
+    <div (click)="toggleCheck()" *ngIf="state === 'completing'" class="material-symbols-outlined text-3xl  text-primary mr-4"> {{ isChecked ? 'check_box' : 'check_box_outline_blank' }} </div>
+    <span
+      class="overflow-hidden text-ellipsis whitespace-nowrap font-semibold mr-auto max-w-[170px]"
+      [ngClass]="isEditing ? 'basis-1/5' : ''"
+      [ngClass]="isChecked ? 'line-through' : ''"
+      >{{ name }}</span
+    >
   <button
     (click)="toggleEdit()"
     class="rounded-full border-2 border-primary px-5 py-1 text-sm font-semibold text-primary"
