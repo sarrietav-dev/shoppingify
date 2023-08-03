@@ -18,10 +18,10 @@
     <div
       class="flex grow-0 items-center justify-center self-stretch rounded-xl bg-primary p-2"
     >
-      <span class="material-symbols-outlined text-white">delete</span>
+      <span (click)="delete()" class="material-symbols-outlined text-white cursor-pointer select-none">delete</span>
     </div>
     <div class="flex grow items-center gap-1 px-2 py-2">
-      <span class="material-symbols-outlined text-primary"> remove </span>
+      <span (click)="decrement()" class="material-symbols-outlined text-primary cursor-pointer select-none"> remove </span>
       <button
         (click)="toggleEdit()"
         class="rounded-full border-2 border-primary bg-transparent px-5 py-1 text-sm font-semibold text-primary"
@@ -29,7 +29,7 @@
         {{ amount }} pc
       </button>
 
-      <span class="material-symbols-outlined text-primary"> add </span>
+      <span (click)="increment()" class="material-symbols-outlined text-primary cursor-pointer select-none"> add </span>
     </div>
   </div>
 </ng-template>
