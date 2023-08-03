@@ -10,10 +10,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         ></app-create-item-banner>
       </div>
       <div class="grow overflow-hidden">
-        <ng-content></ng-content>
+        <ng-content select="[body]"></ng-content>
       </div>
       <div class="w-full flex-shrink-0 basis-24 bg-white px-6 py-4">
-        <app-complete-footer></app-complete-footer>
+        <ng-content select="[footer]"></ng-content>
       </div>
     </div>
   `,
