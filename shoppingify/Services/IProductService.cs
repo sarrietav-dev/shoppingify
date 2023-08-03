@@ -7,7 +7,7 @@ public interface IProductService
     IEnumerable<Product> GetProductsAsync();
     Task<Product> GetProductByIdAsync(string id);
     Task<Product> CreateProductAsync(ProductInput product);
-    Task DeleteProductAsync(int id);
+    Task DeleteProductAsync(string id);
     IEnumerable<string> GetCategories();
 }
 

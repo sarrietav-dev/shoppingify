@@ -1,0 +1,9 @@
+.cart-shown {
+  /* @apply right-0 block; */
+  @apply animate-slide-in;
+}
+
+.cart-hidden {
+  /* @apply left-full hidden; */
+  @apply animate-slide-out;
+}
