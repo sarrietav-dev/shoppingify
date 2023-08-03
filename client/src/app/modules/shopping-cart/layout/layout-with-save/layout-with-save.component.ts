@@ -13,19 +13,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         <ng-content></ng-content>
       </div>
       <div class="w-full flex-shrink-0 basis-24 bg-white px-6 py-4">
-        <form class="relative h-full w-full">
-          <input
-            type="text"
-            class="h-full w-full rounded-xl border-2 border-primary px-6 placeholder:text-sm placeholder:font-semibold placeholder:text-gray-300 focus:border-secondary focus:outline-none focus:ring-0"
-            placeholder="Enter a name"
-          />
-          <button
-            class="absolute right-0 h-full rounded-xl bg-primary px-6 py-2 font-semibold text-white"
-            type="submit"
-          >
-            Save
-          </button>
-        </form>
+        <app-complete-footer></app-complete-footer>
       </div>
     </div>
   `,
