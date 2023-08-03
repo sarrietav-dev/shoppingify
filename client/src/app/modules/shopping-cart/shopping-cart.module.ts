@@ -8,6 +8,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LayoutWithSaveComponent } from './layout/layout-with-save/layout-with-save.component';
 import { EditShoppingListComponent } from './components/edit-shopping-list/edit-shopping-list.component';
 import { EmptyListComponent } from './components/empty-list/empty-list.component';
+import { SaveInputComponent } from './layout/save-input/save-input.component';
+import { CompleteFooterComponent } from './layout/complete-footer/complete-footer.component';
 
 @NgModule({
   exports: [ShoppingCartComponent],
@@ -19,6 +21,8 @@ import { EmptyListComponent } from './components/empty-list/empty-list.component
     LayoutWithSaveComponent,
     EditShoppingListComponent,
     EmptyListComponent,
+    SaveInputComponent,
+    CompleteFooterComponent,
   ],
   imports: [CommonModule, ReactiveFormsModule],
 })
