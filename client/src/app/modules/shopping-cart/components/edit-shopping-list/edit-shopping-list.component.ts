@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -8,6 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class EditShoppingListComponent implements OnInit {
   listState: 'editing' | 'completing' = 'completing';
+  @Output('changeState') changeStateEvent =
+    new EventEmitter<ShoppingCartState>();
 
   items$ = new BehaviorSubject<
     {
@@ -138,5 +140,9 @@ export class EditShoppingListComponent implements OnInit {
     }
 
     return null;
+  }
+
+  changeState(event: ShoppingCartState) {
+    this.changeStateEvent.emit(event);
   }
 }
