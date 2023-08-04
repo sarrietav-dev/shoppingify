@@ -5,6 +5,7 @@
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 -960 960 960"
       class="h-6 w-6 fill-somewhat-black"
+      (click)="toggleListState()"
     >
       <path
         d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z"
@@ -12,55 +13,20 @@
     </svg>
   </div>
   <div class="overflow-y-scroll">
-    <section>
-      <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
+    <section *ngFor="let item of items">
+      <h2 class="my-6 font-semibold text-gray-500">{{item.category}}</h2>
       <ul class="flex flex-col gap-8">
         <app-shopping-list-item
-          name="Avocado"
-          [amount]="3"
-        ></app-shopping-list-item>
-        <app-shopping-list-item
-          name="Pre-cooked corn 450g"
-          [amount]="3"
-        ></app-shopping-list-item>
-      </ul>
-    </section>
-    <section>
-      <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
-      <ul class="flex flex-col gap-8">
-        <app-shopping-list-item
-          name="Avocado"
-          [amount]="3"
-        ></app-shopping-list-item>
-        <app-shopping-list-item
-          name="Pre-cooked corn 450g"
-          [amount]="3"
-        ></app-shopping-list-item>
-      </ul>
-    </section>
-    <section>
-      <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
-      <ul class="flex flex-col gap-8">
-        <app-shopping-list-item
-          name="Avocado"
-          [amount]="3"
-        ></app-shopping-list-item>
-        <app-shopping-list-item
-          name="Pre-cooked corn 450g"
-          [amount]="3"
-        ></app-shopping-list-item>
-      </ul>
-    </section>
-    <section>
-      <h2 class="my-6 font-semibold text-gray-500">Fruits and vegetables</h2>
-      <ul class="flex flex-col gap-8">
-        <app-shopping-list-item
-          name="Avocado"
-          [amount]="3"
-        ></app-shopping-list-item>
-        <app-shopping-list-item
-          name="Pre-cooked corn 450g"
-          [amount]="3"
+          *ngFor="let item of item.items"
+          [name]="item.name"
+          [amount]="item.amount"
+          [isChecked]="item.isChecked"
+          [state]="listState"
+          [id]="item.id"
+          (decrement)="decrement($event)"
+          (increment)="increment($event)"
+          (delete)="delete($event)"
+          (toggleCheck)="toggleCheck($event)"
         ></app-shopping-list-item>
       </ul>
     </section>

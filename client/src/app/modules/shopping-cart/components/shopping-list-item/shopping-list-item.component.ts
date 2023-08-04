@@ -17,7 +17,16 @@ export class ShoppingListItemComponent {
   @Output('delete') deleteEvent = new EventEmitter<string>();
   @Output('toggleCheck') toggleCheckEvent = new EventEmitter<string>();
 
-  isEditing = false;
+  private _isEditing: boolean = false;
+
+  get isEditing() {
+    if (this.state === 'completing') this._isEditing = false;
+    return this._isEditing;
+  }
+
+  set isEditing(value: boolean) {
+    this._isEditing = value;
+  }
 
   toggleEdit() {
     if (this.state === 'completing') return;
@@ -36,7 +45,7 @@ export class ShoppingListItemComponent {
     this.decrementEvent.emit(this.id ?? 'id');
   }
 
-  delete() {
+  deleteItem() {
     this.deleteEvent.emit(this.id ?? 'id');
   }
 

@@ -2,8 +2,10 @@
     <div (click)="toggleCheck()" *ngIf="state === 'completing'" class="material-symbols-outlined text-3xl  text-primary mr-4"> {{ isChecked ? 'check_box' : 'check_box_outline_blank' }} </div>
     <span
       class="overflow-hidden text-ellipsis whitespace-nowrap font-semibold mr-auto max-w-[170px]"
-      [ngClass]="isEditing ? 'basis-1/5' : ''"
-      [ngClass]="isChecked ? 'line-through' : ''"
+      [ngClass]="{
+        'line-through': isChecked,
+        'basis-1/5': isEditing,
+      }"
       >{{ name }}</span
     >
   <button
@@ -20,7 +22,7 @@
     <div
       class="flex grow-0 items-center justify-center self-stretch rounded-xl bg-primary p-2"
     >
-      <span (click)="delete()" class="material-symbols-outlined text-white cursor-pointer select-none">delete</span>
+      <span (click)="deleteItem()" class="material-symbols-outlined text-white cursor-pointer select-none">delete</span>
     </div>
     <div class="flex grow items-center gap-1 px-2 py-2">
       <span (click)="decrement()" class="material-symbols-outlined text-primary cursor-pointer select-none"> remove </span>
