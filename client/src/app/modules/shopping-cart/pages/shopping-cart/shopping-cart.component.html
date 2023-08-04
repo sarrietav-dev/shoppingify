@@ -6,7 +6,9 @@
     </app-layout-with-save>
   </ng-container>
   <ng-container *ngSwitchCase="'editing'">
-      <app-edit-shopping-list (changeState)="changeState($event)"></app-edit-shopping-list>
+    <app-edit-shopping-list
+      (changeState)="changeState($event)"
+    ></app-edit-shopping-list>
   </ng-container>
   <ng-container *ngSwitchCase="'creating'">
     <app-create-item-form

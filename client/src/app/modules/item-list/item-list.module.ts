@@ -6,7 +6,11 @@ import { ProductOverviewComponent } from './components/product-overview/product-
 
 @NgModule({
   exports: [ItemDashboardComponent, ProductOverviewComponent],
-  declarations: [ItemDashboardComponent, DashboardItemComponent, ProductOverviewComponent],
+  declarations: [
+    ItemDashboardComponent,
+    DashboardItemComponent,
+    ProductOverviewComponent,
+  ],
   imports: [CommonModule],
 })
 export class ItemListModule {}

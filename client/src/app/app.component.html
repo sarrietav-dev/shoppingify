@@ -5,22 +5,36 @@
     (scroll)="handleScroll($event)"
     class="relative grow overflow-x-hidden"
   >
-    <main class="grow bg-slate-100 h-full">
-      <item-dashboard (itemClicked)="handleProductOverviewClick($event)"></item-dashboard>
+    <main class="h-full grow bg-slate-100">
+      <item-dashboard
+        (itemClicked)="handleProductOverviewClick($event)"
+      ></item-dashboard>
     </main>
     <aside
-      class="absolute left-full w-full top-0 max-w-sm"
+      class="absolute left-full top-0 w-full max-w-sm"
       [style.top]="cartTopPosition"
-      [ngClass]="cartOpen === undefined ? '' : cartOpen ? 'cart-shown' : 'cart-hidden'"
+      [ngClass]="
+        cartOpen === undefined ? '' : cartOpen ? 'cart-shown' : 'cart-hidden'
+      "
     >
       <app-shopping-cart></app-shopping-cart>
     </aside>
     <aside
       class="absolute left-full top-0 w-full max-w-sm"
       [style.top]="cartTopPosition"
-      [ngClass]="productOverviewOpen === undefined ? '' : productOverviewOpen ? 'cart-shown' : 'cart-hidden'"
+      [ngClass]="
+        productOverviewOpen === undefined
+          ? ''
+          : productOverviewOpen
+          ? 'cart-shown'
+          : 'cart-hidden'
+      "
     >
-      <app-product-overview (deleteClick)="handleDeleteClick($event)" (backClick)="handleBackClick()" [product]="product"></app-product-overview>
+      <app-product-overview
+        (deleteClick)="handleDeleteClick($event)"
+        (backClick)="handleBackClick()"
+        [product]="product"
+      ></app-product-overview>
     </aside>
   </div>
 </div>

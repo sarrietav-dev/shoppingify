@@ -23,15 +23,13 @@ export class CreateItemFormComponent implements OnInit {
       this.categories = categories;
     });
 
-    this.createItemForm
-      .get('category')
-      ?.valueChanges.subscribe((value) => {
-        if (value !== null) {
-          this.matchingCategories = this.categories.filter((category) =>
-            category.toLowerCase().includes(value.toLowerCase())
-          );
-        }
-      });
+    this.createItemForm.get('category')?.valueChanges.subscribe((value) => {
+      if (value !== null) {
+        this.matchingCategories = this.categories.filter((category) =>
+          category.toLowerCase().includes(value.toLowerCase())
+        );
+      }
+    });
   }
 
   createItemForm = this.fb.group({
@@ -62,12 +60,14 @@ export class CreateItemFormComponent implements OnInit {
   }
 
   get shouldShowAutocomplete() {
-    return this.createItemForm.get('category')?.value !== '' && this.matchingCategories.length > 0;
+    return (
+      this.createItemForm.get('category')?.value !== '' &&
+      this.matchingCategories.length > 0
+    );
   }
 
   setCategory(category: string) {
     this.createItemForm.get('category')?.setValue(category);
     this.matchingCategories = [];
   }
-
 }

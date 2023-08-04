@@ -1,8 +1,13 @@
 <div class="space-y-6 px-3 py-6">
   <section *ngFor="let group of products" class="space-y-4">
-    <h2 class="text-xl font-semibold"> {{group.category}} </h2>
+    <h2 class="text-xl font-semibold">{{ group.category }}</h2>
     <ul class="grid grid-cols-2 gap-y-6">
-      <dashboard-item (click)="onItemClicked(product)" *ngFor="let product of group.products" [title]="product.name" [id]="product.id"></dashboard-item>
+      <dashboard-item
+        (click)="onItemClicked(product)"
+        *ngFor="let product of group.products"
+        [title]="product.name"
+        [id]="product.id"
+      ></dashboard-item>
     </ul>
   </section>
 </div>

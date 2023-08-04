@@ -8,7 +8,7 @@ import { ProductsService } from 'src/app/core/services/products/products.service
   styleUrls: ['./item-dashboard.component.css'],
 })
 export class ItemDashboardComponent implements OnInit {
-  products: ProductsGroupedByCategory[] = []
+  products: ProductsGroupedByCategory[] = [];
   @Output() itemClicked = new EventEmitter<Product>();
 
   constructor(private productService: ProductsService) {}
@@ -45,4 +45,4 @@ export class ItemDashboardComponent implements OnInit {
 type ProductsGroupedByCategory = {
   category: string;
   products: Product[];
-}
+};

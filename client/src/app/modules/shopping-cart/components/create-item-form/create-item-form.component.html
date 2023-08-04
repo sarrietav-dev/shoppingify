@@ -1,7 +1,7 @@
 <form
   [formGroup]="createItemForm"
   (ngSubmit)="onSubmit()"
-  class="flex h-screen w-full flex-col px-5 pb-10 bg-slate-100"
+  class="flex h-screen w-full flex-col bg-slate-100 px-5 pb-10"
 >
   <h1 class="my-5 text-xl font-semibold text-somewhat-black">Add a new item</h1>
   <div class="space-y-6">
@@ -45,9 +45,15 @@
       />
       <ul
         class="sm mt-2 max-h-36 overflow-y-auto rounded-lg bg-white px-1 py-2 shadow"
-        [ngClass]="{ 'hidden': !shouldShowAutocomplete }"
+        [ngClass]="{ hidden: !shouldShowAutocomplete }"
       >
-        <li class="cursor-pointer" (click)="setCategory(category)" *ngFor="let category of matchingCategories">{{category}}</li>
+        <li
+          class="cursor-pointer"
+          (click)="setCategory(category)"
+          *ngFor="let category of matchingCategories"
+        >
+          {{ category }}
+        </li>
       </ul>
     </div>
   </div>

@@ -1,13 +1,19 @@
 <li class="flex items-center justify-between">
-    <div (click)="toggleCheck()" *ngIf="state === 'completing'" class="material-symbols-outlined text-3xl  text-primary mr-4"> {{ isChecked ? 'check_box' : 'check_box_outline_blank' }} </div>
-    <span
-      class="overflow-hidden text-ellipsis whitespace-nowrap font-semibold mr-auto max-w-[170px]"
-      [ngClass]="{
+  <div
+    (click)="toggleCheck()"
+    *ngIf="state === 'completing'"
+    class="material-symbols-outlined mr-4 text-3xl text-primary"
+  >
+    {{ isChecked ? "check_box" : "check_box_outline_blank" }}
+  </div>
+  <span
+    class="mr-auto max-w-[170px] overflow-hidden text-ellipsis whitespace-nowrap font-semibold"
+    [ngClass]="{
         'line-through': isChecked,
         'basis-1/5': isEditing,
       }"
-      >{{ name }}</span
-    >
+    >{{ name }}</span
+  >
   <button
     (click)="toggleEdit()"
     class="rounded-full border-2 border-primary px-5 py-1 text-sm font-semibold text-primary"
@@ -22,10 +28,19 @@
     <div
       class="flex grow-0 items-center justify-center self-stretch rounded-xl bg-primary p-2"
     >
-      <span (click)="deleteItem()" class="material-symbols-outlined text-white cursor-pointer select-none">delete</span>
+      <span
+        (click)="deleteItem()"
+        class="material-symbols-outlined cursor-pointer select-none text-white"
+        >delete</span
+      >
     </div>
     <div class="flex grow items-center gap-1 px-2 py-2">
-      <span (click)="decrement()" class="material-symbols-outlined text-primary cursor-pointer select-none"> remove </span>
+      <span
+        (click)="decrement()"
+        class="material-symbols-outlined cursor-pointer select-none text-primary"
+      >
+        remove
+      </span>
       <button
         (click)="toggleEdit()"
         class="rounded-full border-2 border-primary bg-transparent px-5 py-1 text-sm font-semibold text-primary"
@@ -33,7 +48,12 @@
         {{ amount }} pc
       </button>
 
-      <span (click)="increment()" class="material-symbols-outlined text-primary cursor-pointer select-none"> add </span>
+      <span
+        (click)="increment()"
+        class="material-symbols-outlined cursor-pointer select-none text-primary"
+      >
+        add
+      </span>
     </div>
   </div>
 </ng-template>
