@@ -2,21 +2,21 @@
 
 namespace Shoppingify.Cart.Domain;
 
-public class CartItem
+public record CartItem
 {
-    public required CartItemId Id { get; init; }
-    public required CartId CartId { get; init; }
+    private readonly int _quantity;
     public required Product Product { get; init; }
-    public required int Quantity { get; init; }
-    public CartItemStatus Status { get; private set; } = CartItemStatus.Unchecked;
-    
-    public void Check()
+    public required int Quantity
     {
-        Status = CartItemStatus.Checked;
+        get => _quantity;
+        init
+        {
+            if (value < 0)
+                throw new InvalidOperationException("Quantity cannot be negative");
+            
+            _quantity = value;
+        }
     }
-    
-    public void Uncheck()
-    {
-        Status = CartItemStatus.Unchecked;
-    }
+
+    public required CartItemStatus Status { get; init; } 
 }

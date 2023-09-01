@@ -6,6 +6,7 @@ public class Cart
     public required CartId Id { get; init; }
     public required CartOwnerId CartOwnerId { get; init; }
     public required string Name { get; init; }
+    public ICollection<CartItem> CartItems { get; private set; } = new List<CartItem>();
 
     public CartState State
     {
@@ -25,9 +26,17 @@ public class Cart
     {
         State = CartState.Completed;
     }
-    
+
     public void Cancel()
     {
         State = CartState.Canceled;
+    }
+    
+    public void UpdateList(IEnumerable<CartItem> cartItems)
+    {
+        if (State != CartState.Active)
+            throw new InvalidOperationException("Cannot update a non-active cart");
+        
+        CartItems = cartItems.ToList();
     }
 }
