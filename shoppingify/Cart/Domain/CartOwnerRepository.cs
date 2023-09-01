@@ -2,5 +2,5 @@
 
 public interface ICartOwnerRepository
 {
-    public CartOwner? Get(CartOwnerId id);
+    public Task<CartOwner?> Get(CartOwnerId id);
 }
