@@ -11,7 +11,7 @@ public class ProductApplicationService
         _repository = repository;
     }
 
-    public async Task<Product> Get(Guid productId)
+    public async Task<Product?> Get(Guid productId)
     {
         return await _repository.Get(new ProductId(productId));
     }
@@ -35,8 +35,8 @@ public class ProductApplicationService
         await _repository.Add(newProduct);
     }
 
-    public async Task Delete(ProductId productId)
+    public async Task Delete(Guid productId)
     {
-        await _repository.Delete(productId);
+        await _repository.Delete(new ProductId(productId));
     }
 }

@@ -44,7 +44,7 @@ public class ProductsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _applicationService.Delete(new ProductId(id));
+        await _applicationService.Delete(id);
 
         return Ok();
     }
