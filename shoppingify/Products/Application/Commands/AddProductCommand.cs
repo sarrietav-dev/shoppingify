@@ -1,0 +1,1 @@
+public record AddProductCommand(string Name, string? Note, string Category, string? Image);
