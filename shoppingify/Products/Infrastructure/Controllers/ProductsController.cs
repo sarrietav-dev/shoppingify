@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Shoppingify.Products.Application;
+using shoppingify.Products.Application;
 
-namespace Shoppingify.Products.Infrastructure.Controllers;
+namespace shoppingify.Products.Infrastructure.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

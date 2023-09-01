@@ -1,4 +1,4 @@
-namespace Shoppingify.Cart.Domain;
+namespace shoppingify.Cart.Domain;
 
 public class Cart
 {

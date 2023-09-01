@@ -1,6 +1,6 @@
-using Shoppingify.Products.Domain;
+using shoppingify.Products.Domain;
 
-namespace Shoppingify.Products.Application;
+namespace shoppingify.Products.Application;
 
 public class ProductApplicationService
 {

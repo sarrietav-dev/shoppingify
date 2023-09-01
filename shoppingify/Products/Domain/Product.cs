@@ -1,4 +1,4 @@
-namespace Shoppingify.Products.Domain;
+namespace shoppingify.Products.Domain;
 
 public class Product
 {
