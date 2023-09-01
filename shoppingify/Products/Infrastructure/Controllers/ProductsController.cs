@@ -17,7 +17,7 @@ public class ProductsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var product = await _applicationService.Get(new ProductId(id));
+        var product = await _applicationService.Get(id);
 
         if (product is null)
             return NotFound();
@@ -25,10 +25,10 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAll(Guid id)
     {
-        var products = await _applicationService.GetAll(new ProductOwner(Guid.Empty));
+        var products = await _applicationService.GetAll(id);
 
         return Ok(products);
     }

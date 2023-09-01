@@ -11,14 +11,14 @@ public class ProductApplicationService
         _repository = repository;
     }
 
-    public async Task<Product> Get(ProductId id)
+    public async Task<Product> Get(Guid productId)
     {
-        return await _repository.Get(id);
+        return await _repository.Get(new ProductId(productId));
     }
 
-    public async Task<IEnumerable<Product>> GetAll(ProductOwner owner)
+    public async Task<IEnumerable<Product>> GetAll(Guid productOwnerId)
     {
-        return await _repository.GetAll(owner);
+        return await _repository.GetAll(new ProductOwner(productOwnerId));
     }
 
     public async Task Add(AddProductCommand product)
