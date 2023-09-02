@@ -40,4 +40,18 @@ public class Cart
         
         CartItems = cartItems.ToList();
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+            return false;
+
+        var cart = (Cart) obj;
+        return Id.Equals(cart.Id) && CartOwnerId.Equals(cart.CartOwnerId);
+    }
+    
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, CartOwnerId);
+    }
 }
