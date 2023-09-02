@@ -15,8 +15,8 @@ public class CartController : ControllerBase
         _cartApplicationService = cartApplicationService;
     }
     
-    [HttpGet("{cartOwnerId:guid}")]
-    public async Task<IActionResult> GetActiveCart(Guid cartOwnerId)
+    [HttpGet("{cartOwnerId}")]
+    public async Task<IActionResult> GetActiveCart(string cartOwnerId)
     {
         var cart = await _cartApplicationService.GetActiveCart(cartOwnerId);
         return Ok(cart);
@@ -43,8 +43,8 @@ public class CartController : ControllerBase
         return Ok();
     }
     
-    [HttpPost("{cartOwnerId:guid}")]
-    public async Task<IActionResult> CreateCart(Guid cartOwnerId, string name)
+    [HttpPost("{cartOwnerId}")]
+    public async Task<IActionResult> CreateCart(string cartOwnerId, string name)
     {
         await _cartApplicationService.CreateCart(cartOwnerId, name);
         return Ok();

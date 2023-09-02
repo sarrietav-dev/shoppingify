@@ -14,7 +14,7 @@ public class ProductsController : ControllerBase
         _applicationService = applicationService;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get(Guid id)
     {
         var product = await _applicationService.Get(id);
@@ -25,7 +25,7 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
     public async Task<IActionResult> GetAll(Guid id)
     {
         var products = await _applicationService.GetAll(id);

@@ -1,3 +1,3 @@
 namespace shoppingify.Cart.Domain;
 
-public record CartOwnerId(Guid Value);
+public record CartOwnerId(string Value);

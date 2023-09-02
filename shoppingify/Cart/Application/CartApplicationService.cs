@@ -13,7 +13,7 @@ public class CartApplicationService
         _cartOwnerRepository = cartOwnerRepository;
     }
     
-    public async Task CreateCart(Guid cartOwnerId, string name)
+    public async Task CreateCart(string cartOwnerId, string name)
     {
         var cartOwner = await _cartOwnerRepository.Get(new CartOwnerId(cartOwnerId));
         if (cartOwner == null)
@@ -23,7 +23,7 @@ public class CartApplicationService
         await _cartRepository.Add(cart);
     }
 
-    public async Task<Domain.Cart?> GetActiveCart(Guid cartOwnerId)
+    public async Task<Domain.Cart?> GetActiveCart(string cartOwnerId)
     {
         var cartOwner = await _cartOwnerRepository.Get(new CartOwnerId(cartOwnerId));
         if (cartOwner == null)
