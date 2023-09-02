@@ -12,6 +12,16 @@ public class CartApplicationService
         _cartRepository = cartRepository;
         _cartOwnerRepository = cartOwnerRepository;
     }
+    
+    public async Task CreateCart(Guid cartOwnerId, string name)
+    {
+        var cartOwner = await _cartOwnerRepository.Get(new CartOwnerId(cartOwnerId));
+        if (cartOwner == null)
+            throw new InvalidOperationException("Cart owner not found");
+
+        var cart = cartOwner.CreateCart(name, null);
+        await _cartRepository.Add(cart);
+    }
 
     public async Task<Domain.Cart?> GetActiveCart(Guid cartOwnerId)
     {
