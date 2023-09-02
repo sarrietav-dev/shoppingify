@@ -26,7 +26,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(Guid id)
+    public async Task<IActionResult> GetAll(string id)
     {
         var products = await _applicationService.GetAll(id);
 
@@ -34,9 +34,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(AddProductCommand product)
+    public async Task<IActionResult> Add(string id, AddProductCommand product)
     {
-        await _applicationService.Add(product);
+        await _applicationService.Add(id, product);
 
         return Ok();
     }
@@ -48,5 +48,4 @@ public class ProductsController : ControllerBase
 
         return Ok();
     }
-
 }

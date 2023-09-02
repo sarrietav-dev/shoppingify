@@ -16,16 +16,16 @@ public class ProductApplicationService
         return await _repository.Get(new ProductId(productId));
     }
 
-    public async Task<IEnumerable<Product>> GetAll(Guid productOwnerId)
+    public async Task<IEnumerable<Product>> GetAll(string productOwnerId)
     {
         return await _repository.GetAll(new ProductOwner(productOwnerId));
     }
 
-    public async Task Add(AddProductCommand product)
+    public async Task Add(string ownerId, AddProductCommand product)
     {
         var newProduct = new Product {
             Id = new ProductId(Guid.NewGuid()),
-            Owner = new ProductOwner(Guid.Empty),
+            Owner = new ProductOwner(ownerId),
             Name = product.Name,
             Note = product.Note,
             Category = product.Category,

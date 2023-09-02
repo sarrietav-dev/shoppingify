@@ -8,7 +8,7 @@ public class CartOwnerEntityConfig : IEntityTypeConfiguration<CartOwner>
 {
     public void Configure(EntityTypeBuilder<CartOwner> builder)
     {
-        builder.HasKey(c => c.Id.Value);
+        builder.HasKey(c => c.Id);
         builder.Property(c => c.Id).ValueGeneratedNever()
             .HasConversion(id => id.Value, value => new CartOwnerId(value));
         builder.Property(c => c.ActiveCartId)

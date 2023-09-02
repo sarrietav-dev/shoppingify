@@ -8,8 +8,8 @@ public class CartEntityConfig : IEntityTypeConfiguration<Domain.Cart>
 {
     public void Configure(EntityTypeBuilder<Domain.Cart> builder)
     {
-        builder.HasKey(c => c.Id.Value);
-        builder.HasAlternateKey(c => c.CartOwnerId.Value);
+        builder.HasKey(c => c.Id);
+        builder.HasAlternateKey(c => c.CartOwnerId);
         builder.OwnsMany<CartItem>(c => c.CartItems);
 
         builder.Property(c => c.Id)

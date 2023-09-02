@@ -8,8 +8,8 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.HasKey(x => x.Id.Value);
-        builder.HasAlternateKey(x => x.Owner.Value);
+        builder.HasKey(x => x.Id);
+        builder.HasAlternateKey(x => x.Owner);
 
         builder.Property(x => x.Id)
             .HasConversion(x => x.Value, x => new ProductId(x))
