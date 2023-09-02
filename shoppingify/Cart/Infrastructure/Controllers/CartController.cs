@@ -5,7 +5,7 @@ using shoppingify.Cart.Domain;
 namespace shoppingify.Cart.Infrastructure.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class CartController : ControllerBase
 {
     private readonly CartApplicationService _cartApplicationService;

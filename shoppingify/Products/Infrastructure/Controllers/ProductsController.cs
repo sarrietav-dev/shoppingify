@@ -4,7 +4,7 @@ using shoppingify.Products.Application;
 namespace shoppingify.Products.Infrastructure.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class ProductsController : ControllerBase
 {
     private readonly ProductApplicationService _applicationService;
