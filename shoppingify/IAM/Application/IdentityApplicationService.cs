@@ -5,8 +5,8 @@ namespace shoppingify.IAM.Application;
 
 public class IdentityApplicationService
 {
-    private IAuthenticationProviderService _authenticationProviderService;
-    private IMediator _mediator;
+    private readonly IAuthenticationProviderService _authenticationProviderService;
+    private readonly IMediator _mediator;
 
     public IdentityApplicationService(IAuthenticationProviderService authenticationProviderService, IMediator mediator)
     {

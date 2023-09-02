@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using shoppingify.Cart.Domain;
-using shoppingify.IAM;
 using shoppingify.IAM.Domain;
 
 namespace shoppingify.Cart.Application;
