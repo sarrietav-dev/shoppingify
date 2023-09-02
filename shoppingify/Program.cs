@@ -1,5 +1,7 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using shoppingify.Cart.Domain;
+using shoppingify.Cart.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddScoped<ICartOwnerRepository, MockCartOwnerRepository>();
 
 FirebaseApp.Create(new AppOptions()
     { Credential = GoogleCredential.GetApplicationDefault(), ProjectId = "shoppingify-6c574" });
