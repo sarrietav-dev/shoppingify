@@ -14,8 +14,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddScoped<ICartOwnerRepository, MockCartOwnerRepository>();
 
+/*
 FirebaseApp.Create(new AppOptions()
     { Credential = GoogleCredential.GetApplicationDefault(), ProjectId = "shoppingify-6c574" });
+*/
 
 var app = builder.Build();
 
