@@ -7,16 +7,20 @@ namespace shoppingify.Cart.Application;
 public class UserCreatedEventHandler : INotificationHandler<UserCreatedEvent>
 {
     private readonly ICartOwnerRepository _cartOwnerRepository;
+    private ILogger _logger;
 
-    public UserCreatedEventHandler(ICartOwnerRepository cartOwnerRepository)
+    public UserCreatedEventHandler(ICartOwnerRepository cartOwnerRepository, ILogger logger)
     {
         _cartOwnerRepository = cartOwnerRepository;
+        _logger = logger;
     }
 
-    public Task Handle(UserCreatedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(UserCreatedEvent notification, CancellationToken cancellationToken)
     {
         var newCartOwner = new CartOwner { Id = new CartOwnerId(notification.Id) };
         
-        return _cartOwnerRepository.Add(newCartOwner);
+        await _cartOwnerRepository.Add(newCartOwner);
+        
+        _logger.LogInformation("CartOwner for User with Uid {Uid} created", notification.Id);
     }
 }

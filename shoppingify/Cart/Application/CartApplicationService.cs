@@ -6,21 +6,37 @@ public class CartApplicationService
 {
     private readonly ICartRepository _cartRepository;
     private readonly ICartOwnerRepository _cartOwnerRepository;
+    private readonly ILogger _logger;
 
-    public CartApplicationService(ICartRepository cartRepository, ICartOwnerRepository cartOwnerRepository)
+    public CartApplicationService(ICartRepository cartRepository, ICartOwnerRepository cartOwnerRepository,
+        ILogger logger)
     {
         _cartRepository = cartRepository;
         _cartOwnerRepository = cartOwnerRepository;
+        _logger = logger;
     }
-    
+
     public async Task CreateCart(string cartOwnerId, string name)
     {
         var cartOwner = await _cartOwnerRepository.Get(new CartOwnerId(cartOwnerId));
         if (cartOwner == null)
-            throw new InvalidOperationException("Cart owner not found");
+        {
+            var invalidOperationException = new InvalidOperationException("Cart owner not found");
+            _logger.LogWarning(invalidOperationException, "Cart owner with {Id} not found", cartOwnerId);
+            throw invalidOperationException;
+        }
 
-        var cart = cartOwner.CreateCart(name, null);
-        await _cartRepository.Add(cart);
+        try
+        {
+            var cart = cartOwner.CreateCart(name, null);
+            await _cartRepository.Add(cart);
+            _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cart.Id, cartOwnerId);
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning(e, "Cart owner {CartOwnerId} already has an active cart", cartOwnerId);
+            throw;
+        }
     }
 
     public async Task<Domain.Cart?> GetActiveCart(string cartOwnerId)
@@ -48,7 +64,7 @@ public class CartApplicationService
 
         cart.UpdateList(cartItems);
     }
-    
+
     public async Task CompleteCart(Guid cartId)
     {
         var cart = await _cartRepository.Get(new CartId(cartId));
@@ -58,7 +74,7 @@ public class CartApplicationService
 
         cart.Complete();
     }
-    
+
     public async Task CancelCart(Guid cartId)
     {
         var cart = await _cartRepository.Get(new CartId(cartId));
