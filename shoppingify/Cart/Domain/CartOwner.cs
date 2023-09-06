@@ -11,26 +11,59 @@ public class CartOwner
         init => _activeCartId = value;
     }
 
-    public Cart CreateCart(string name, IEnumerable<CartItem>? cartItems)
+    /// <summary>
+    /// Creates a new cart for the cart owner
+    /// </summary>
+    /// <param name="name">
+    /// The name of the cart
+    /// </param>
+    /// <param name="cartItems">
+    /// Initial list of cart items
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the cart owner already has an active cart 
+    /// </exception>
+    public Cart CreateCart(string name, IEnumerable<CartItem> cartItems)
+    {
+        var cart = BuildCart(name);
+
+        cart.UpdateList(cartItems);
+
+        return cart;
+    }
+
+    /// <summary>
+    /// Creates a new cart for the cart owner
+    /// </summary>
+    /// <param name="name">
+    /// The name of the cart
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the cart owner already has an active cart 
+    /// </exception>
+    public Cart CreateCart(string name)
+    {
+        return BuildCart(name);
+    }
+
+    private Cart BuildCart(string name)
     {
         if (ActiveCartId is not null)
             throw new InvalidOperationException("Cannot create a new cart while there is an active one");
 
-        var cart = new Cart
+        return new Cart
         {
             Id = new CartId(Guid.NewGuid()),
             CartOwnerId = Id,
             Name = name
         };
-
-        _activeCartId = cart.Id;
-
-        if (cartItems is not null)
-            cart.UpdateList(cartItems);
-
-        return cart;
     }
-    
+
+
+    /// <summary>
+    /// Completes the active cart.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
     public void CompleteCart()
     {
         if (ActiveCartId is null)
@@ -38,7 +71,7 @@ public class CartOwner
 
         _activeCartId = null;
     }
-    
+
     public void CancelCart()
     {
         if (ActiveCartId is null)
