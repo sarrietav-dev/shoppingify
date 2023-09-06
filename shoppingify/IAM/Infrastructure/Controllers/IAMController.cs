@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using shoppingify.IAM.Application;
+using shoppingify.IAM.Application.Exceptions;
 
 namespace shoppingify.IAM.Infrastructure.Controllers;
 
@@ -17,10 +18,16 @@ public class IamController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> RegisterUser()
     {
-        var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];
-        
-        await _identityApplicationService.RegisterUser(uid);
+        try
+        {
+            var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];
+            await _identityApplicationService.RegisterUser(uid);
 
-        return CreatedAtAction(nameof(RegisterUser), null);
+            return CreatedAtAction(nameof(RegisterUser), null);
+        }
+        catch (InvalidTokenException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }

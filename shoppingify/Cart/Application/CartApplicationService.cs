@@ -10,7 +10,7 @@ public class CartApplicationService
     private readonly ILogger _logger;
 
     public CartApplicationService(ICartRepository cartRepository, ICartOwnerRepository cartOwnerRepository,
-        ILogger logger)
+        ILogger<CartApplicationService> logger)
     {
         _cartRepository = cartRepository;
         _cartOwnerRepository = cartOwnerRepository;

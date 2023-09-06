@@ -7,9 +7,9 @@ namespace shoppingify.Cart.Application;
 public class UserCreatedEventHandler : INotificationHandler<UserCreatedEvent>
 {
     private readonly ICartOwnerRepository _cartOwnerRepository;
-    private ILogger _logger;
+    private readonly ILogger _logger;
 
-    public UserCreatedEventHandler(ICartOwnerRepository cartOwnerRepository, ILogger logger)
+    public UserCreatedEventHandler(ICartOwnerRepository cartOwnerRepository, ILogger<UserCreatedEventHandler> logger)
     {
         _cartOwnerRepository = cartOwnerRepository;
         _logger = logger;

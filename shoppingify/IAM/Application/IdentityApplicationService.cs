@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using shoppingify.IAM.Application.Exceptions;
 using shoppingify.IAM.Domain;
 
 namespace shoppingify.IAM.Application;
@@ -9,7 +10,8 @@ public class IdentityApplicationService
     private readonly IMediator _mediator;
     private readonly ILogger _logger;
 
-    public IdentityApplicationService(IAuthenticationProviderService authenticationProviderService, IMediator mediator, ILogger logger)
+    public IdentityApplicationService(IAuthenticationProviderService authenticationProviderService, IMediator mediator,
+        ILogger<IdentityApplicationService> logger)
     {
         _authenticationProviderService = authenticationProviderService;
         _mediator = mediator;
@@ -22,11 +24,11 @@ public class IdentityApplicationService
 
         if (verifiedUid is null)
         {
-            var exception = new Exception("Invalid token");
+            var exception = new InvalidTokenException("Invalid token");
             _logger.LogWarning(exception, "Invalid token for uid {Uid}", uid);
             throw exception;
         }
-        
+
         _logger.LogInformation("User {Uid} validated and registered", uid);
         await _mediator.Publish(new UserCreatedEvent(verifiedUid));
     }
