@@ -24,7 +24,8 @@ public class CartApplicationService
         try
         {
             cartOwner.CreateCart(name);
-            _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart?.Id, cartOwner.Id);
+            _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart?.Id,
+                cartOwner.Id);
         }
         catch (InvalidOperationException e)
         {
@@ -128,5 +129,10 @@ public class CartApplicationService
         if (cart != null) return cart;
         _logger.LogWarning("Cart {Id} not found", cartId);
         throw new InvalidOperationException("Cart not found");
+    }
+
+    public async Task<IEnumerable<Domain.Cart>> GetCarts(string cartOwnerId)
+    {
+        return await _cartRepository.GetAll(cartOwnerId);
     }
 }

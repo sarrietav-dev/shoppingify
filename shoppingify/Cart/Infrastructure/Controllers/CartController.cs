@@ -19,6 +19,16 @@ public class CartController : ControllerBase
         _authenticationProviderService = authenticationProviderService;
     }
 
+    [HttpGet("/carts")]
+    public async Task<IActionResult> GetCarts()
+    {
+        var cartOwnerId = await GetAuthorizationToken();
+
+        var carts = await _cartApplicationService.GetCarts(cartOwnerId);
+
+        return Ok(carts);
+    }
+
     [HttpGet("/active-cart")]
     public async Task<IActionResult> GetActiveCart()
     {
