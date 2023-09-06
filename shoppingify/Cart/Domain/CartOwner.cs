@@ -2,13 +2,13 @@
 
 public class CartOwner
 {
-    private CartId? _activeCartId;
+    private Cart? _activeCart;
     public required CartOwnerId Id { get; init; }
 
-    public CartId? ActiveCartId
+    public Cart? ActiveCart
     {
-        get => _activeCartId;
-        init => _activeCartId = value;
+        get => _activeCart;
+        init => _activeCart = value;
     }
 
     /// <summary>
@@ -23,13 +23,13 @@ public class CartOwner
     /// <exception cref="InvalidOperationException">
     /// Thrown when the cart owner already has an active cart 
     /// </exception>
-    public Cart CreateCart(string name, IEnumerable<CartItem> cartItems)
+    public void CreateCart(string name, IEnumerable<CartItem> cartItems)
     {
         var cart = BuildCart(name);
 
         cart.UpdateList(cartItems);
 
-        return cart;
+        _activeCart = cart;
     }
 
     /// <summary>
@@ -41,14 +41,14 @@ public class CartOwner
     /// <exception cref="InvalidOperationException">
     /// Thrown when the cart owner already has an active cart 
     /// </exception>
-    public Cart CreateCart(string name)
+    public void CreateCart(string name)
     {
-        return BuildCart(name);
+        _activeCart = BuildCart(name);
     }
 
     private Cart BuildCart(string name)
     {
-        if (ActiveCartId is not null)
+        if (_activeCart is not null)
             throw new InvalidOperationException("Cannot create a new cart while there is an active one");
 
         return new Cart
@@ -63,38 +63,40 @@ public class CartOwner
     /// <summary>
     /// Completes the active cart.
     /// </summary>
-    /// <param name="cart">
-    /// Cart to be completed. Must be the owner's active cart or else an error will be thrown.
-    /// </param>
     /// <exception cref="InvalidOperationException">
     /// When the Owner doesn't have an active cart, or when the given cart is already completed or canceled.
     /// </exception>
-    public void CompleteCart(Cart cart)
+    public Cart CompleteCart()
     {
-        if (ActiveCartId is null)
+        if (_activeCart is null)
             throw new InvalidOperationException("Cannot complete a cart while there is no active one");
 
-        cart.Complete();
+        _activeCart.Complete();
 
-        _activeCartId = null;
+        var cart = _activeCart;
+
+        _activeCart = null;
+
+        return cart;
     }
 
     /// <summary>
     /// Cancels the active cart.
     /// </summary>
-    /// <param name="cart">
-    /// Cart to be canceled. Must be the owner's active cart or else an error will be thrown.
-    /// </param>
     /// <exception cref="InvalidOperationException">
     /// When the Owner doesn't have an active cart, or when the given cart is already canceled or completed.
     /// </exception>
-    public void CancelCart(Cart cart)
+    public Cart CancelCart()
     {
-        if (ActiveCartId is null)
+        if (_activeCart is null)
             throw new InvalidOperationException("Cannot cancel a cart while there is no active one");
-        
-        cart.Cancel();
 
-        _activeCartId = null;
+        _activeCart.Cancel();
+
+        var cart = _activeCart;
+
+        _activeCart = null;
+
+        return cart;
     }
 }

@@ -12,50 +12,89 @@ public class CartController : ControllerBase
     private readonly CartApplicationService _cartApplicationService;
     private readonly IAuthenticationProviderService _authenticationProviderService;
 
-    public CartController(CartApplicationService cartApplicationService, IAuthenticationProviderService authenticationProviderService)
+    public CartController(CartApplicationService cartApplicationService,
+        IAuthenticationProviderService authenticationProviderService)
     {
         _cartApplicationService = cartApplicationService;
         _authenticationProviderService = authenticationProviderService;
     }
-    
+
     [HttpGet("/active-cart")]
     public async Task<IActionResult> GetActiveCart()
     {
-        var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];
-        var cartOwnerId = await _authenticationProviderService.VerifyToken(uid);
-        
+        var cartOwnerId = await GetAuthorizationToken();
+
         var cart = await _cartApplicationService.GetActiveCart(cartOwnerId);
-        
+
         if (cart == null) return NotFound();
-        
+
         return Ok(cart);
     }
-    
+
+    [HttpPost("/active-cart")]
+    public async Task<IActionResult> CreateCart(string name)
+    {
+        try
+        {
+            var cartOwnerId = await GetAuthorizationToken();
+            await _cartApplicationService.CreateCart(cartOwnerId, name);
+            return NoContent();
+        }
+        catch (InvalidOperationException)
+        {
+            return BadRequest();
+        }
+    }
+
     [HttpPut("/active-cart/items")]
     public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItem> cartItems)
     {
-        await _cartApplicationService.UpdateCartList(cartId, cartItems);
-        return Ok();
+        try
+        {
+            var ownerId = await GetAuthorizationToken();
+            await _cartApplicationService.UpdateCartList(ownerId, cartItems);
+            return Ok();
+        }
+        catch (InvalidOperationException)
+        {
+            return BadRequest();
+        }
     }
-    
-    [HttpPut("{cartId:guid}/complete")]
-    public async Task<IActionResult> CompleteCart(Guid cartId)
+
+    [HttpPut("/active-cart/complete")]
+    public async Task<IActionResult> CompleteCart()
     {
-        await _cartApplicationService.CompleteCart(cartId);
-        return Ok();
+        try
+        {
+            var cartOwnerId = await GetAuthorizationToken();
+            await _cartApplicationService.CompleteCart(cartOwnerId);
+            return Ok();
+        }
+        catch (InvalidOperationException)
+        {
+            return BadRequest();
+        }
     }
-    
-    [HttpPut("{cartId:guid}/cancel")]
-    public async Task<IActionResult> CancelCart(Guid cartId)
+
+    [HttpPut("/active-cart/cancel")]
+    public async Task<IActionResult> CancelCart()
     {
-        await _cartApplicationService.CancelCart(cartId);
-        return Ok();
+        try
+        {
+            var cartOwnerId = await GetAuthorizationToken();
+            await _cartApplicationService.CancelCart(cartOwnerId);
+            return Ok();
+        }
+        catch (InvalidOperationException)
+        {
+            return BadRequest();
+        }
     }
-    
-    [HttpPost("{cartOwnerId}")]
-    public async Task<IActionResult> CreateCart(string cartOwnerId, string name)
+
+    private async Task<string> GetAuthorizationToken()
     {
-        await _cartApplicationService.CreateCart(cartOwnerId, name);
-        return Ok();
+        var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];
+        var cartOwnerId = await _authenticationProviderService.VerifyToken(uid);
+        return cartOwnerId;
     }
 }
