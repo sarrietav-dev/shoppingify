@@ -23,12 +23,12 @@ public class Cart
         }
     }
 
-    public void Complete()
+    internal void Complete()
     {
         State = CartState.Completed;
     }
 
-    public void Cancel()
+    internal void Cancel()
     {
         State = CartState.Canceled;
     }

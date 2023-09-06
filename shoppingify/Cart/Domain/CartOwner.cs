@@ -63,19 +63,37 @@ public class CartOwner
     /// <summary>
     /// Completes the active cart.
     /// </summary>
-    /// <exception cref="InvalidOperationException"></exception>
-    public void CompleteCart()
+    /// <param name="cart">
+    /// Cart to be completed. Must be the owner's active cart or else an error will be thrown.
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    /// When the Owner doesn't have an active cart, or when the given cart is already completed or canceled.
+    /// </exception>
+    public void CompleteCart(Cart cart)
     {
         if (ActiveCartId is null)
             throw new InvalidOperationException("Cannot complete a cart while there is no active one");
 
+        cart.Complete();
+
         _activeCartId = null;
     }
 
-    public void CancelCart()
+    /// <summary>
+    /// Cancels the active cart.
+    /// </summary>
+    /// <param name="cart">
+    /// Cart to be canceled. Must be the owner's active cart or else an error will be thrown.
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    /// When the Owner doesn't have an active cart, or when the given cart is already canceled or completed.
+    /// </exception>
+    public void CancelCart(Cart cart)
     {
         if (ActiveCartId is null)
             throw new InvalidOperationException("Cannot cancel a cart while there is no active one");
+        
+        cart.Cancel();
 
         _activeCartId = null;
     }
