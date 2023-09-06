@@ -18,6 +18,15 @@ public class IdentityApplicationService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Registers a user in the system. If the token is valid, a <see cref="UserCreatedEvent"/> is published.
+    /// </summary>
+    /// <param name="uid">
+    /// The token to validate. The token must be in the format "Bearer {token}".
+    /// </param>
+    /// <exception cref="InvalidTokenException">
+    /// Thrown when the token is invalid.
+    /// </exception>
     public async Task RegisterUser(string uid)
     {
         var verifiedUid = await _authenticationProviderService.VerifyToken(uid);
