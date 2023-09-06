@@ -1,4 +1,5 @@
 ﻿using shoppingify.Cart.Domain;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace shoppingify.Cart.Application;
 
@@ -43,16 +44,23 @@ public class CartApplicationService
     {
         var cartOwner = await _cartOwnerRepository.Get(new CartOwnerId(cartOwnerId));
         if (cartOwner == null)
+        {
+            _logger.LogWarning("Cart owner {Id} not found", cartOwnerId);
             throw new InvalidOperationException("Cart owner not found");
+        }
 
         if (cartOwner.ActiveCartId is null)
-            throw new InvalidOperationException("Cart owner does not have an active cart");
+        {
+            _logger.LogWarning("Cart owner {Id} has no active cart", cartOwnerId);
+            throw new InvalidOperationException("Cart owner has no active cart");
+        }
 
         var cart = await _cartRepository.Get(cartOwner.ActiveCartId);
-        if (cart == null)
-            throw new InvalidOperationException("Cart not found");
 
-        return cart;
+        if (cart != null) return cart;
+
+        _logger.LogWarning("Cart {Id} not found", cartOwner.ActiveCartId);
+        throw new InvalidOperationException("Cart not found");
     }
 
     public async Task UpdateCartList(Guid cartId, IEnumerable<CartItem> cartItems)
@@ -60,9 +68,20 @@ public class CartApplicationService
         var cart = await _cartRepository.Get(new CartId(cartId));
 
         if (cart == null)
+        {
+            _logger.LogWarning("Cart {Id} not found", cartId);
             throw new InvalidOperationException("Cart not found");
+        }
 
-        cart.UpdateList(cartItems);
+        try
+        {
+            cart.UpdateList(cartItems);
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning("Cart {Id} is not active so cannot update", cartId);
+            throw;
+        }
     }
 
     public async Task CompleteCart(Guid cartId)
@@ -70,9 +89,20 @@ public class CartApplicationService
         var cart = await _cartRepository.Get(new CartId(cartId));
 
         if (cart == null)
+        {
+            _logger.LogWarning("Cart {Id} not found", cartId);
             throw new InvalidOperationException("Cart not found");
+        }
 
-        cart.Complete();
+        try
+        {
+            cart.Complete();
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning("Cart {Id} is not active so cannot complete", cartId);
+            throw;
+        }
     }
 
     public async Task CancelCart(Guid cartId)
@@ -80,8 +110,19 @@ public class CartApplicationService
         var cart = await _cartRepository.Get(new CartId(cartId));
 
         if (cart == null)
+        {
+            _logger.LogWarning("Cart {Id} not found", cartId);
             throw new InvalidOperationException("Cart not found");
+        }
 
-        cart.Cancel();
+        try
+        {
+            cart.Cancel();
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning("Cart {Id} is not active so cannot cancel", cartId);
+            throw;
+        }
     }
 }
