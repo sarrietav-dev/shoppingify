@@ -1,29 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using shoppingify.Cart.Application;
 using shoppingify.Cart.Domain;
+using shoppingify.IAM.Application;
 
 namespace shoppingify.Cart.Infrastructure.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/me")]
 public class CartController : ControllerBase
 {
     private readonly CartApplicationService _cartApplicationService;
+    private readonly IAuthenticationProviderService _authenticationProviderService;
 
-    public CartController(CartApplicationService cartApplicationService)
+    public CartController(CartApplicationService cartApplicationService, IAuthenticationProviderService authenticationProviderService)
     {
         _cartApplicationService = cartApplicationService;
+        _authenticationProviderService = authenticationProviderService;
     }
     
-    [HttpGet("{cartOwnerId}")]
-    public async Task<IActionResult> GetActiveCart(string cartOwnerId)
+    [HttpGet("/active-cart")]
+    public async Task<IActionResult> GetActiveCart()
     {
+        var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];
+        var cartOwnerId = await _authenticationProviderService.VerifyToken(uid);
+        
         var cart = await _cartApplicationService.GetActiveCart(cartOwnerId);
+        
+        if (cart == null) return NotFound();
+        
         return Ok(cart);
     }
     
-    [HttpPut("{cartId:guid}")]
-    public async Task<IActionResult> UpdateCartList(Guid cartId, IEnumerable<CartItem> cartItems)
+    [HttpPut("/active-cart/items")]
+    public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItem> cartItems)
     {
         await _cartApplicationService.UpdateCartList(cartId, cartItems);
         return Ok();
