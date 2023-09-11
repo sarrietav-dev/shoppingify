@@ -8,6 +8,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ItemListModule } from './modules/item-list/item-list.module';
 import { ShoppingCartModule } from './modules/shopping-cart/shopping-cart.module';
 import { HttpClientModule } from '@angular/common/http';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAuth,getAuth } from '@angular/fire/auth';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
     ItemListModule,
     ShoppingCartModule,
     HttpClientModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
   ],
   providers: [],
   bootstrap: [AppComponent],
