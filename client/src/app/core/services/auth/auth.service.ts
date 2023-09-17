@@ -25,6 +25,11 @@ export class AuthService {
     await this.fbAuth.signOut();
   }
 
+  async getToken() {
+    const user = this.user;
+    return user?.getIdToken();
+  }
+
   get user() {
     return this.fbAuth.currentUser;
   }
