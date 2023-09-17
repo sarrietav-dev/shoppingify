@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Auth, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from '@angular/fire/auth';
+import { Auth, GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,10 @@ export class AuthService {
 
   async signInWithGoogleRedirect() {
     const userCredentials = await signInWithRedirect(this.fbAuth, new GoogleAuthProvider());
+  }
+
+  async signInWithGithub() {
+    const userCredentials = await signInWithPopup(this.fbAuth, new GithubAuthProvider());
   }
 
   async signOut() {
