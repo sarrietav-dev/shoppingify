@@ -3,7 +3,7 @@
     <img src="/assets/logo.svg" alt="" />
   </div>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    <button (click)="onLogoutClicked()" mat-menu-item>
       <mat-icon color="#374151">logout</mat-icon>
       <span>Logout</span>
     </button>
