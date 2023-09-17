@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 
 @Component({
@@ -6,13 +7,19 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  signInWithGoogle() {
-    this.authService.signInWithGoogle();
+  async signInWithGoogle() {
+    await this.authService.signInWithGoogle();
+    this.redirect()
   }
 
-  signInWithGithub() {
-    this.authService.signInWithGithub();
+  async signInWithGithub() {
+    await this.authService.signInWithGithub();
+    this.redirect()
+  }
+
+  private redirect(): void {
+    this.router.navigate(['/']);
   }
 }
