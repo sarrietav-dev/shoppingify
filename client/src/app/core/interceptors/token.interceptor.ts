@@ -5,7 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, lastValueFrom } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
@@ -20,14 +20,18 @@ export class TokenInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
-    const authToken = this.authService.getToken();
+    return from(this.handle(request, next));
+  }
 
-    const authRequest = request.clone({
+  async handle(req: HttpRequest<unknown>, next: HttpHandler): Promise<HttpEvent<unknown>> {
+    const authToken = await this.authService.getToken();
+
+    const authRequest = req.clone({
       setHeaders: {
         Authorization: `Bearer ${authToken}`,
       },
     });
 
-    return next.handle(authRequest);
+    return lastValueFrom(next.handle(authRequest));
   }
 }

@@ -27,7 +27,7 @@ export class AuthService {
 
   async getToken() {
     const user = this.user;
-    return user?.getIdToken();
+    return await user?.getIdToken();
   }
 
   get user() {
