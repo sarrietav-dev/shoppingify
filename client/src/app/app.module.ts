@@ -8,7 +8,6 @@ import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
 
 
@@ -18,7 +17,7 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => {
       const auth = getAuth();
-      if (!environment.production) {
+      if (environment.production) {
         connectAuthEmulator(auth, 'http://localhost:9099');
       }
       return auth;
@@ -26,7 +25,6 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
     AppRoutingModule,
     BrowserModule,
     CommonModule,
-    BrowserAnimationsModule,
     HttpClientModule,
   ],
   providers: [
