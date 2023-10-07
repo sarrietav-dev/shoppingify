@@ -17,7 +17,7 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => {
       const auth = getAuth();
-      if (environment.production) {
+      if (!environment.production) {
         connectAuthEmulator(auth, 'http://localhost:9099');
       }
       return auth;
