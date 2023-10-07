@@ -7,17 +7,14 @@ import { environment } from '../environments/environment';
 import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TokenInterceptor } from './core/interceptors/token.interceptor';
+
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    AppRoutingModule,
-    BrowserModule,
-    CommonModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => {
       const auth = getAuth();
@@ -26,8 +23,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       }
       return auth;
     }),
+    AppRoutingModule,
+    BrowserModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
