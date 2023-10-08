@@ -84,7 +84,7 @@ public class CartApplicationService
             var cart = cartOwner.CompleteCart();
             await _cartRepository.Add(cart);
         }
-        catch (InvalidOperationException e)
+        catch (InvalidOperationException)
         {
             _logger.LogError("Cart {Id} from Owner {OwnerId} is not active so cannot complete",
                 cartOwner.ActiveCart.Id, cartOwner.Id);
