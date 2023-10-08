@@ -53,10 +53,11 @@ public class CartApplicationServiceTests
     }
 
     [Fact]
-    public async void CreateCart_CartOwnerNotFound_CreatesCartOwner() {
+    public async void CreateCart_CartOwnerNotFound_CreatesCartOwner()
+    {
         var cartOwnerId = new CartOwnerId("y1281");
 
-        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwnerId)).ReturnsAsync((CartOwner?) null);
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwnerId)).ReturnsAsync((CartOwner?)null);
 
         await _cartApplicationService.CreateCart(cartOwnerId.Value, "My Cart");
 
@@ -96,7 +97,7 @@ public class CartApplicationServiceTests
     {
         var cartOwner = _cartOwnerFaker.Generate();
 
-        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync((CartOwner?) null);
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync((CartOwner?)null);
 
         var cart = await _cartApplicationService.GetActiveCart(cartOwner.Id.Value);
 
@@ -126,7 +127,7 @@ public class CartApplicationServiceTests
         var cartOwner = _cartOwnerFaker.Generate();
         cartOwner.CreateCart("My Cart");
 
-        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync((CartOwner?) null);
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync((CartOwner?)null);
 
         var cartItems = _cartItemFaker.Generate(2);
 
@@ -177,6 +178,82 @@ public class CartApplicationServiceTests
         var cartItems = _cartItemFaker.Generate(2);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
+
+        _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
+    }
+
+    [Fact]
+    public async void CompleteCart_WithValidData_Successfully()
+    {
+        var cartOwner = _cartOwnerFaker.Generate();
+        cartOwner.CreateCart("My Cart");
+
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
+
+        await _cartApplicationService.CompleteCart(cartOwner.Id.Value);
+
+        _cartRepositoryMock.Verify(x => x.Add(It.IsAny<shoppingify.Cart.Domain.Cart>()), Times.Once);
+    }
+
+    [Fact]
+    public async void CompleteCart_CartOwnerNotFound_ThrowsException()
+    {
+        var cartOwner = _cartOwnerFaker.Generate();
+        cartOwner.CreateCart("My Cart");
+
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync((CartOwner?)null);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CompleteCart(cartOwner.Id.Value));
+
+        _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
+    }
+
+    [Fact]
+    public async void CompleteCart_CartOwnerWithoutActiveCart_ThrowsException()
+    {
+        var cartOwner = _cartOwnerFaker.Generate();
+
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CompleteCart(cartOwner.Id.Value));
+
+        _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
+    }
+
+    [Fact]
+    public async void CancelCart_WithValidData_Successfully()
+    {
+        var cartOwner = _cartOwnerFaker.Generate();
+        cartOwner.CreateCart("My Cart");
+
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
+
+        await _cartApplicationService.CancelCart(cartOwner.Id.Value);
+
+        _cartRepositoryMock.Verify(x => x.Add(It.IsAny<shoppingify.Cart.Domain.Cart>()), Times.Once);
+    }
+
+    [Fact]
+    public async void CancelCart_CartOwnerNotFound_ThrowsException()
+    {
+        var cartOwner = _cartOwnerFaker.Generate();
+        cartOwner.CreateCart("My Cart");
+
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync((CartOwner?)null);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CancelCart(cartOwner.Id.Value));
+
+        _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
+    }
+
+    [Fact]
+    public async void CancelCart_CartOwnerWithoutActiveCart_ThrowsException()
+    {
+        var cartOwner = _cartOwnerFaker.Generate();
+
+        _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CancelCart(cartOwner.Id.Value));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
