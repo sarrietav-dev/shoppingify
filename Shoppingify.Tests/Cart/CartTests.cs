@@ -66,4 +66,29 @@ public class CartTests
 
         Assert.Equal(cartItems, cart.CartItems);
     }
+
+    [Fact]
+    public void UpdateList_WithNotActiveCart_ThrowsException()
+    {
+        var cart = new shoppingify.Cart.Domain.Cart
+        {
+            Id = new CartId(Guid.NewGuid()),
+            CartOwnerId = new CartOwnerId("y1281"),
+            Name = "My Cart"
+        };
+
+        var cartItems = new List<CartItem>
+        {
+            new()
+            {
+                Quantity = 1,
+                Product = new Product(Guid.NewGuid(), "Hi"),
+                Status = CartItemStatus.Checked
+            }
+        };
+
+        cart.Complete();
+
+        Assert.Throws<InvalidOperationException>(() => cart.UpdateList(cartItems));
+    }
 }
