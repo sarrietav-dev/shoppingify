@@ -21,7 +21,7 @@ public class CartTests
     }
 
     [Fact]
-    public void Should_Be_Equal()
+    public void Carts_With_Same_Id_And_OwnerId_Should_Be_Equal()
     {
         var id = Guid.NewGuid();
 
@@ -43,7 +43,7 @@ public class CartTests
     }
 
     [Fact]
-    public void Should_Update_List()
+    public void UpdateList_SingleItem_Successfully()
     {
         var cart = new shoppingify.Cart.Domain.Cart
         {
