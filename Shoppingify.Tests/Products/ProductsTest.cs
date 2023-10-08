@@ -5,7 +5,7 @@ namespace Shoppingify.Tests.Products;
 public class ProductsTest
 {
     [Fact]
-    public void TestCreateProduct()
+    public void Product_CreateProduct_ReturnsCorrectValues()
     {
         var product = new Product
         {
@@ -22,7 +22,7 @@ public class ProductsTest
     }
 
     [Fact]
-    public void TestTwoProductsWithTheSameIdAreEqual()
+    public void Product_TwoProductsWithTheSameId_AreEqual()
     {
         var id = new ProductId(Guid.NewGuid());
         var product1 = new Product
