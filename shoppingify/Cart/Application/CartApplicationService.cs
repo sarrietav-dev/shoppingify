@@ -3,7 +3,7 @@ using InvalidOperationException = System.InvalidOperationException;
 
 namespace shoppingify.Cart.Application;
 
-public class CartApplicationService
+public class CartApplicationService : ICartApplicationService
 {
     private readonly ICartRepository _cartRepository;
     private readonly ICartOwnerRepository _cartOwnerRepository;
