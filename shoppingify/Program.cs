@@ -1,7 +1,5 @@
 using shoppingify.Cart.Domain;
 using shoppingify.Cart.Infrastructure.Repositories;
-using shoppingify.IAM.Application;
-using shoppingify.IAM.Infrastructure;
 using Serilog;
 using shoppingify.Middleware;
 
@@ -24,8 +22,6 @@ builder.Services.AddLogging(x =>
     }
 );
 builder.Services.AddScoped<ICartOwnerRepository, MockCartOwnerRepository>();
-builder.Services.AddScoped<IAuthenticationProviderService, MockAuthenticationService>();
-builder.Services.AddScoped<IdentityApplicationService, IdentityApplicationService>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 /*
