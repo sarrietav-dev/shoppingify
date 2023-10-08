@@ -3,7 +3,7 @@ using shoppingify.IAM.Application;
 
 namespace shoppingify.Middleware;
 
-class AuthTokenMiddleware : IMiddleware
+public class AuthTokenMiddleware : IMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly IAuthenticationProviderService _tokenService;
