@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "shoppingify-ce723"
+  },
+  "targets": {
+    "shoppingify-ce723": {
+      "hosting": {
+        "client": [
+          "shoppingify-ce723"
+        ]
+      }
+    }
+  }
+}

@@ -1,7 +1,13 @@
 <aside class="flex h-full shrink-0 basis-16 flex-col justify-between py-4">
-  <div class="mx-auto">
+  <div class="mx-auto" [matMenuTriggerFor]="menu">
     <img src="/assets/logo.svg" alt="" />
   </div>
+  <mat-menu #menu="matMenu">
+    <button (click)="onLogoutClicked()" mat-menu-item>
+      <mat-icon color="#374151">logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
   <ul class="flex grow flex-col justify-center gap-16">
     <li>
       <a
@@ -9,9 +15,9 @@
         matTooltipPosition="right"
         class="link-active relative flex items-center justify-center px-5 py-3"
       >
-        <span class="material-symbols-outlined text-gray-700">
+      <mat-icon>
           format_list_bulleted
-        </span>
+      </mat-icon>
       </a>
     </li>
     <li>
@@ -20,7 +26,7 @@
         matTooltipPosition="right"
         class="relative flex items-center justify-center px-5 py-3"
       >
-        <span class="material-symbols-outlined text-gray-700"> replay </span>
+        <mat-icon > replay </mat-icon>
       </a>
     </li>
     <li>
@@ -29,7 +35,7 @@
         matTooltipPosition="right"
         class="relative flex items-center justify-center px-5 py-3 text-gray-700"
       >
-        <span class="material-symbols-outlined"> insert_chart </span>
+        <mat-icon> insert_chart </mat-icon>
       </a>
     </li>
   </ul>
