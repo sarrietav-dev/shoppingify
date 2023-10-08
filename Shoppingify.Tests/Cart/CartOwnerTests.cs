@@ -48,4 +48,54 @@ public class CartOwnerTest
         // Act & Assert
         Assert.Throws<InvalidOperationException>(() => cartOwner.CreateCart("Cart 2", cartItems2));
     }
+
+    [Fact]
+    public void CompleteCart_WithValidData_Successfully()
+    {
+        // Arrange
+        var cartOwner = _cartOwnerFaker.Generate();
+        var cartItems = _cartItemFaker.Generate(10);
+        cartOwner.CreateCart("New Cart", cartItems);
+
+        // Act
+        cartOwner.CompleteCart();
+
+        // Assert
+        Assert.Null(cartOwner.ActiveCart);
+    }
+
+    [Fact]
+    public void CompleteCart_CartOwnerWithoutActiveCart_ThrowsException()
+    {
+        // Arrange
+        var cartOwner = _cartOwnerFaker.Generate();
+
+        // Act & Assert
+        Assert.Throws<InvalidOperationException>(() => cartOwner.CompleteCart());
+    }
+
+    [Fact]
+    public void CancelCart_WithValidData_Successfully()
+    {
+        // Arrange
+        var cartOwner = _cartOwnerFaker.Generate();
+        var cartItems = _cartItemFaker.Generate(10);
+        cartOwner.CreateCart("New Cart", cartItems);
+
+        // Act
+        cartOwner.CancelCart();
+
+        // Assert
+        Assert.Null(cartOwner.ActiveCart);
+    }
+
+    [Fact]
+    public void CancelCart_CartOwnerWithoutActiveCart_ThrowsException()
+    {
+        // Arrange
+        var cartOwner = _cartOwnerFaker.Generate();
+
+        // Act & Assert
+        Assert.Throws<InvalidOperationException>(() => cartOwner.CancelCart());
+    }
 }
