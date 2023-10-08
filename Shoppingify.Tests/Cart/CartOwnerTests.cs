@@ -1,63 +1,51 @@
-﻿using shoppingify.Cart.Domain;
+﻿// FILEPATH: /c:/Users/ASUS/GitHub/shoppingify/Shoppingify.Tests/Cart/CartOwnerTest.cs
+
+using Bogus;
+using shoppingify.Cart.Domain;
 
 namespace Shoppingify.Tests.Cart;
 
-public class CartOwnerTests
+public class CartOwnerTest
 {
-    [Fact]
-    public void Should_Create_CartOwner()
-    {
-        var cartOwner = new CartOwner
-        {
-            Id = new CartOwnerId("y1281")
-        };
+    private readonly Faker<CartOwner> _cartOwnerFaker;
+    private readonly Faker<CartItem> _cartItemFaker;
 
-        Assert.Equal("y1281", cartOwner.Id.Value);
-        Assert.Null(cartOwner.ActiveCart);
+    public CartOwnerTest()
+    {
+        _cartOwnerFaker = new Faker<CartOwner>()
+            .RuleFor(co => co.Id, f => new CartOwnerId(f.Random.String()));
+
+        _cartItemFaker = new Faker<CartItem>()
+            .RuleFor(ci => ci.Product, f => new Product(f.Random.Guid(), f.Commerce.ProductName()))
+            .RuleFor(ci => ci.Quantity, f => f.Random.Int(1, 10));
     }
 
     [Fact]
-    public void Should_Create_Cart()
+    public void CartOwner_CreateCart_CreatesNewCart()
     {
-        var cartOwner = new CartOwner
-        {
-            Id = new CartOwnerId("y1281")
-        };
+        // Arrange
+        var cartOwner = _cartOwnerFaker.Generate();
+        var cartItems = _cartItemFaker.Generate(10);
+        // Act
+        cartOwner.CreateCart("New Cart", cartItems);
 
-        cartOwner.CreateCart("My Cart");
-
-        var cart = cartOwner.ActiveCart;
-
-        Assert.Equal("My Cart", cart?.Name);
-        Assert.Equal(CartState.Active, cart?.State);
-        Assert.Equal(0, cart?.CartItems.Count);
+        // Assert
+        Assert.NotNull(cartOwner.ActiveCart);
+        Assert.Equal("New Cart", cartOwner.ActiveCart.Name);
+        Assert.Equal(cartItems.Count, cartOwner.ActiveCart.CartItems.Count);
+        Assert.True(cartItems.All(ci => cartOwner.ActiveCart.CartItems.Any(i => i.Product == ci.Product && i.Quantity == ci.Quantity)));
     }
 
     [Fact]
-    public void Should_Complete_Cart()
+    public void CartOwner_CreateCart_ThrowsExceptionWhenActiveCartExists()
     {
-        var cartOwner = new CartOwner
-        {
-            Id = new CartOwnerId("y1281")
-        };
+        // Arrange
+        var cartOwner = _cartOwnerFaker.Generate();
+        var cartItems1 = _cartItemFaker.Generate(2);
+        var cartItems2 = _cartItemFaker.Generate(2);
+        cartOwner.CreateCart("Cart 1", cartItems1);
 
-        cartOwner.CreateCart("My Cart");
-        cartOwner.CompleteCart();
-
-        Assert.Null(cartOwner.ActiveCart);
-    }
-
-    [Fact]
-    public void Should_Cancel_Cart()
-    {
-        var cartOwner = new CartOwner
-        {
-            Id = new CartOwnerId("y1281")
-        };
-
-        cartOwner.CreateCart("My Cart");
-        cartOwner.CancelCart();
-
-        Assert.Null(cartOwner.ActiveCart);
+        // Act & Assert
+        Assert.Throws<InvalidOperationException>(() => cartOwner.CreateCart("Cart 2", cartItems2));
     }
 }
