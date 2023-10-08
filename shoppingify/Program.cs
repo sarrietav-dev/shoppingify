@@ -3,6 +3,7 @@ using shoppingify.Cart.Infrastructure.Repositories;
 using shoppingify.IAM.Application;
 using shoppingify.IAM.Infrastructure;
 using Serilog;
+using shoppingify.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,5 +47,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<AuthTokenMiddleware>();
 
 app.Run();
