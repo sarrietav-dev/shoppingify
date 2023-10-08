@@ -1,6 +1,4 @@
-﻿using shoppingify.Products.Domain;
-
-namespace shoppingify.Cart.Domain;
+﻿namespace shoppingify.Cart.Domain;
 
 public record CartItem
 {

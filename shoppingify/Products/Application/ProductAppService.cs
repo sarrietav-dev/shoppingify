@@ -2,7 +2,7 @@ using shoppingify.Products.Domain;
 
 namespace shoppingify.Products.Application;
 
-public class ProductApplicationService
+public class ProductApplicationService : IProductApplicationService
 {
     private readonly IProductRepository _repository;
 

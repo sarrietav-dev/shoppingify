@@ -8,10 +8,10 @@ namespace shoppingify.Products.Infrastructure.Controllers;
 [Route("api/v1/me/products")]
 public class ProductsController : ControllerBase
 {
-    private readonly ProductApplicationService _applicationService;
+    private readonly IProductApplicationService _applicationService;
     private readonly IAuthenticationProviderService _authenticationProviderService;
 
-    public ProductsController(ProductApplicationService applicationService, IAuthenticationProviderService authenticationProviderService)
+    public ProductsController(IProductApplicationService applicationService, IAuthenticationProviderService authenticationProviderService)
     {
         _applicationService = applicationService;
         _authenticationProviderService = authenticationProviderService;
