@@ -9,10 +9,10 @@ namespace shoppingify.Cart.Infrastructure.Controllers;
 [Route("api/v1/me")]
 public class CartController : ControllerBase
 {
-    private readonly CartApplicationService _cartApplicationService;
+    private readonly ICartApplicationService _cartApplicationService;
     private readonly IAuthenticationProviderService _authenticationProviderService;
 
-    public CartController(CartApplicationService cartApplicationService,
+    public CartController(ICartApplicationService cartApplicationService,
         IAuthenticationProviderService authenticationProviderService)
     {
         _cartApplicationService = cartApplicationService;
@@ -20,78 +20,73 @@ public class CartController : ControllerBase
     }
 
     [HttpGet("/carts")]
-    public async Task<IActionResult> GetCarts()
+    public async Task<IActionResult> GetCarts([FromHeader(Name = "uid")] string cartOwnerId)
     {
-        var cartOwnerId = await GetAuthorizationToken();
-
         var carts = await _cartApplicationService.GetCarts(cartOwnerId);
 
         return Ok(carts);
     }
 
     [HttpGet("/active-cart")]
-    public async Task<IActionResult> GetActiveCart()
+    public async Task<IActionResult> GetActiveCart([FromHeader(Name = "uid")] string cartOwnerId)
     {
-        var cartOwnerId = await GetAuthorizationToken();
-
         var cart = await _cartApplicationService.GetActiveCart(cartOwnerId);
 
-        if (cart == null) return NotFound();
+        if (cart == null) return NoContent();
 
         return Ok(cart);
     }
 
     [HttpPost("/active-cart")]
-    public async Task<IActionResult> CreateCart(string name)
+    public async Task<IActionResult> CreateCart([FromBody] CreateCartCommand cart, [FromHeader(Name = "uid")] string cartOwnerId)
     {
         try
         {
-            var cartOwnerId = await GetAuthorizationToken();
-            await _cartApplicationService.CreateCart(cartOwnerId, name);
-            return NoContent();
+            var cartId = await _cartApplicationService.CreateCart(cartOwnerId, cart.Name, cart.CartItems);
+
+            if (cartId == null) return StatusCode(500);
+
+            return CreatedAtAction(nameof(GetActiveCart), new { cartOwnerId }, cartId);
         }
         catch (InvalidOperationException)
         {
-            return BadRequest();
+            return BadRequest(new { Message = "Cart already has an active cart" });
         }
     }
 
     [HttpPut("/active-cart/items")]
-    public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItem> cartItems)
+    public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItem> cartItems, [FromHeader(Name = "uid")] string ownerId)
     {
         try
         {
-            var ownerId = await GetAuthorizationToken();
             await _cartApplicationService.UpdateCartList(ownerId, cartItems);
             return Ok();
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException e)
         {
-            return BadRequest();
+            return BadRequest(new { e.Message });
         }
     }
 
     [HttpPut("/active-cart/complete")]
-    public async Task<IActionResult> CompleteCart()
+    public async Task<IActionResult> CompleteCart([FromHeader(Name = "uid")] string cartOwnerId, [FromBody] IEnumerable<CartItem> cartItems)
     {
         try
         {
-            var cartOwnerId = await GetAuthorizationToken();
             await _cartApplicationService.CompleteCart(cartOwnerId);
             return Ok();
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException e)
         {
-            return BadRequest();
+            return BadRequest(new { e.Message });
         }
     }
 
     [HttpPut("/active-cart/cancel")]
-    public async Task<IActionResult> CancelCart()
+    public async Task<IActionResult> CancelCart([FromHeader(Name = "uid")] string cartOwnerId)
     {
         try
         {
-            var cartOwnerId = await GetAuthorizationToken();
             await _cartApplicationService.CancelCart(cartOwnerId);
             return Ok();
         }
@@ -108,3 +103,5 @@ public class CartController : ControllerBase
         return cartOwnerId;
     }
 }
+
+public record CreateCartCommand(string Name, IEnumerable<CartItem> CartItems);

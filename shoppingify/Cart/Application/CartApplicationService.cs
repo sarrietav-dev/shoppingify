@@ -17,7 +17,7 @@ public class CartApplicationService : ICartApplicationService
         _logger = logger;
     }
 
-    public async Task CreateCart(string cartOwnerId, string name)
+    public async Task<CartId?> CreateCart(string cartOwnerId, string name)
     {
         var cartOwner = await GetCartOwner(cartOwnerId);
 
@@ -32,13 +32,46 @@ public class CartApplicationService : ICartApplicationService
                 };
                 cartOwner.CreateCart(name);
                 await _cartOwnerRepository.Add(cartOwner);
-                return;
+                return cartOwner.ActiveCart?.Id;
             }
 
             cartOwner.CreateCart(name);
 
             _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart?.Id,
                 cartOwner.Id);
+
+            return cartOwner.ActiveCart?.Id;
+        }
+        catch (InvalidOperationException e)
+        {
+            _logger.LogWarning(e, "Cart owner {CartOwnerId} already has an active cart", cartOwnerId);
+            throw;
+        }
+    }
+
+    public async Task<CartId?> CreateCart(string cartOwnerId, string name, IEnumerable<CartItem> cartItems)
+    {
+        var cartOwner = await GetCartOwner(cartOwnerId);
+
+        try
+        {
+            if (cartOwner is null)
+            {
+                cartOwner = new CartOwner
+                {
+                    Id = new CartOwnerId(cartOwnerId)
+                };
+                cartOwner.CreateCart(name, cartItems);
+                await _cartOwnerRepository.Add(cartOwner);
+                return cartOwner.ActiveCart?.Id;
+            }
+
+            cartOwner.CreateCart(name, cartItems);
+
+            _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart?.Id,
+                cartOwner.Id);
+
+            return cartOwner.ActiveCart?.Id;
         }
         catch (InvalidOperationException e)
         {
