@@ -1,7 +1,5 @@
 using shoppingify.Cart.Domain;
-using shoppingify.Cart.Infrastructure.Repositories;
 using Serilog;
-using shoppingify.Middleware;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using shoppingify.IAM.Application;
