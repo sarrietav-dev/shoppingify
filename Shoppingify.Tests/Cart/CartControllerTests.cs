@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Bogus;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using shoppingify.Cart.Application;
@@ -37,6 +39,18 @@ public class CartControllerTests
             .RuleFor(x => x.Product, f => new Product(f.Random.Guid(), f.Commerce.Product()))
             .RuleFor(x => x.Quantity, f => f.Random.Int(1, 10))
             .RuleFor(x => x.Status, f => f.PickRandom<CartItemStatus>());
+
+        var user = new ClaimsPrincipal(
+            new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
+            })
+        );
+
+        _cartController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = user }
+        };
     }
 
     [Theory]
