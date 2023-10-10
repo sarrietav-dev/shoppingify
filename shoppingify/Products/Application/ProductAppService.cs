@@ -5,10 +5,12 @@ namespace shoppingify.Products.Application;
 public class ProductApplicationService : IProductApplicationService
 {
     private readonly IProductRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ProductApplicationService(IProductRepository repository)
+    public ProductApplicationService(IProductRepository repository, IUnitOfWork unitOfWork)
     {
         _repository = repository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Product?> Get(Guid productId)
@@ -33,10 +35,12 @@ public class ProductApplicationService : IProductApplicationService
         };
 
         await _repository.Add(newProduct);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task Delete(Guid productId)
     {
         await _repository.Delete(new ProductId(productId));
+        await _unitOfWork.SaveChangesAsync();
     }
 }

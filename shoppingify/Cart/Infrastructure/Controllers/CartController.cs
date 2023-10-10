@@ -20,7 +20,7 @@ public class CartController : ControllerBase
         _authenticationProviderService = authenticationProviderService;
     }
 
-    [HttpGet("/carts")]
+    [HttpGet("carts")]
     public async Task<IActionResult> GetCarts()
     {
         var cartOwnerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -32,7 +32,7 @@ public class CartController : ControllerBase
         return Ok(carts);
     }
 
-    [HttpGet("/active-cart")]
+    [HttpGet("active-cart")]
     public async Task<IActionResult> GetActiveCart()
     {
         var cartOwnerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -46,7 +46,7 @@ public class CartController : ControllerBase
         return Ok(cart);
     }
 
-    [HttpPost("/active-cart")]
+    [HttpPost("active-cart")]
     public async Task<IActionResult> CreateCart([FromBody] CreateCartCommand cart)
     {
         var cartOwnerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -67,7 +67,7 @@ public class CartController : ControllerBase
         }
     }
 
-    [HttpPut("/active-cart/items")]
+    [HttpPut("active-cart/items")]
     public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItem> cartItems)
     {
         var ownerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -85,7 +85,7 @@ public class CartController : ControllerBase
         }
     }
 
-    [HttpPut("/active-cart/complete")]
+    [HttpPut("active-cart/complete")]
     public async Task<IActionResult> CompleteCart()
     {
         var cartOwnerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -102,7 +102,7 @@ public class CartController : ControllerBase
         }
     }
 
-    [HttpPut("/active-cart/cancel")]
+    [HttpPut("active-cart/cancel")]
     public async Task<IActionResult> CancelCart()
     {
         var cartOwnerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;

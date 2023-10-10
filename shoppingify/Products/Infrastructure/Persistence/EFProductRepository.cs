@@ -35,7 +35,7 @@ class EFProductRepository : IProductRepository
 
     public async Task<IEnumerable<Product>> GetAll(ProductOwner owner)
     {
-        return await _context.Products.Where(x => x.Owner == owner).ToListAsync();
+        return await _context.Products.Where(x => x.Owner.Value == owner.Value).ToListAsync();
     }
 
     public Task Update(Product product)

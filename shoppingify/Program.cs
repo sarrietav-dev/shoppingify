@@ -39,6 +39,7 @@ builder.Services.AddTransient<ICartApplicationService, CartApplicationService>()
 builder.Services.AddTransient<IProductApplicationService, ProductApplicationService>();
 builder.Services.AddTransient<ICartRepository, EFCartRepository>();
 builder.Services.AddTransient<IProductRepository, EFProductRepository>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddDbContext<AppDbContext>(options =>
