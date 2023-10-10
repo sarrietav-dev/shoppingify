@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Shoppingify.IAM.Application;
 using Shoppingify.Products.Application;
-using shoppingify.Products.Application.Commands;
+using Shoppingify.Products.Application.Commands;
 using Shoppingify.Products.Domain;
 using Shoppingify.Products.Infrastructure.Controllers;
 

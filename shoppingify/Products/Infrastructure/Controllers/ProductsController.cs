@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Shoppingify.Products.Application;
-using shoppingify.Products.Application.Commands;
+using Shoppingify.Products.Application.Commands;
 
 namespace Shoppingify.Products.Infrastructure.Controllers;
 
