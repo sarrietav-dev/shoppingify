@@ -2,5 +2,5 @@
 
 public interface IAuthenticationProviderService
 {
-    public Task<string> VerifyToken(string token);
+    public Task<string?> VerifyToken(string token);
 }

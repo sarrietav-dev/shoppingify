@@ -5,7 +5,7 @@ namespace Shoppingify.IAM.Infrastructure;
 
 internal class FirebaseAuthenticationProvider : IAuthenticationProviderService
 {
-    public async Task<string> VerifyToken(string token)
+    public async Task<string?> VerifyToken(string token)
     {
         var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
 
