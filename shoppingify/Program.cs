@@ -2,6 +2,12 @@ using shoppingify.Cart.Domain;
 using shoppingify.Cart.Infrastructure.Repositories;
 using Serilog;
 using shoppingify.Middleware;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using shoppingify.IAM.Application;
+using shoppingify.IAM.Infrastructure;
+using shoppingify;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,12 +28,18 @@ builder.Services.AddLogging(x =>
     }
 );
 builder.Services.AddScoped<ICartOwnerRepository, MockCartOwnerRepository>();
+builder.Services.AddScoped<IAuthenticationProviderService, FakeAuthenticationProvider>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseInMemoryDatabase("shoppingify");
+});
 
-/*
 FirebaseApp.Create(new AppOptions()
-    { Credential = GoogleCredential.GetApplicationDefault(), ProjectId = "shoppingify-6c574" });
-*/
+{
+    Credential = GoogleCredential.GetApplicationDefault(),
+    ProjectId = "shoppingify-6c574"
+});
 
 var app = builder.Build();
 
