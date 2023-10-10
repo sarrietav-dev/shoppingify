@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Shoppingify;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Infrastructure.Repositories;

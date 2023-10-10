@@ -37,10 +37,4 @@ public class EfProductRepository : IProductRepository
     {
         return await _context.Products.ToListAsync();
     }
-
-    public Task Update(Product product)
-    {
-        _context.Update(product);
-        return Task.CompletedTask;
-    }
 }

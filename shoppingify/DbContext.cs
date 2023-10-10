@@ -10,9 +10,9 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<CartOwner> CartOwners { get; set; }
-    public DbSet<Cart.Domain.Cart> Carts { get; set; }
-    public DbSet<Product> Products { get; set; }
+    public required DbSet<CartOwner> CartOwners { get; set; }
+    public required DbSet<Cart.Domain.Cart> Carts { get; set; }
+    public required DbSet<Product> Products { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
