@@ -21,6 +21,27 @@ public class CartOwnerTest
     }
 
     [Fact]
+    public void CartOwner_CreateCart_WithValidData_Successfully()
+    {
+        // Arrange
+        var cartOwner = new CartOwner
+        {
+            Id = new CartOwnerId(""),
+            ActiveCart = new Shoppingify.Cart.Domain.Cart
+            {
+                Id = new CartId(Guid.Empty),
+                Name = "New Cart",
+                CartOwnerId = new CartOwnerId(""),
+                CreatedAt = DateTime.Now,
+            }
+        };
+
+        // Assert
+        Assert.NotNull(cartOwner.ActiveCart);
+        Assert.Equal("New Cart", cartOwner.ActiveCart.Name);
+    }
+
+    [Fact]
     public void CartOwner_CreateCart_CreatesNewCart()
     {
         // Arrange
