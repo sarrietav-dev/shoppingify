@@ -118,13 +118,6 @@ public class CartController : ControllerBase
             return BadRequest();
         }
     }
-
-    private async Task<string> GetAuthorizationToken()
-    {
-        var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];
-        var cartOwnerId = await _authenticationProviderService.VerifyToken(uid);
-        return cartOwnerId;
-    }
 }
 
 public record CreateCartCommand(string Name, IEnumerable<CartItem> CartItems);
