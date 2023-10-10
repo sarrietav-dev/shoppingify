@@ -1,7 +1,7 @@
-﻿using shoppingify.Cart.Domain;
+﻿using Shoppingify.Cart.Domain;
 using InvalidOperationException = System.InvalidOperationException;
 
-namespace shoppingify.Cart.Application;
+namespace Shoppingify.Cart.Application;
 
 public class CartApplicationService : ICartApplicationService
 {

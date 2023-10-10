@@ -3,10 +3,10 @@ using Bogus;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using shoppingify.IAM.Application;
-using shoppingify.Products.Application;
-using shoppingify.Products.Domain;
-using shoppingify.Products.Infrastructure.Controllers;
+using Shoppingify.IAM.Application;
+using Shoppingify.Products.Application;
+using Shoppingify.Products.Domain;
+using Shoppingify.Products.Infrastructure.Controllers;
 
 namespace Shoppingify.Tests.Products;
 

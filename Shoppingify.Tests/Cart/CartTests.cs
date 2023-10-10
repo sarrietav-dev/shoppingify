@@ -1,5 +1,5 @@
-﻿using shoppingify.Cart.Domain;
-using Product = shoppingify.Cart.Domain.Product;
+﻿using Shoppingify.Cart.Domain;
+using Product = Shoppingify.Cart.Domain.Product;
 
 namespace Shoppingify.Tests.Cart;
 
@@ -8,7 +8,7 @@ public class CartTests
     [Fact]
     public void Should_Create_Cart()
     {
-        var cart = new shoppingify.Cart.Domain.Cart
+        var cart = new Shoppingify.Cart.Domain.Cart
         {
             Id = new CartId(Guid.NewGuid()),
             CartOwnerId = new CartOwnerId("y1281"),
@@ -25,14 +25,14 @@ public class CartTests
     {
         var id = Guid.NewGuid();
 
-        var cart1 = new shoppingify.Cart.Domain.Cart
+        var cart1 = new Shoppingify.Cart.Domain.Cart
         {
             Id = new CartId(id),
             CartOwnerId = new CartOwnerId("y1281"),
             Name = "My Cart"
         };
 
-        var cart2 = new shoppingify.Cart.Domain.Cart
+        var cart2 = new Shoppingify.Cart.Domain.Cart
         {
             Id = new CartId(id),
             CartOwnerId = new CartOwnerId("y1281"),
@@ -45,7 +45,7 @@ public class CartTests
     [Fact]
     public void UpdateList_SingleItem_Successfully()
     {
-        var cart = new shoppingify.Cart.Domain.Cart
+        var cart = new Shoppingify.Cart.Domain.Cart
         {
             Id = new CartId(Guid.NewGuid()),
             CartOwnerId = new CartOwnerId("y1281"),
@@ -70,7 +70,7 @@ public class CartTests
     [Fact]
     public void UpdateList_WithNotActiveCart_ThrowsException()
     {
-        var cart = new shoppingify.Cart.Domain.Cart
+        var cart = new Shoppingify.Cart.Domain.Cart
         {
             Id = new CartId(Guid.NewGuid()),
             CartOwnerId = new CartOwnerId("y1281"),

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Domain;
 
-namespace shoppingify;
+namespace Shoppingify;
 
 public class AppDbContext : DbContext
 {

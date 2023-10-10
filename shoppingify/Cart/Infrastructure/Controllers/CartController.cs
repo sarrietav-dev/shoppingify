@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using shoppingify.Cart.Application;
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Application;
+using Shoppingify.Cart.Domain;
 
-namespace shoppingify.Cart.Infrastructure.Controllers;
+namespace Shoppingify.Cart.Infrastructure.Controllers;
 
 [ApiController]
 [Route("api/v1/me")]

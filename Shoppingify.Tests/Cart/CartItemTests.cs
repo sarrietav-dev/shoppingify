@@ -1,5 +1,5 @@
 using Bogus;
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Tests.Cart;
 

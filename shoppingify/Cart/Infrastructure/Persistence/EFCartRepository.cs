@@ -1,8 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Domain;
 
-namespace shoppingify.Cart.Infrastructure.Persistence;
+namespace Shoppingify.Cart.Infrastructure.Persistence;
 
 class EFCartRepository : ICartRepository
 {

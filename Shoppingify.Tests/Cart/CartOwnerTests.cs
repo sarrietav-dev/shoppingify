@@ -1,7 +1,7 @@
 ﻿// FILEPATH: /c:/Users/ASUS/GitHub/shoppingify/Shoppingify.Tests/Cart/CartOwnerTest.cs
 
 using Bogus;
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Tests.Cart;
 

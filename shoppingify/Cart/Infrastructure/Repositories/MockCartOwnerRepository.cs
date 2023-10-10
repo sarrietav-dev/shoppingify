@@ -1,6 +1,6 @@
-﻿using shoppingify.Cart.Domain;
+﻿using Shoppingify.Cart.Domain;
 
-namespace shoppingify.Cart.Infrastructure.Repositories;
+namespace Shoppingify.Cart.Infrastructure.Repositories;
 
 public class MockCartOwnerRepository : ICartOwnerRepository
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using shoppingify.Products.Domain;
+using Shoppingify.Products.Domain;
 
-namespace shoppingify.Products.Infrastructure.Persistence;
+namespace Shoppingify.Products.Infrastructure.Persistence;
 
 class EFProductRepository : IProductRepository
 {

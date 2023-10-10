@@ -1,8 +1,8 @@
 using Bogus;
 using Microsoft.Extensions.Logging;
 using Moq;
-using shoppingify.Cart.Application;
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Application;
+using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Tests.Cart;
 
@@ -192,7 +192,7 @@ public class CartApplicationServiceTests
 
         await _cartApplicationService.CompleteCart(cartOwner.Id.Value);
 
-        _cartRepositoryMock.Verify(x => x.Add(It.IsAny<shoppingify.Cart.Domain.Cart>()), Times.Once);
+        _cartRepositoryMock.Verify(x => x.Add(It.IsAny<Shoppingify.Cart.Domain.Cart>()), Times.Once);
     }
 
     [Fact]
@@ -230,7 +230,7 @@ public class CartApplicationServiceTests
 
         await _cartApplicationService.CancelCart(cartOwner.Id.Value);
 
-        _cartRepositoryMock.Verify(x => x.Add(It.IsAny<shoppingify.Cart.Domain.Cart>()), Times.Once);
+        _cartRepositoryMock.Verify(x => x.Add(It.IsAny<Shoppingify.Cart.Domain.Cart>()), Times.Once);
     }
 
     [Fact]

@@ -1,6 +1,6 @@
-using shoppingify.IAM.Application;
+using Shoppingify.IAM.Application;
 
-namespace shoppingify.IAM.Infrastructure;
+namespace Shoppingify.IAM.Infrastructure;
 
 class FakeAuthenticationProvider : IAuthenticationProviderService
 {

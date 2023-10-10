@@ -1,4 +1,4 @@
-﻿namespace shoppingify.Cart.Domain;
+﻿namespace Shoppingify.Cart.Domain;
 
 public interface ICartOwnerRepository
 {

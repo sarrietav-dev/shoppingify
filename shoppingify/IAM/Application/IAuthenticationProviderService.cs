@@ -1,4 +1,4 @@
-﻿namespace shoppingify.IAM.Application;
+﻿namespace Shoppingify.IAM.Application;
 
 public interface IAuthenticationProviderService
 {

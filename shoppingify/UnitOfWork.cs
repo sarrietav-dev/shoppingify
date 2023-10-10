@@ -1,6 +1,6 @@
-using shoppingify;
+namespace Shoppingify;
 
-class UnitOfWork : IUnitOfWork
+public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
 

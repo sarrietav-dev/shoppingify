@@ -1,18 +1,18 @@
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Domain;
 using Serilog;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using shoppingify.IAM.Application;
-using shoppingify.IAM.Infrastructure;
-using shoppingify;
+using Shoppingify.IAM.Application;
+using Shoppingify.IAM.Infrastructure;
+using Shoppingify;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using shoppingify.Cart.Application;
-using shoppingify.Products.Application;
-using shoppingify.Cart.Infrastructure.Persistence;
-using shoppingify.Products.Domain;
-using shoppingify.Products.Infrastructure.Persistence;
+using Shoppingify.Cart.Application;
+using Shoppingify.Products.Application;
+using Shoppingify.Cart.Infrastructure.Persistence;
+using Shoppingify.Products.Domain;
+using Shoppingify.Products.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +48,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddAuthentication()
-    .AddScheme<AppAuthenticationSchemeOptions, AppAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, options => { });
+    .AddScheme<AppAuthenticationSchemeOptions, AppAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, _ => { });
+
 
 builder.Services.AddAuthorization(options =>
 {

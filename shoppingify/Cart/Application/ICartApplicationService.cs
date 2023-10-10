@@ -1,6 +1,6 @@
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Domain;
 
-namespace shoppingify.Cart.Application;
+namespace Shoppingify.Cart.Application;
 
 public interface ICartApplicationService
 {

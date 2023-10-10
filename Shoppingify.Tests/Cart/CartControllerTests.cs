@@ -3,10 +3,10 @@ using Bogus;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using shoppingify.Cart.Application;
-using shoppingify.Cart.Domain;
-using shoppingify.Cart.Infrastructure.Controllers;
-using shoppingify.IAM.Application;
+using Shoppingify.Cart.Application;
+using Shoppingify.Cart.Domain;
+using Shoppingify.Cart.Infrastructure.Controllers;
+using Shoppingify.IAM.Application;
 
 namespace Shoppingify.Tests.Cart;
 
@@ -15,7 +15,7 @@ public class CartControllerTests
     private readonly Mock<ICartApplicationService> _cartApplicationServiceMock;
     private readonly CartController _cartController;
     private readonly Mock<IAuthenticationProviderService> _authenticationProviderServiceMock;
-    private readonly Faker<shoppingify.Cart.Domain.Cart> _cartFaker;
+    private readonly Faker<Shoppingify.Cart.Domain.Cart> _cartFaker;
     private readonly Faker<CartItem> _cartItemFaker;
 
     public CartControllerTests()
@@ -23,7 +23,7 @@ public class CartControllerTests
         _cartApplicationServiceMock = new Mock<ICartApplicationService>();
         _authenticationProviderServiceMock = new Mock<IAuthenticationProviderService>();
         _cartController = new CartController(_cartApplicationServiceMock.Object);
-        _cartFaker = new Faker<shoppingify.Cart.Domain.Cart>()
+        _cartFaker = new Faker<Shoppingify.Cart.Domain.Cart>()
             .RuleFor(x => x.Id, f => new CartId(f.Random.Guid()))
             .RuleFor(x => x.Name, f => f.Random.String2(10))
             .RuleFor(x => x.CartOwnerId, f => new CartOwnerId(f.Random.Guid().ToString()))
@@ -91,7 +91,7 @@ public class CartControllerTests
     {
         // Arrange
 
-        _cartApplicationServiceMock.Setup(x => x.GetActiveCart(It.IsAny<string>())).ReturnsAsync((shoppingify.Cart.Domain.Cart?)null);
+        _cartApplicationServiceMock.Setup(x => x.GetActiveCart(It.IsAny<string>())).ReturnsAsync((Shoppingify.Cart.Domain.Cart?)null);
 
         // Act
         var result = await _cartController.GetActiveCart();

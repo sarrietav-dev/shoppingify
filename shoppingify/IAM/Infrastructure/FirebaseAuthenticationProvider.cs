@@ -1,7 +1,7 @@
 using FirebaseAdmin.Auth;
-using shoppingify.IAM.Application;
+using Shoppingify.IAM.Application;
 
-namespace shoppingify.IAM.Infrastructure;
+namespace Shoppingify.IAM.Infrastructure;
 
 class FirebaseAuthenticationProvider : IAuthenticationProviderService
 {

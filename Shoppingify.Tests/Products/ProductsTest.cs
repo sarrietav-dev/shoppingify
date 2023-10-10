@@ -1,4 +1,4 @@
-﻿using shoppingify.Products.Domain;
+﻿using Shoppingify.Products.Domain;
 
 namespace Shoppingify.Tests.Products;
 
