@@ -9,8 +9,12 @@ using shoppingify.IAM.Infrastructure;
 using shoppingify;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using shoppingify.Cart.Application;
+using shoppingify.Products.Application;
+using shoppingify.Cart.Infrastructure.Persistence;
+using shoppingify.Products.Domain;
+using shoppingify.Products.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +34,14 @@ builder.Services.AddLogging(x =>
         x.AddSerilog(dispose: true);
     }
 );
-builder.Services.AddScoped<ICartOwnerRepository, MockCartOwnerRepository>();
-builder.Services.AddScoped<IAuthenticationProviderService, FakeAuthenticationProvider>();
+
+builder.Services.AddTransient<ICartOwnerRepository, EFCartOwnerRepository>();
+builder.Services.AddTransient<IAuthenticationProviderService, FakeAuthenticationProvider>();
+builder.Services.AddTransient<ICartApplicationService, CartApplicationService>();
+builder.Services.AddTransient<IProductApplicationService, ProductApplicationService>();
+builder.Services.AddTransient<ICartRepository, EFCartRepository>();
+builder.Services.AddTransient<IProductRepository, EFProductRepository>();
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
