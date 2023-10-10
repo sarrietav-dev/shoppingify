@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Shoppingify;
 using Shoppingify.Cart.Domain;
 
-namespace shoppingify.Cart.Infrastructure.Repositories;
+namespace Shoppingify.Cart.Infrastructure.Repositories;
 
 internal class EfCartOwnerRepository : ICartOwnerRepository
 {

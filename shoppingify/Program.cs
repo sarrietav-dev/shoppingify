@@ -7,7 +7,7 @@ using Serilog;
 using Shoppingify;
 using Shoppingify.Cart.Application;
 using Shoppingify.Cart.Domain;
-using shoppingify.Cart.Infrastructure.Repositories;
+using Shoppingify.Cart.Infrastructure.Repositories;
 using Shoppingify.IAM.Application;
 using Shoppingify.IAM.Infrastructure;
 using Shoppingify.Products.Application;
