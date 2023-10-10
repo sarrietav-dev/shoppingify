@@ -7,7 +7,7 @@ using Serilog;
 using Shoppingify;
 using Shoppingify.Cart.Application;
 using Shoppingify.Cart.Domain;
-using Shoppingify.Cart.Infrastructure.Persistence;
+using shoppingify.Cart.Infrastructure.Repositories;
 using Shoppingify.IAM.Application;
 using Shoppingify.IAM.Infrastructure;
 using Shoppingify.Products.Application;
@@ -33,11 +33,11 @@ builder.Services.AddLogging(x =>
     }
 );
 
-builder.Services.AddTransient<ICartOwnerRepository, EFCartOwnerRepository>();
+builder.Services.AddTransient<ICartOwnerRepository, EfCartOwnerRepository>();
 builder.Services.AddTransient<IAuthenticationProviderService, FakeAuthenticationProvider>();
 builder.Services.AddTransient<ICartApplicationService, CartApplicationService>();
 builder.Services.AddTransient<IProductApplicationService, ProductApplicationService>();
-builder.Services.AddTransient<ICartRepository, EFCartRepository>();
+builder.Services.AddTransient<ICartRepository, EfCartRepository>();
 builder.Services.AddTransient<IProductRepository, EfProductRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
