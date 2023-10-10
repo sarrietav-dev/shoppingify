@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using shoppingify.IAM.Application;
 using shoppingify.Products.Application;
@@ -31,8 +33,10 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var id = await GetAuthorizationToken();
-        
+        var id = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (id is null) return BadRequest();
+
         var products = await _applicationService.GetAll(id);
 
         return Ok(products);
@@ -41,8 +45,10 @@ public class ProductsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Add(AddProductCommand product)
     {
-        var id = await GetAuthorizationToken();
-        
+        var id = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (id is null) return BadRequest();
+
         await _applicationService.Add(ownerId: id, product);
 
         return Ok();
@@ -51,11 +57,15 @@ public class ProductsController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
+        var uid = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        if (uid is null) return BadRequest();
+
         await _applicationService.Delete(id);
 
         return Ok();
     }
-    
+
     private async Task<string> GetAuthorizationToken()
     {
         var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Bogus;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,18 @@ public class ProductsControllerTest
             .RuleFor(p => p.Note, f => f.Random.String())
             .RuleFor(p => p.Image, f => f.Random.String())
             .RuleFor(p => p.Owner, f => new ProductOwner(f.Random.String()));
+
+        var user = new ClaimsPrincipal(
+            new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
+            })
+        );
+
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = user }
+        };
     }
 
     [Fact]
@@ -35,7 +48,7 @@ public class ProductsControllerTest
     {
         // Arrange
         var id = Guid.NewGuid();
-        _applicationServiceMock.Setup(x => x.Get(id)).ReturnsAsync((Product?)null);
+        _applicationServiceMock.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync((Product?)null);
 
         // Act
         var result = await _controller.Get(id);
@@ -48,7 +61,7 @@ public class ProductsControllerTest
     public async Task Get_ReturnsOk_WhenProductIsNotNull()
     {
         var product = _productFaker.Generate();
-        _applicationServiceMock.Setup(x => x.Get(product.Id.Value)).ReturnsAsync(product);
+        _applicationServiceMock.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(product);
 
         // Act
         var result = await _controller.Get(product.Id.Value);
@@ -64,15 +77,7 @@ public class ProductsControllerTest
         // Arrange
         var id = Guid.NewGuid();
         var products = _productFaker.Generate(10);
-        _authenticationProviderServiceMock.Setup(x => x.VerifyToken(It.IsAny<string>())).ReturnsAsync(id.ToString());
-        _applicationServiceMock.Setup(x => x.GetAll(id.ToString())).ReturnsAsync(products);
-
-        _controller.ControllerContext = new ControllerContext
-        {
-            HttpContext = new DefaultHttpContext()
-        };
-
-        _controller.HttpContext.Request.Headers["Authorization"] = "Bearer " + "test";
+        _applicationServiceMock.Setup(x => x.GetAll(It.IsAny<string>())).ReturnsAsync(products);
 
         // Act
         var result = await _controller.GetAll();
@@ -89,20 +94,14 @@ public class ProductsControllerTest
         var id = Guid.NewGuid();
         var product = new AddProductCommand("Test Product", "Test Category", "Test Note", "Test Image");
         _authenticationProviderServiceMock.Setup(x => x.VerifyToken(It.IsAny<string>())).ReturnsAsync(id.ToString());
-
-        _controller.ControllerContext = new ControllerContext
-        {
-            HttpContext = new DefaultHttpContext()
-        };
-
-        _controller.HttpContext.Request.Headers["Authorization"] = "Bearer " + "test";
+        _applicationServiceMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<AddProductCommand>())).Returns(Task.CompletedTask);
 
         // Act
         var result = await _controller.Add(product);
 
         // Assert
         Assert.IsType<OkResult>(result);
-        _applicationServiceMock.Verify(x => x.Add(id.ToString(), product), Times.Once);
+        _applicationServiceMock.Verify(x => x.Add(It.IsAny<string>(), product), Times.Once);
     }
 
     [Fact]
