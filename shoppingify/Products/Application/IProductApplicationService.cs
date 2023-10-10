@@ -1,6 +1,7 @@
-using shoppingify.Products.Domain;
+using Shoppingify.Products.Application.Commands;
+using Shoppingify.Products.Domain;
 
-namespace shoppingify.Products.Application;
+namespace Shoppingify.Products.Application;
 
 public interface IProductApplicationService
 {

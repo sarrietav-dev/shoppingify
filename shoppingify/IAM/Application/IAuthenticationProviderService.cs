@@ -1,6 +1,6 @@
-﻿namespace shoppingify.IAM.Application;
+﻿namespace Shoppingify.IAM.Application;
 
 public interface IAuthenticationProviderService
 {
-    public Task<string> VerifyToken(string token);
+    public Task<string?> VerifyToken(string token);
 }

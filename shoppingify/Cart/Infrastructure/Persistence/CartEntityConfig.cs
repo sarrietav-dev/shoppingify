@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Domain;
 
-namespace shoppingify.Cart.Infrastructure.Persistence;
+namespace Shoppingify.Cart.Infrastructure.Persistence;
 
 public class CartEntityConfig : IEntityTypeConfiguration<Domain.Cart>
 {
@@ -22,7 +22,7 @@ public class CartEntityConfig : IEntityTypeConfiguration<Domain.Cart>
 
         builder.Property(c => c.Name)
             .IsRequired();
-        
+
         builder.Property(c => c.CreatedAt)
             .IsRequired();
 

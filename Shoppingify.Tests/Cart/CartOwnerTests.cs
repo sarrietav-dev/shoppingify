@@ -1,14 +1,14 @@
 ﻿// FILEPATH: /c:/Users/ASUS/GitHub/shoppingify/Shoppingify.Tests/Cart/CartOwnerTest.cs
 
 using Bogus;
-using shoppingify.Cart.Domain;
+using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Tests.Cart;
 
 public class CartOwnerTest
 {
-    private readonly Faker<CartOwner> _cartOwnerFaker;
     private readonly Faker<CartItem> _cartItemFaker;
+    private readonly Faker<CartOwner> _cartOwnerFaker;
 
     public CartOwnerTest()
     {
@@ -18,6 +18,27 @@ public class CartOwnerTest
         _cartItemFaker = new Faker<CartItem>()
             .RuleFor(ci => ci.Product, f => new Product(f.Random.Guid(), f.Commerce.ProductName()))
             .RuleFor(ci => ci.Quantity, f => f.Random.Int(1, 10));
+    }
+
+    [Fact]
+    public void CartOwner_CreateCart_WithValidData_Successfully()
+    {
+        // Arrange
+        var cartOwner = new CartOwner
+        {
+            Id = new CartOwnerId(""),
+            ActiveCart = new Shoppingify.Cart.Domain.Cart
+            {
+                Id = new CartId(Guid.Empty),
+                Name = "New Cart",
+                CartOwnerId = new CartOwnerId(""),
+                CreatedAt = DateTime.Now,
+            }
+        };
+
+        // Assert
+        Assert.NotNull(cartOwner.ActiveCart);
+        Assert.Equal("New Cart", cartOwner.ActiveCart.Name);
     }
 
     [Fact]
@@ -33,7 +54,8 @@ public class CartOwnerTest
         Assert.NotNull(cartOwner.ActiveCart);
         Assert.Equal("New Cart", cartOwner.ActiveCart.Name);
         Assert.Equal(cartItems.Count, cartOwner.ActiveCart.CartItems.Count);
-        Assert.True(cartItems.All(ci => cartOwner.ActiveCart.CartItems.Any(i => i.Product == ci.Product && i.Quantity == ci.Quantity)));
+        Assert.True(cartItems.All(ci =>
+            cartOwner.ActiveCart.CartItems.Any(i => i.Product == ci.Product && i.Quantity == ci.Quantity)));
     }
 
     [Fact]

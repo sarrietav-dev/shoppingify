@@ -1,4 +1,4 @@
-namespace shoppingify;
+namespace Shoppingify;
 
 public interface IUnitOfWork
 {

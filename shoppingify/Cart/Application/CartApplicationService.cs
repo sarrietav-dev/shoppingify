@@ -1,26 +1,26 @@
-﻿using shoppingify.Cart.Domain;
-using InvalidOperationException = System.InvalidOperationException;
+﻿using Shoppingify.Cart.Domain;
 
-namespace shoppingify.Cart.Application;
+namespace Shoppingify.Cart.Application;
 
 public class CartApplicationService : ICartApplicationService
 {
-    private readonly ICartRepository _cartRepository;
     private readonly ICartOwnerRepository _cartOwnerRepository;
+    private readonly ICartRepository _cartRepository;
     private readonly ILogger _logger;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CartApplicationService(ICartRepository cartRepository, ICartOwnerRepository cartOwnerRepository,
-        ILogger<CartApplicationService> logger)
+        ILogger<CartApplicationService> logger, IUnitOfWork unitOfWork)
     {
         _cartRepository = cartRepository;
         _cartOwnerRepository = cartOwnerRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<CartId?> CreateCart(string cartOwnerId, string name)
     {
         var cartOwner = await GetCartOwner(cartOwnerId);
-
 
         try
         {
@@ -39,6 +39,8 @@ public class CartApplicationService : ICartApplicationService
 
             _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart?.Id,
                 cartOwner.Id);
+
+            await _unitOfWork.SaveChangesAsync();
 
             return cartOwner.ActiveCart?.Id;
         }
@@ -71,6 +73,8 @@ public class CartApplicationService : ICartApplicationService
             _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart?.Id,
                 cartOwner.Id);
 
+            await _unitOfWork.SaveChangesAsync();
+
             return cartOwner.ActiveCart?.Id;
         }
         catch (InvalidOperationException e)
@@ -86,10 +90,7 @@ public class CartApplicationService : ICartApplicationService
 
         if (cartOwner is null) return null;
 
-        if (cartOwner.ActiveCart is null)
-        {
-            _logger.LogWarning("Cart owner {Id} has no active cart", cartOwnerId);
-        }
+        if (cartOwner.ActiveCart is null) _logger.LogWarning("Cart owner {Id} has no active cart", cartOwnerId);
 
         return cartOwner.ActiveCart;
     }
@@ -111,6 +112,7 @@ public class CartApplicationService : ICartApplicationService
         try
         {
             cart.UpdateList(cartItems);
+            await _unitOfWork.SaveChangesAsync();
         }
         catch (InvalidOperationException)
         {
@@ -121,7 +123,7 @@ public class CartApplicationService : ICartApplicationService
 
     public async Task CompleteCart(string cartOwnerId)
     {
-        var cartOwner = await GetCartOwner(cartOwnerId: cartOwnerId);
+        var cartOwner = await GetCartOwner(cartOwnerId);
 
         if (cartOwner is null) throw new InvalidOperationException("Cart owner not found");
 
@@ -135,6 +137,7 @@ public class CartApplicationService : ICartApplicationService
         {
             var cart = cartOwner.CompleteCart();
             await _cartRepository.Add(cart);
+            await _unitOfWork.SaveChangesAsync();
         }
         catch (InvalidOperationException)
         {
@@ -146,7 +149,7 @@ public class CartApplicationService : ICartApplicationService
 
     public async Task CancelCart(string cartOwnerId)
     {
-        var cartOwner = await GetCartOwner(cartOwnerId: cartOwnerId);
+        var cartOwner = await GetCartOwner(cartOwnerId);
 
         if (cartOwner is null) throw new InvalidOperationException("Cart owner not found");
 
@@ -160,6 +163,7 @@ public class CartApplicationService : ICartApplicationService
         {
             var cart = cartOwner.CancelCart();
             await _cartRepository.Add(cart);
+            await _unitOfWork.SaveChangesAsync();
         }
         catch (InvalidOperationException)
         {
@@ -169,23 +173,15 @@ public class CartApplicationService : ICartApplicationService
         }
     }
 
+    public async Task<IEnumerable<Domain.Cart>> GetCarts(string cartOwnerId)
+    {
+        return await _cartRepository.GetAll(cartOwnerId);
+    }
+
     private async Task<CartOwner?> GetCartOwner(string cartOwnerId)
     {
         var cartOwner = await _cartOwnerRepository.Get(new CartOwnerId(cartOwnerId));
         _logger.LogWarning("Cart owner {Id} not found", cartOwnerId);
         return cartOwner;
-    }
-
-    private async Task<Domain.Cart> GetCart(Guid cartId)
-    {
-        var cart = await _cartRepository.Get(new CartId(cartId));
-        if (cart != null) return cart;
-        _logger.LogWarning("Cart {Id} not found", cartId);
-        throw new InvalidOperationException("Cart not found");
-    }
-
-    public async Task<IEnumerable<Domain.Cart>> GetCarts(string cartOwnerId)
-    {
-        return await _cartRepository.GetAll(cartOwnerId);
     }
 }

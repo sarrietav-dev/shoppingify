@@ -1,11 +1,11 @@
-using shoppingify.IAM.Application;
+using Shoppingify.IAM.Application;
 
-namespace shoppingify.IAM.Infrastructure;
+namespace Shoppingify.IAM.Infrastructure;
 
-class FakeAuthenticationProvider : IAuthenticationProviderService
+internal class FakeAuthenticationProvider : IAuthenticationProviderService
 {
-    public Task<string> VerifyToken(string token)
+    public Task<string?> VerifyToken(string token)
     {
-        return Task.FromResult("mock-user-id");
+        return Task.FromResult("mock-user-id")!;
     }
 }

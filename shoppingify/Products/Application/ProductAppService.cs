@@ -1,6 +1,7 @@
-using shoppingify.Products.Domain;
+using Shoppingify.Products.Application.Commands;
+using Shoppingify.Products.Domain;
 
-namespace shoppingify.Products.Application;
+namespace Shoppingify.Products.Application;
 
 public class ProductApplicationService : IProductApplicationService
 {
@@ -25,7 +26,8 @@ public class ProductApplicationService : IProductApplicationService
 
     public async Task Add(string ownerId, AddProductCommand product)
     {
-        var newProduct = new Product {
+        var newProduct = new Product
+        {
             Id = new ProductId(Guid.NewGuid()),
             Owner = new ProductOwner(ownerId),
             Name = product.Name,

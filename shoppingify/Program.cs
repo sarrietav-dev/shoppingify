@@ -1,18 +1,18 @@
-using shoppingify.Cart.Domain;
-using Serilog;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using shoppingify.IAM.Application;
-using shoppingify.IAM.Infrastructure;
-using shoppingify;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using shoppingify.Cart.Application;
-using shoppingify.Products.Application;
-using shoppingify.Cart.Infrastructure.Persistence;
-using shoppingify.Products.Domain;
-using shoppingify.Products.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Shoppingify;
+using Shoppingify.Cart.Application;
+using Shoppingify.Cart.Domain;
+using Shoppingify.Cart.Infrastructure.Repositories;
+using Shoppingify.IAM.Application;
+using Shoppingify.IAM.Infrastructure;
+using Shoppingify.Products.Application;
+using Shoppingify.Products.Domain;
+using Shoppingify.Products.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,22 +33,21 @@ builder.Services.AddLogging(x =>
     }
 );
 
-builder.Services.AddTransient<ICartOwnerRepository, EFCartOwnerRepository>();
+builder.Services.AddTransient<ICartOwnerRepository, EfCartOwnerRepository>();
 builder.Services.AddTransient<IAuthenticationProviderService, FakeAuthenticationProvider>();
 builder.Services.AddTransient<ICartApplicationService, CartApplicationService>();
 builder.Services.AddTransient<IProductApplicationService, ProductApplicationService>();
-builder.Services.AddTransient<ICartRepository, EFCartRepository>();
-builder.Services.AddTransient<IProductRepository, EFProductRepository>();
+builder.Services.AddTransient<ICartRepository, EfCartRepository>();
+builder.Services.AddTransient<IProductRepository, EfProductRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseInMemoryDatabase("shoppingify");
-});
+builder.Services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("shoppingify"); });
 
 builder.Services.AddAuthentication()
-    .AddScheme<AppAuthenticationSchemeOptions, AppAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, options => { });
+    .AddScheme<AppAuthenticationSchemeOptions, AppAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme,
+        _ => { });
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -57,7 +56,7 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
-FirebaseApp.Create(new AppOptions()
+FirebaseApp.Create(new AppOptions
 {
     Credential = GoogleCredential.GetApplicationDefault(),
     ProjectId = "shoppingify-6c574"

@@ -1,26 +1,28 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using shoppingify.IAM.Application;
-using shoppingify.Products.Application;
+using Shoppingify.Products.Application;
+using Shoppingify.Products.Application.Commands;
 
-namespace shoppingify.Products.Infrastructure.Controllers;
+namespace Shoppingify.Products.Infrastructure.Controllers;
 
 [ApiController]
 [Route("api/v1/me/products")]
 public class ProductsController : ControllerBase
 {
     private readonly IProductApplicationService _applicationService;
-    private readonly IAuthenticationProviderService _authenticationProviderService;
 
-    public ProductsController(IProductApplicationService applicationService, IAuthenticationProviderService authenticationProviderService)
+    public ProductsController(IProductApplicationService applicationService)
     {
         _applicationService = applicationService;
-        _authenticationProviderService = authenticationProviderService;
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get(Guid id)
     {
+        var uid = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        
+        if (uid is null) return BadRequest();
+        
         var product = await _applicationService.Get(id);
 
         if (product is null)
@@ -48,7 +50,7 @@ public class ProductsController : ControllerBase
 
         if (id is null) return BadRequest();
 
-        await _applicationService.Add(ownerId: id, product);
+        await _applicationService.Add(id, product);
 
         return Ok();
     }
@@ -63,12 +65,5 @@ public class ProductsController : ControllerBase
         await _applicationService.Delete(id);
 
         return Ok();
-    }
-
-    private async Task<string> GetAuthorizationToken()
-    {
-        var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];
-        var cartOwnerId = await _authenticationProviderService.VerifyToken(uid);
-        return cartOwnerId;
     }
 }

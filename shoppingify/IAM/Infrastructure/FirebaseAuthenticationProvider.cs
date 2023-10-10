@@ -1,11 +1,11 @@
 using FirebaseAdmin.Auth;
-using shoppingify.IAM.Application;
+using Shoppingify.IAM.Application;
 
-namespace shoppingify.IAM.Infrastructure;
+namespace Shoppingify.IAM.Infrastructure;
 
-class FirebaseAuthenticationProvider : IAuthenticationProviderService
+internal class FirebaseAuthenticationProvider : IAuthenticationProviderService
 {
-    public async Task<string> VerifyToken(string token)
+    public async Task<string?> VerifyToken(string token)
     {
         var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
 

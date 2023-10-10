@@ -1,23 +1,19 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using shoppingify.Cart.Application;
-using shoppingify.Cart.Domain;
-using shoppingify.IAM.Application;
+using Shoppingify.Cart.Application;
+using Shoppingify.Cart.Domain;
 
-namespace shoppingify.Cart.Infrastructure.Controllers;
+namespace Shoppingify.Cart.Infrastructure.Controllers;
 
 [ApiController]
 [Route("api/v1/me")]
 public class CartController : ControllerBase
 {
     private readonly ICartApplicationService _cartApplicationService;
-    private readonly IAuthenticationProviderService _authenticationProviderService;
 
-    public CartController(ICartApplicationService cartApplicationService,
-        IAuthenticationProviderService authenticationProviderService)
+    public CartController(ICartApplicationService cartApplicationService)
     {
         _cartApplicationService = cartApplicationService;
-        _authenticationProviderService = authenticationProviderService;
     }
 
     [HttpGet("carts")]
@@ -117,13 +113,6 @@ public class CartController : ControllerBase
         {
             return BadRequest();
         }
-    }
-
-    private async Task<string> GetAuthorizationToken()
-    {
-        var uid = Request.Headers["Authorization"].ToString().Split(" ")[1];
-        var cartOwnerId = await _authenticationProviderService.VerifyToken(uid);
-        return cartOwnerId;
     }
 }
 

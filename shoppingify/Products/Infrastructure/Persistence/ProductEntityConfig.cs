@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using shoppingify.Products.Domain;
+using Shoppingify.Products.Domain;
 
-namespace shoppingify.Products.Infrastructure.Persistence;
+namespace Shoppingify.Products.Infrastructure.Persistence;
 
 public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
 {
