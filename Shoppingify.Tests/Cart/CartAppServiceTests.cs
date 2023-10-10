@@ -8,18 +8,21 @@ namespace Shoppingify.Tests.Cart;
 
 public class CartApplicationServiceTests
 {
-    private readonly Mock<ICartRepository> _cartRepositoryMock;
-    private readonly Mock<ICartOwnerRepository> _cartOwnerRepositoryMock;
     private readonly ICartApplicationService _cartApplicationService;
-    private readonly Faker<CartOwner> _cartOwnerFaker;
     private readonly Faker<CartItem> _cartItemFaker;
+    private readonly Faker<CartOwner> _cartOwnerFaker;
+    private readonly Mock<ICartOwnerRepository> _cartOwnerRepositoryMock;
+    private readonly Mock<ICartRepository> _cartRepositoryMock;
 
     public CartApplicationServiceTests()
     {
         _cartRepositoryMock = new Mock<ICartRepository>();
         _cartOwnerRepositoryMock = new Mock<ICartOwnerRepository>();
-        var _loggerMock = new Mock<ILogger<CartApplicationService>>();
-        _cartApplicationService = new CartApplicationService(_cartRepositoryMock.Object, _cartOwnerRepositoryMock.Object, _loggerMock.Object);
+        var loggerMock = new Mock<ILogger<CartApplicationService>>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        unitOfWorkMock.Setup(x => x.SaveChangesAsync(default)).Returns(Task.CompletedTask);
+        _cartApplicationService = new CartApplicationService(_cartRepositoryMock.Object,
+            _cartOwnerRepositoryMock.Object, loggerMock.Object, unitOfWorkMock.Object);
         _cartOwnerFaker = new Faker<CartOwner>()
             .RuleFor(x => x.Id, f => new CartOwnerId(f.Random.AlphaNumeric(5)));
         _cartItemFaker = new Faker<CartItem>()
@@ -47,7 +50,8 @@ public class CartApplicationServiceTests
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CreateCart(cartOwner.Id.Value, "My Cart"));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _cartApplicationService.CreateCart(cartOwner.Id.Value, "My Cart"));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
@@ -131,7 +135,8 @@ public class CartApplicationServiceTests
 
         var cartItems = _cartItemFaker.Generate(2);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
@@ -145,7 +150,8 @@ public class CartApplicationServiceTests
 
         var cartItems = _cartItemFaker.Generate(2);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
@@ -161,7 +167,8 @@ public class CartApplicationServiceTests
 
         var cartItems = _cartItemFaker.Generate(2);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
@@ -177,7 +184,8 @@ public class CartApplicationServiceTests
 
         var cartItems = _cartItemFaker.Generate(2);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
@@ -203,7 +211,8 @@ public class CartApplicationServiceTests
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync((CartOwner?)null);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CompleteCart(cartOwner.Id.Value));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _cartApplicationService.CompleteCart(cartOwner.Id.Value));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
@@ -215,7 +224,8 @@ public class CartApplicationServiceTests
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CompleteCart(cartOwner.Id.Value));
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _cartApplicationService.CompleteCart(cartOwner.Id.Value));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
@@ -241,7 +251,8 @@ public class CartApplicationServiceTests
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync((CartOwner?)null);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CancelCart(cartOwner.Id.Value));
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => _cartApplicationService.CancelCart(cartOwner.Id.Value));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
@@ -253,7 +264,8 @@ public class CartApplicationServiceTests
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _cartApplicationService.CancelCart(cartOwner.Id.Value));
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => _cartApplicationService.CancelCart(cartOwner.Id.Value));
 
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }

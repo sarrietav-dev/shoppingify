@@ -32,12 +32,12 @@ public class Cart
     {
         State = CartState.Canceled;
     }
-    
+
     public void UpdateList(IEnumerable<CartItem> cartItems)
     {
         if (State != CartState.Active)
             throw new InvalidOperationException("Cannot update a non-active cart");
-        
+
         CartItems = cartItems.ToList();
     }
 
@@ -46,10 +46,10 @@ public class Cart
         if (obj == null || GetType() != obj.GetType())
             return false;
 
-        var cart = (Cart) obj;
+        var cart = (Cart)obj;
         return Id.Equals(cart.Id) && CartOwnerId.Equals(cart.CartOwnerId);
     }
-    
+
     public override int GetHashCode()
     {
         return HashCode.Combine(Id, CartOwnerId);

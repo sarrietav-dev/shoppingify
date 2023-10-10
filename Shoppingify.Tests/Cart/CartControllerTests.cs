@@ -6,7 +6,6 @@ using Moq;
 using Shoppingify.Cart.Application;
 using Shoppingify.Cart.Domain;
 using Shoppingify.Cart.Infrastructure.Controllers;
-using Shoppingify.IAM.Application;
 
 namespace Shoppingify.Tests.Cart;
 
@@ -14,14 +13,12 @@ public class CartControllerTests
 {
     private readonly Mock<ICartApplicationService> _cartApplicationServiceMock;
     private readonly CartController _cartController;
-    private readonly Mock<IAuthenticationProviderService> _authenticationProviderServiceMock;
     private readonly Faker<Shoppingify.Cart.Domain.Cart> _cartFaker;
     private readonly Faker<CartItem> _cartItemFaker;
 
     public CartControllerTests()
     {
         _cartApplicationServiceMock = new Mock<ICartApplicationService>();
-        _authenticationProviderServiceMock = new Mock<IAuthenticationProviderService>();
         _cartController = new CartController(_cartApplicationServiceMock.Object);
         _cartFaker = new Faker<Shoppingify.Cart.Domain.Cart>()
             .RuleFor(x => x.Id, f => new CartId(f.Random.Guid()))
@@ -91,7 +88,8 @@ public class CartControllerTests
     {
         // Arrange
 
-        _cartApplicationServiceMock.Setup(x => x.GetActiveCart(It.IsAny<string>())).ReturnsAsync((Shoppingify.Cart.Domain.Cart?)null);
+        _cartApplicationServiceMock.Setup(x => x.GetActiveCart(It.IsAny<string>()))
+            .ReturnsAsync((Shoppingify.Cart.Domain.Cart?)null);
 
         // Act
         var result = await _cartController.GetActiveCart();
@@ -108,10 +106,12 @@ public class CartControllerTests
         var cartId = Guid.NewGuid();
         var name = "My cart";
         var items = _cartItemFaker.Generate(3);
-        _cartApplicationServiceMock.Setup(x => x.CreateCart(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<CartItem>>())).ReturnsAsync(new CartId(cartId));
+        _cartApplicationServiceMock
+            .Setup(x => x.CreateCart(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<CartItem>>()))
+            .ReturnsAsync(new CartId(cartId));
 
         // Act
-        var result = await _cartController.CreateCart(cart: new CreateCartCommand(name, items));
+        var result = await _cartController.CreateCart(new CreateCartCommand(name, items));
 
         // Assert
         Assert.IsType<CreatedAtActionResult>(result);
@@ -124,10 +124,11 @@ public class CartControllerTests
 
         var name = "My cart";
         var items = _cartItemFaker.Generate(3);
-        _cartApplicationServiceMock.Setup(x => x.CreateCart(It.IsAny<string>(), name, items)).Throws<InvalidOperationException>();
+        _cartApplicationServiceMock.Setup(x => x.CreateCart(It.IsAny<string>(), name, items))
+            .Throws<InvalidOperationException>();
 
         // Act
-        var result = await _cartController.CreateCart(cart: new CreateCartCommand(name, items));
+        var result = await _cartController.CreateCart(new CreateCartCommand(name, items));
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
@@ -140,10 +141,11 @@ public class CartControllerTests
 
         var name = "My cart";
         var items = _cartItemFaker.Generate(3);
-        _cartApplicationServiceMock.Setup(x => x.CreateCart(It.IsAny<string>(), name, items)).ReturnsAsync((CartId?)null);
+        _cartApplicationServiceMock.Setup(x => x.CreateCart(It.IsAny<string>(), name, items))
+            .ReturnsAsync((CartId?)null);
 
         // Act
-        var result = await _cartController.CreateCart(cart: new CreateCartCommand(name, items));
+        var result = await _cartController.CreateCart(new CreateCartCommand(name, items));
 
         // Assert
         Assert.IsType<StatusCodeResult>(result);
@@ -158,7 +160,7 @@ public class CartControllerTests
         var items = _cartItemFaker.Generate(3);
 
         // Act
-        var result = await _cartController.UpdateCartList(cartItems: items);
+        var result = await _cartController.UpdateCartList(items);
 
         // Assert
         Assert.IsType<OkResult>(result);
@@ -170,10 +172,11 @@ public class CartControllerTests
         // Arrange
 
         var items = _cartItemFaker.Generate(3);
-        _cartApplicationServiceMock.Setup(x => x.UpdateCartList(It.IsAny<string>(), items)).Throws<InvalidOperationException>();
+        _cartApplicationServiceMock.Setup(x => x.UpdateCartList(It.IsAny<string>(), items))
+            .Throws<InvalidOperationException>();
 
         // Act
-        var result = await _cartController.UpdateCartList(cartItems: items);
+        var result = await _cartController.UpdateCartList(items);
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
@@ -182,10 +185,6 @@ public class CartControllerTests
     [Fact]
     public async Task CompleteCart_WithValidData_ReturnsOk()
     {
-        // Arrange
-
-        var items = _cartItemFaker.Generate(3);
-
         // Act
         var result = await _cartController.CompleteCart();
 
@@ -197,8 +196,6 @@ public class CartControllerTests
     public async Task CompleteCart_WithInvalidState_ReturnsBadRequest()
     {
         // Arrange
-
-        var items = _cartItemFaker.Generate(3);
         _cartApplicationServiceMock.Setup(x => x.CompleteCart(It.IsAny<string>())).Throws<InvalidOperationException>();
 
         // Act
@@ -211,9 +208,6 @@ public class CartControllerTests
     [Fact]
     public async Task CancelCart_WithValidData_ReturnsOk()
     {
-        // Arrange
-
-
         // Act
         var result = await _cartController.CancelCart();
 

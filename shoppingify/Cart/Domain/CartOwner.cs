@@ -12,16 +12,16 @@ public class CartOwner
     }
 
     /// <summary>
-    /// Creates a new cart for the cart owner
+    ///     Creates a new cart for the cart owner
     /// </summary>
     /// <param name="name">
-    /// The name of the cart
+    ///     The name of the cart
     /// </param>
     /// <param name="cartItems">
-    /// Initial list of cart items
+    ///     Initial list of cart items
     /// </param>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when the cart owner already has an active cart 
+    ///     Thrown when the cart owner already has an active cart
     /// </exception>
     public void CreateCart(string name, IEnumerable<CartItem> cartItems)
     {
@@ -33,13 +33,13 @@ public class CartOwner
     }
 
     /// <summary>
-    /// Creates a new cart for the cart owner
+    ///     Creates a new cart for the cart owner
     /// </summary>
     /// <param name="name">
-    /// The name of the cart
+    ///     The name of the cart
     /// </param>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when the cart owner already has an active cart 
+    ///     Thrown when the cart owner already has an active cart
     /// </exception>
     public void CreateCart(string name)
     {
@@ -61,10 +61,10 @@ public class CartOwner
 
 
     /// <summary>
-    /// Completes the active cart.
+    ///     Completes the active cart.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    /// When the Owner doesn't have an active cart, or when the given cart is already completed or canceled.
+    ///     When the Owner doesn't have an active cart, or when the given cart is already completed or canceled.
     /// </exception>
     public Cart CompleteCart()
     {
@@ -81,10 +81,10 @@ public class CartOwner
     }
 
     /// <summary>
-    /// Cancels the active cart.
+    ///     Cancels the active cart.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    /// When the Owner doesn't have an active cart, or when the given cart is already canceled or completed.
+    ///     When the Owner doesn't have an active cart, or when the given cart is already canceled or completed.
     /// </exception>
     public Cart CancelCart()
     {

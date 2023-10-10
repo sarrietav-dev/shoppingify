@@ -4,7 +4,6 @@ namespace Shoppingify.Cart.Application;
 
 public interface ICartApplicationService
 {
-
     public Task<CartId?> CreateCart(string cartOwnerId, string name);
     public Task<CartId?> CreateCart(string cartOwnerId, string name, IEnumerable<CartItem> cartItems);
     public Task<Domain.Cart?> GetActiveCart(string cartOwnerId);

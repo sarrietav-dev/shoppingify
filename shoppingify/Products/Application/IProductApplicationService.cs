@@ -1,3 +1,4 @@
+using shoppingify.Products.Application.Commands;
 using Shoppingify.Products.Domain;
 
 namespace Shoppingify.Products.Application;

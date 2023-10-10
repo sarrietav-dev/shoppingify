@@ -1,16 +1,16 @@
-using Shoppingify.Cart.Domain;
-using Serilog;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using Shoppingify.IAM.Application;
-using Shoppingify.IAM.Infrastructure;
-using Shoppingify;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Shoppingify;
 using Shoppingify.Cart.Application;
-using Shoppingify.Products.Application;
+using Shoppingify.Cart.Domain;
 using Shoppingify.Cart.Infrastructure.Persistence;
+using Shoppingify.IAM.Application;
+using Shoppingify.IAM.Infrastructure;
+using Shoppingify.Products.Application;
 using Shoppingify.Products.Domain;
 using Shoppingify.Products.Infrastructure.Persistence;
 
@@ -38,17 +38,15 @@ builder.Services.AddTransient<IAuthenticationProviderService, FakeAuthentication
 builder.Services.AddTransient<ICartApplicationService, CartApplicationService>();
 builder.Services.AddTransient<IProductApplicationService, ProductApplicationService>();
 builder.Services.AddTransient<ICartRepository, EFCartRepository>();
-builder.Services.AddTransient<IProductRepository, EFProductRepository>();
+builder.Services.AddTransient<IProductRepository, EfProductRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseInMemoryDatabase("shoppingify");
-});
+builder.Services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("shoppingify"); });
 
 builder.Services.AddAuthentication()
-    .AddScheme<AppAuthenticationSchemeOptions, AppAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, _ => { });
+    .AddScheme<AppAuthenticationSchemeOptions, AppAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme,
+        _ => { });
 
 
 builder.Services.AddAuthorization(options =>
@@ -58,7 +56,7 @@ builder.Services.AddAuthorization(options =>
         .Build();
 });
 
-FirebaseApp.Create(new AppOptions()
+FirebaseApp.Create(new AppOptions
 {
     Credential = GoogleCredential.GetApplicationDefault(),
     ProjectId = "shoppingify-6c574"

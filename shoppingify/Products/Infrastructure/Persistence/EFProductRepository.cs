@@ -3,11 +3,11 @@ using Shoppingify.Products.Domain;
 
 namespace Shoppingify.Products.Infrastructure.Persistence;
 
-class EFProductRepository : IProductRepository
+public class EfProductRepository : IProductRepository
 {
     private readonly AppDbContext _context;
 
-    public EFProductRepository(AppDbContext context)
+    public EfProductRepository(AppDbContext context)
     {
         _context = context;
     }
@@ -28,14 +28,14 @@ class EFProductRepository : IProductRepository
         return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IEnumerable<Product>> GetAll()
-    {
-        return await _context.Products.ToListAsync();
-    }
-
     public async Task<IEnumerable<Product>> GetAll(ProductOwner owner)
     {
         return await _context.Products.Where(x => x.Owner.Value == owner.Value).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Product>> GetAll()
+    {
+        return await _context.Products.ToListAsync();
     }
 
     public Task Update(Product product)

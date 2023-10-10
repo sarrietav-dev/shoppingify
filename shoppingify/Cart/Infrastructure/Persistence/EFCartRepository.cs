@@ -1,10 +1,9 @@
-
 using Microsoft.EntityFrameworkCore;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Infrastructure.Persistence;
 
-class EFCartRepository : ICartRepository
+internal class EFCartRepository : ICartRepository
 {
     public readonly AppDbContext _context;
 

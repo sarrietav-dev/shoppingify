@@ -1,5 +1,4 @@
 ﻿using Shoppingify.Cart.Domain;
-using Product = Shoppingify.Cart.Domain.Product;
 
 namespace Shoppingify.Tests.Cart;
 

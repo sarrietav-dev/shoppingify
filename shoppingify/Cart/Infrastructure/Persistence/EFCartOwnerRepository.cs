@@ -3,7 +3,7 @@ using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Infrastructure.Persistence;
 
-class EFCartOwnerRepository : ICartOwnerRepository
+internal class EFCartOwnerRepository : ICartOwnerRepository
 {
     private readonly AppDbContext _context;
 

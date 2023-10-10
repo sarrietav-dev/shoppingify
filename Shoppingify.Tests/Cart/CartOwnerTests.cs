@@ -7,8 +7,8 @@ namespace Shoppingify.Tests.Cart;
 
 public class CartOwnerTest
 {
-    private readonly Faker<CartOwner> _cartOwnerFaker;
     private readonly Faker<CartItem> _cartItemFaker;
+    private readonly Faker<CartOwner> _cartOwnerFaker;
 
     public CartOwnerTest()
     {
@@ -33,7 +33,8 @@ public class CartOwnerTest
         Assert.NotNull(cartOwner.ActiveCart);
         Assert.Equal("New Cart", cartOwner.ActiveCart.Name);
         Assert.Equal(cartItems.Count, cartOwner.ActiveCart.CartItems.Count);
-        Assert.True(cartItems.All(ci => cartOwner.ActiveCart.CartItems.Any(i => i.Product == ci.Product && i.Quantity == ci.Quantity)));
+        Assert.True(cartItems.All(ci =>
+            cartOwner.ActiveCart.CartItems.Any(i => i.Product == ci.Product && i.Quantity == ci.Quantity)));
     }
 
     [Fact]

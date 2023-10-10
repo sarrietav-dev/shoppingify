@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Shoppingify.IAM.Application;
 using Shoppingify.Products.Application;
+using shoppingify.Products.Application.Commands;
 using Shoppingify.Products.Domain;
 using Shoppingify.Products.Infrastructure.Controllers;
 
@@ -94,7 +95,8 @@ public class ProductsControllerTest
         var id = Guid.NewGuid();
         var product = new AddProductCommand("Test Product", "Test Category", "Test Note", "Test Image");
         _authenticationProviderServiceMock.Setup(x => x.VerifyToken(It.IsAny<string>())).ReturnsAsync(id.ToString());
-        _applicationServiceMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<AddProductCommand>())).Returns(Task.CompletedTask);
+        _applicationServiceMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<AddProductCommand>()))
+            .Returns(Task.CompletedTask);
 
         // Act
         var result = await _controller.Add(product);

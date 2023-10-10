@@ -11,11 +11,13 @@ public class AppAuthenticationSchemeOptions : AuthenticationSchemeOptions
 public class AppAuthenticationHandler : AuthenticationHandler<AppAuthenticationSchemeOptions>
 {
     private readonly IAuthenticationProviderService _authenticationProviderService;
+
     public AppAuthenticationHandler(
         IOptionsMonitor<AppAuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock, IAuthenticationProviderService authenticationProviderService) : base(options, logger, encoder, clock)
+        ISystemClock clock, IAuthenticationProviderService authenticationProviderService) : base(options, logger,
+        encoder, clock)
     {
         _authenticationProviderService = authenticationProviderService;
     }
@@ -23,19 +25,14 @@ public class AppAuthenticationHandler : AuthenticationHandler<AppAuthenticationS
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-        if (token == null)
-        {
-            return AuthenticateResult.NoResult();
-        }
+        if (token == null) return AuthenticateResult.NoResult();
 
         var uid = await _authenticationProviderService.VerifyToken(token);
 
-        if (uid == null)
-        {
-            return AuthenticateResult.Fail("Invalid token");
-        }
+        if (uid == null) return AuthenticateResult.Fail("Invalid token");
 
-        var claims = new[] {
+        var claims = new[]
+        {
             new Claim(ClaimTypes.NameIdentifier, uid),
             new Claim(ClaimTypes.Name, uid)
         };

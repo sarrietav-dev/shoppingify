@@ -22,7 +22,7 @@ public class CartEntityConfig : IEntityTypeConfiguration<Domain.Cart>
 
         builder.Property(c => c.Name)
             .IsRequired();
-        
+
         builder.Property(c => c.CreatedAt)
             .IsRequired();
 

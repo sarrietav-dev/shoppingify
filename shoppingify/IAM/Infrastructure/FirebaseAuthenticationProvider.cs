@@ -3,7 +3,7 @@ using Shoppingify.IAM.Application;
 
 namespace Shoppingify.IAM.Infrastructure;
 
-class FirebaseAuthenticationProvider : IAuthenticationProviderService
+internal class FirebaseAuthenticationProvider : IAuthenticationProviderService
 {
     public async Task<string> VerifyToken(string token)
     {

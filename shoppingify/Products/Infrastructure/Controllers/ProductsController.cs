@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Shoppingify.Products.Application;
+using shoppingify.Products.Application.Commands;
 
 namespace Shoppingify.Products.Infrastructure.Controllers;
 
@@ -45,7 +46,7 @@ public class ProductsController : ControllerBase
 
         if (id is null) return BadRequest();
 
-        await _applicationService.Add(ownerId: id, product);
+        await _applicationService.Add(id, product);
 
         return Ok();
     }
