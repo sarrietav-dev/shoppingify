@@ -19,7 +19,7 @@ public class CartItemTest
     {
         // Arrange
         var product = new Product(Guid.NewGuid(), "Product Name");
-        var quantity = 5;
+        const int quantity = 5;
 
         // Act
         var cartItem = new CartItem { Product = product, Quantity = quantity, Status = CartItemStatus.Unchecked };
@@ -27,6 +27,7 @@ public class CartItemTest
         // Assert
         Assert.Equal(product, cartItem.Product);
         Assert.Equal(quantity, cartItem.Quantity);
+        Assert.Equal(CartItemStatus.Unchecked, cartItem.Status);
     }
 
     [Fact]

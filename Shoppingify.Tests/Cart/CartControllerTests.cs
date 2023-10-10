@@ -68,6 +68,22 @@ public class CartControllerTests
     }
 
     [Fact]
+    public async Task GetCarts_UidNull_ReturnsBadRequest()
+    {
+        // Arrange
+        _cartController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _cartController.GetCarts();
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
     public async Task GetActiveCart_WithCart_ReturnsOk()
     {
         // Arrange
@@ -96,6 +112,22 @@ public class CartControllerTests
 
         // Assert
         Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
+    public async Task GetActiveCart_UidNull_ReturnsBadRequest()
+    {
+        // Arrange
+        _cartController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _cartController.GetActiveCart();
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
     }
 
     [Fact]
@@ -153,6 +185,22 @@ public class CartControllerTests
     }
 
     [Fact]
+    public async Task CreateCart_UidNull_ReturnsBadRequest()
+    {
+        // Arrange
+        _cartController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _cartController.CreateCart(new CreateCartCommand("My cart", new List<CartItem>()));
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
     public async Task UpdateCartList_WithValidData_ReturnsOk()
     {
         // Arrange
@@ -183,6 +231,22 @@ public class CartControllerTests
     }
 
     [Fact]
+    public async Task UpdateCartList_UidNull_ReturnsBadRequest()
+    {
+        // Arrange
+        _cartController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _cartController.UpdateCartList(new List<CartItem>());
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
     public async Task CompleteCart_WithValidData_ReturnsOk()
     {
         // Act
@@ -206,6 +270,22 @@ public class CartControllerTests
     }
 
     [Fact]
+    public async Task CompleteCart_UidNull_ReturnsBadRequest()
+    {
+        // Arrange
+        _cartController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _cartController.CompleteCart();
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
     public async Task CancelCart_WithValidData_ReturnsOk()
     {
         // Act
@@ -221,6 +301,22 @@ public class CartControllerTests
         // Arrange
 
         _cartApplicationServiceMock.Setup(x => x.CancelCart(It.IsAny<string>())).Throws<InvalidOperationException>();
+
+        // Act
+        var result = await _cartController.CancelCart();
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public async Task CancelCart_UidNull_ReturnsBadRequest()
+    {
+        // Arrange
+        _cartController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
 
         // Act
         var result = await _cartController.CancelCart();

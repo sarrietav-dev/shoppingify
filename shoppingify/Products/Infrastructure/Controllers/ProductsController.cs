@@ -19,6 +19,10 @@ public class ProductsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get(Guid id)
     {
+        var uid = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        
+        if (uid is null) return BadRequest();
+        
         var product = await _applicationService.Get(id);
 
         if (product is null)

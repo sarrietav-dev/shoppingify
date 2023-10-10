@@ -45,7 +45,7 @@ public class ProductsControllerTest
     }
 
     [Fact]
-    public async Task Get_ReturnsNotFound_WhenProductIsNull()
+    public async Task Get_WhenProductIsNull_ReturnsNotFound()
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -57,9 +57,26 @@ public class ProductsControllerTest
         // Assert
         Assert.IsType<NotFoundResult>(result);
     }
+    
+    [Fact]
+    public async Task Get_WhenUserIsNotAuthenticated_ReturnsBadRequest()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _controller.Get(id);
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
 
     [Fact]
-    public async Task Get_ReturnsOk_WhenProductIsNotNull()
+    public async Task Get_WithValidData_ReturnsOk()
     {
         var product = _productFaker.Generate();
         _applicationServiceMock.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(product);
@@ -71,9 +88,26 @@ public class ProductsControllerTest
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(product, okResult.Value);
     }
+    
+    [Fact]
+    public async Task GetAll_WhenUserIsNotAuthenticated_ReturnsBadRequest()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _controller.GetAll();
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+    }
 
     [Fact]
-    public async Task GetAll_ReturnsOk_WithListOfProducts()
+    public async Task GetAll_WithValidData_ReturnsOk()
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -87,9 +121,25 @@ public class ProductsControllerTest
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(products, okResult.Value);
     }
+    
+    [Fact]
+    public async Task GetAll_WhenNoProducts_ReturnsOk()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var products = new List<Product>();
+        _applicationServiceMock.Setup(x => x.GetAll(It.IsAny<string>())).ReturnsAsync(products);
+
+        // Act
+        var result = await _controller.GetAll();
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(products, okResult.Value);
+    }
 
     [Fact]
-    public async Task Add_ReturnsOk_WhenProductIsAdded()
+    public async Task Add_WhenProductIsAdded_ReturnsOk()
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -105,9 +155,28 @@ public class ProductsControllerTest
         Assert.IsType<OkResult>(result);
         _applicationServiceMock.Verify(x => x.Add(It.IsAny<string>(), product), Times.Once);
     }
+    
+    [Fact]
+    public async Task Add_WhenUserIsNotAuthenticated_ReturnsBadRequest()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var product = new AddProductCommand("Test Product", "Test Category", "Test Note", "Test Image");
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _controller.Add(product);
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+        _applicationServiceMock.Verify(x => x.Add(It.IsAny<string>(), product), Times.Never);
+    }
 
     [Fact]
-    public async Task Delete_ReturnsOk_WhenProductIsDeleted()
+    public async Task Delete_WhenProductIsDeleted_ReturnsOk()
     {
         // Arrange
         var id = Guid.NewGuid();
@@ -119,5 +188,24 @@ public class ProductsControllerTest
         // Assert
         Assert.IsType<OkResult>(result);
         _applicationServiceMock.Verify(x => x.Delete(productId), Times.Once);
+    }
+    
+    [Fact]
+    public async Task Delete_WhenUserIsNotAuthenticated_ReturnsBadRequest()
+    {
+        // Arrange
+        var id = Guid.NewGuid();
+        var productId = Guid.NewGuid();
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = new ClaimsPrincipal() }
+        };
+
+        // Act
+        var result = await _controller.Delete(productId);
+
+        // Assert
+        Assert.IsType<BadRequestResult>(result);
+        _applicationServiceMock.Verify(x => x.Delete(productId), Times.Never);
     }
 }
