@@ -21,7 +21,7 @@ public class ProductsControllerTest
     {
         _applicationServiceMock = new Mock<IProductApplicationService>();
         _authenticationProviderServiceMock = new Mock<IAuthenticationProviderService>();
-        _controller = new ProductsController(_applicationServiceMock.Object, _authenticationProviderServiceMock.Object);
+        _controller = new ProductsController(_applicationServiceMock.Object);
         _productFaker = new Faker<Product>()
             .RuleFor(p => p.Id, f => new ProductId(f.Random.Guid()))
             .RuleFor(p => p.Name, f => f.Random.String())

@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using shoppingify.IAM.Application;
 using shoppingify.Products.Application;
 
 namespace shoppingify.Products.Infrastructure.Controllers;
@@ -10,12 +9,10 @@ namespace shoppingify.Products.Infrastructure.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly IProductApplicationService _applicationService;
-    private readonly IAuthenticationProviderService _authenticationProviderService;
 
-    public ProductsController(IProductApplicationService applicationService, IAuthenticationProviderService authenticationProviderService)
+    public ProductsController(IProductApplicationService applicationService)
     {
         _applicationService = applicationService;
-        _authenticationProviderService = authenticationProviderService;
     }
 
     [HttpGet("{id:guid}")]

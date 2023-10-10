@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using shoppingify.Cart.Application;
 using shoppingify.Cart.Domain;
-using shoppingify.IAM.Application;
 
 namespace shoppingify.Cart.Infrastructure.Controllers;
 
@@ -11,13 +10,10 @@ namespace shoppingify.Cart.Infrastructure.Controllers;
 public class CartController : ControllerBase
 {
     private readonly ICartApplicationService _cartApplicationService;
-    private readonly IAuthenticationProviderService _authenticationProviderService;
 
-    public CartController(ICartApplicationService cartApplicationService,
-        IAuthenticationProviderService authenticationProviderService)
+    public CartController(ICartApplicationService cartApplicationService)
     {
         _cartApplicationService = cartApplicationService;
-        _authenticationProviderService = authenticationProviderService;
     }
 
     [HttpGet("carts")]

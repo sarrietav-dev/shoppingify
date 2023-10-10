@@ -22,8 +22,7 @@ public class CartControllerTests
     {
         _cartApplicationServiceMock = new Mock<ICartApplicationService>();
         _authenticationProviderServiceMock = new Mock<IAuthenticationProviderService>();
-        _cartController = new CartController(_cartApplicationServiceMock.Object,
-            _authenticationProviderServiceMock.Object);
+        _cartController = new CartController(_cartApplicationServiceMock.Object);
         _cartFaker = new Faker<shoppingify.Cart.Domain.Cart>()
             .RuleFor(x => x.Id, f => new CartId(f.Random.Guid()))
             .RuleFor(x => x.Name, f => f.Random.String2(10))
