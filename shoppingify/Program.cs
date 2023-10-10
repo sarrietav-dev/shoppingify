@@ -8,6 +8,9 @@ using shoppingify.IAM.Application;
 using shoppingify.IAM.Infrastructure;
 using shoppingify;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +38,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("shoppingify");
 });
 
+builder.Services.AddAuthentication()
+    .AddScheme<AppAuthenticationSchemeOptions, AppAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme, options => { });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
 FirebaseApp.Create(new AppOptions()
 {
     Credential = GoogleCredential.GetApplicationDefault(),
@@ -55,7 +68,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseMiddleware<AuthTokenMiddleware>();
 
 app.Run();
