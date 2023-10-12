@@ -10,7 +10,7 @@ public class CartApplicationService : ICartApplicationService
     private readonly IUnitOfWork _unitOfWork;
 
     public CartApplicationService(ICartRepository cartRepository, ICartOwnerRepository cartOwnerRepository,
-        ILogger logger, IUnitOfWork unitOfWork)
+        ILogger<CartApplicationService> logger, IUnitOfWork unitOfWork)
     {
         _cartRepository = cartRepository;
         _cartOwnerRepository = cartOwnerRepository;
