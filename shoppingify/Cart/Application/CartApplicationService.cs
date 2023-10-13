@@ -65,6 +65,7 @@ public class CartApplicationService : ICartApplicationService
                 };
                 cartOwner.CreateCart(name, cartItems);
                 await _cartOwnerRepository.Add(cartOwner);
+                await _unitOfWork.SaveChangesAsync();
                 return cartOwner.ActiveCart?.Id;
             }
 
