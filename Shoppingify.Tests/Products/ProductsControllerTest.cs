@@ -146,13 +146,13 @@ public class ProductsControllerTest
         var product = new AddProductCommand("Test Product", "Test Category", "Test Note", "Test Image");
         _authenticationProviderServiceMock.Setup(x => x.VerifyToken(It.IsAny<string>())).ReturnsAsync(id.ToString());
         _applicationServiceMock.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<AddProductCommand>()))
-            .Returns(Task.CompletedTask);
+            .Returns(Task.FromResult(_productFaker.Generate()));
 
         // Act
         var result = await _controller.Add(product);
 
         // Assert
-        Assert.IsType<OkResult>(result);
+        Assert.IsType<CreatedAtActionResult>(result);
         _applicationServiceMock.Verify(x => x.Add(It.IsAny<string>(), product), Times.Once);
     }
     

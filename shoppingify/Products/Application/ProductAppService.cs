@@ -24,7 +24,7 @@ public class ProductApplicationService : IProductApplicationService
         return await _repository.GetAll(new ProductOwner(productOwnerId));
     }
 
-    public async Task Add(string ownerId, AddProductCommand product)
+    public async Task<Product> Add(string ownerId, AddProductCommand product)
     {
         var newProduct = new Product
         {
@@ -38,6 +38,8 @@ public class ProductApplicationService : IProductApplicationService
 
         await _repository.Add(newProduct);
         await _unitOfWork.SaveChangesAsync();
+
+        return newProduct;
     }
 
     public async Task Delete(Guid productId)

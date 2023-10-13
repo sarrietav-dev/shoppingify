@@ -20,9 +20,9 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> Get(Guid id)
     {
         var uid = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-        
+
         if (uid is null) return BadRequest();
-        
+
         var product = await _applicationService.Get(id);
 
         if (product is null)
@@ -50,9 +50,9 @@ public class ProductsController : ControllerBase
 
         if (id is null) return BadRequest();
 
-        await _applicationService.Add(id, product);
+        var createdProduct = await _applicationService.Add(id, product);
 
-        return Ok();
+        return CreatedAtAction(nameof(Get), new { id = createdProduct.Id }, product);
     }
 
     [HttpDelete("{id:guid}")]
