@@ -10,7 +10,7 @@ public class CartItemTest
     public CartItemTest()
     {
         _cartItemFaker = new Faker<CartItem>()
-            .RuleFor(ci => ci.Product, f => new Product(f.Random.Guid(), f.Commerce.ProductName()))
+            .RuleFor(ci => ci.Product, f => new ProductId(f.Random.Guid()))
             .RuleFor(ci => ci.Quantity, f => f.Random.Int(1, 10));
     }
 
@@ -18,11 +18,11 @@ public class CartItemTest
     public void CartItem_CreateCartItem_ReturnsCorrectValues()
     {
         // Arrange
-        var product = new Product(Guid.NewGuid(), "Product Name");
+        var product = new ProductId(Guid.NewGuid());
         const int quantity = 5;
 
         // Act
-        var cartItem = new CartItem { Product = product, Quantity = quantity, Status = CartItemStatus.Unchecked };
+        var cartItem = new CartItem { Product= product, Quantity = quantity, Status = CartItemStatus.Unchecked };
 
         // Assert
         Assert.Equal(product, cartItem.Product);

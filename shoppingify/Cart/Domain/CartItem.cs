@@ -3,7 +3,7 @@
 public record CartItem
 {
     private readonly int _quantity;
-    public required Product Product { get; init; }
+    public required ProductId Product { get; init; }
 
     public required int Quantity
     {

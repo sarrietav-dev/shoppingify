@@ -56,7 +56,7 @@ public class CartTests
             new()
             {
                 Quantity = 1,
-                Product = new Product(Guid.NewGuid(), "Hi"),
+                Product = new ProductId(Guid.NewGuid()),
                 Status = CartItemStatus.Checked
             }
         };
@@ -81,7 +81,7 @@ public class CartTests
             new()
             {
                 Quantity = 1,
-                Product = new Product(Guid.NewGuid(), "Hi"),
+                Product = new ProductId(Guid.NewGuid()),
                 Status = CartItemStatus.Checked
             }
         };
@@ -210,7 +210,7 @@ public class CartTests
 
         Assert.False(cart1.Equals(new object()));
     }
-    
+
     [Fact]
     public void GetHashCode_WithSameId_And_OwnerId_Should_Return_Same_HashCode()
     {

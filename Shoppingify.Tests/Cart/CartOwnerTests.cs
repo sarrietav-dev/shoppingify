@@ -16,7 +16,7 @@ public class CartOwnerTest
             .RuleFor(co => co.Id, f => new CartOwnerId(f.Random.String()));
 
         _cartItemFaker = new Faker<CartItem>()
-            .RuleFor(ci => ci.Product, f => new Product(f.Random.Guid(), f.Commerce.ProductName()))
+            .RuleFor(ci => ci.Product, f => new ProductId(f.Random.Guid()))
             .RuleFor(ci => ci.Quantity, f => f.Random.Int(1, 10));
     }
 

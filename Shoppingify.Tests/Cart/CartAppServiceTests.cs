@@ -27,7 +27,7 @@ public class CartApplicationServiceTests
         _cartOwnerFaker = new Faker<CartOwner>()
             .RuleFor(x => x.Id, f => new CartOwnerId(f.Random.AlphaNumeric(5)));
         _cartItemFaker = new Faker<CartItem>()
-            .RuleFor(ci => ci.Product, f => new Product(f.Random.Guid(), f.Commerce.ProductName()))
+            .RuleFor(ci => ci.Product, f => new ProductId(f.Random.Guid()))
             .RuleFor(ci => ci.Quantity, f => f.Random.Int(1, 10));
         _cartFaker = new Faker<Shoppingify.Cart.Domain.Cart>()
             .RuleFor(c => c.Id, f => new CartId(f.Random.Guid()))

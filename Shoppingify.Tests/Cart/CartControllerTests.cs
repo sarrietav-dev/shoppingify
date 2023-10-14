@@ -26,13 +26,13 @@ public class CartControllerTests
             .RuleFor(x => x.CartOwnerId, f => new CartOwnerId(f.Random.Guid().ToString()))
             .RuleFor(x => x.CartItems, f => f.Make(3, () => new CartItem
             {
-                Product = new Product(f.Random.Guid(), f.Commerce.Product()),
+                Product = new ProductId(f.Random.Guid()),
                 Quantity = f.Random.Int(1, 10),
                 Status = f.PickRandom<CartItemStatus>()
             }));
 
         _cartItemFaker = new Faker<CartItem>()
-            .RuleFor(x => x.Product, f => new Product(f.Random.Guid(), f.Commerce.Product()))
+            .RuleFor(x => x.Product, f => new ProductId(f.Random.Guid()))
             .RuleFor(x => x.Quantity, f => f.Random.Int(1, 10))
             .RuleFor(x => x.Status, f => f.PickRandom<CartItemStatus>());
 

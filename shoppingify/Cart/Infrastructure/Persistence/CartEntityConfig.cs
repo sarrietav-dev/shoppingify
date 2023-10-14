@@ -10,7 +10,17 @@ public class CartEntityConfig : IEntityTypeConfiguration<Domain.Cart>
     {
         builder.HasKey(c => c.Id);
         builder.HasAlternateKey(c => c.CartOwnerId);
-        builder.OwnsMany<CartItem>(c => c.CartItems);
+
+        var cartItemBuilder = builder.OwnsMany<CartItem>(c => c.CartItems);
+
+        cartItemBuilder.WithOwner().HasForeignKey("CartId");
+        cartItemBuilder.Property(ci => ci.Product)
+            .HasConversion(c => c.Value, c => new ProductId(c))
+            .IsRequired();
+        cartItemBuilder.Property(ci => ci.Quantity);
+        cartItemBuilder.Property(ci => ci.Status)
+            .HasConversion(c => c.ToString(), c => Enum.Parse<CartItemStatus>(c))
+            .IsRequired();
 
         builder.Property(c => c.Id)
             .HasConversion(c => c.Value, c => new CartId(c))
