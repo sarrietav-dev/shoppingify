@@ -24,6 +24,7 @@ internal class EfCartRepository : ICartRepository
 
     public async Task<IEnumerable<Shoppingify.Cart.Domain.Cart>> GetAll(string ownerId)
     {
-        return await _context.Carts.Where(x => x.CartOwnerId.Value == ownerId).ToListAsync();
+        var cartOwnerId = new CartOwnerId(ownerId);
+        return await _context.Carts.Where(x => x.CartOwnerId == cartOwnerId).ToListAsync();
     }
 }

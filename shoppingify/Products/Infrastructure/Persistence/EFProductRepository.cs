@@ -30,7 +30,7 @@ public class EfProductRepository : IProductRepository
 
     public async Task<IEnumerable<Product>> GetAll(ProductOwner owner)
     {
-        return await _context.Products.Where(x => x.Owner.Value == owner.Value).ToListAsync();
+        return await _context.Products.Where(x => x.Owner.Equals(owner)).ToListAsync();
     }
 
     public async Task<IEnumerable<Product>> GetAll()
