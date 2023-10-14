@@ -42,7 +42,10 @@ builder.Services.AddTransient<IProductRepository, EfProductRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-builder.Services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("shoppingify"); });
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddAuthentication()
     .AddScheme<AppAuthenticationSchemeOptions, AppAuthenticationHandler>(JwtBearerDefaults.AuthenticationScheme,
