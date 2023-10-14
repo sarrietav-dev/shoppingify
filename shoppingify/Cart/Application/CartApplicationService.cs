@@ -30,19 +30,20 @@ public class CartApplicationService : ICartApplicationService
                 {
                     Id = new CartOwnerId(cartOwnerId)
                 };
-                cartOwner.CreateCart(name);
+                var cart = cartOwner.CreateCart(name);
                 await _cartOwnerRepository.Add(cartOwner);
-                return cartOwner.ActiveCart?.Id;
+                await _cartRepository.Add(cart);
+                return cart.Id;
             }
 
-            cartOwner.CreateCart(name);
+            var createdCart = cartOwner.CreateCart(name);
 
-            _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart?.Id,
+            _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart,
                 cartOwner.Id);
 
             await _unitOfWork.SaveChangesAsync();
 
-            return cartOwner.ActiveCart?.Id;
+            return createdCart.Id;
         }
         catch (InvalidOperationException e)
         {
@@ -63,20 +64,21 @@ public class CartApplicationService : ICartApplicationService
                 {
                     Id = new CartOwnerId(cartOwnerId)
                 };
-                cartOwner.CreateCart(name, cartItems);
+                var cart = cartOwner.CreateCart(name, cartItems);
                 await _cartOwnerRepository.Add(cartOwner);
+                await _cartRepository.Add(cart);
                 await _unitOfWork.SaveChangesAsync();
-                return cartOwner.ActiveCart?.Id;
+                return cart.Id;
             }
 
-            cartOwner.CreateCart(name, cartItems);
+            var createdCart = cartOwner.CreateCart(name, cartItems);
 
-            _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart?.Id,
+            _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart,
                 cartOwner.Id);
 
             await _unitOfWork.SaveChangesAsync();
 
-            return cartOwner.ActiveCart?.Id;
+            return createdCart.Id;
         }
         catch (InvalidOperationException e)
         {
@@ -91,9 +93,15 @@ public class CartApplicationService : ICartApplicationService
 
         if (cartOwner is null) return null;
 
-        if (cartOwner.ActiveCart is null) _logger.LogWarning("Cart owner {Id} has no active cart", cartOwnerId);
+        if (cartOwner.ActiveCart is null)
+        {
+            _logger.LogWarning("Cart owner {Id} has no active cart", cartOwnerId);
+            return null;
+        }
 
-        return cartOwner.ActiveCart;
+        var cart = await _cartRepository.Get(cartOwner.ActiveCart);
+
+        return cart;
     }
 
     public async Task UpdateCartList(string ownerId, IEnumerable<CartItem> cartItems)
@@ -108,7 +116,13 @@ public class CartApplicationService : ICartApplicationService
             throw new InvalidOperationException("Cart owner has no active cart");
         }
 
-        var cart = cartOwner.ActiveCart;
+        var cart = await _cartRepository.Get(cartOwner.ActiveCart);
+
+        if (cart is null)
+        {
+            _logger.LogError("Cart {Id} from Owner {OwnerId} not found", cartOwner.ActiveCart, ownerId);
+            throw new InvalidOperationException("Cart not found");
+        }
 
         try
         {
@@ -134,16 +148,25 @@ public class CartApplicationService : ICartApplicationService
             throw new InvalidOperationException("Cart owner has no active cart");
         }
 
+        var cart = await _cartRepository.Get(cartOwner.ActiveCart);
+
+        if (cart is null)
+        {
+            _logger.LogError("Cart {Id} from Owner {OwnerId} not found", cartOwner.ActiveCart, cartOwner.Id);
+            throw new InvalidOperationException("Cart not found");
+        }
+
         try
         {
-            var cart = cartOwner.CompleteCart();
-            await _cartRepository.Add(cart);
+            // TODO: Make this eventually consistent. Publish an event and update the cart.
+            cartOwner.CompleteCart();
+            cart.Complete();
             await _unitOfWork.SaveChangesAsync();
         }
         catch (InvalidOperationException)
         {
             _logger.LogError("Cart {Id} from Owner {OwnerId} is not active so cannot complete",
-                cartOwner.ActiveCart.Id, cartOwner.Id);
+                cartOwner.ActiveCart, cartOwner.Id);
             throw;
         }
     }
@@ -160,16 +183,24 @@ public class CartApplicationService : ICartApplicationService
             throw new InvalidOperationException("Cart owner has no active cart");
         }
 
+        var cart = await _cartRepository.Get(cartOwner.ActiveCart);
+
+        if (cart is null)
+        {
+            _logger.LogError("Cart {Id} from Owner {OwnerId} not found", cartOwner.ActiveCart, cartOwner.Id);
+            throw new InvalidOperationException("Cart not found");
+        }
+
         try
         {
-            var cart = cartOwner.CancelCart();
-            await _cartRepository.Add(cart);
+            cartOwner.CancelCart();
+            cart.Cancel();
             await _unitOfWork.SaveChangesAsync();
         }
         catch (InvalidOperationException)
         {
             _logger.LogError("Cart {Id} from Owner {OwnerId} is not active so cannot cancel",
-                cartOwner.ActiveCart.Id, cartOwner.Id);
+                cartOwner.ActiveCart, cartOwner.Id);
             throw;
         }
     }

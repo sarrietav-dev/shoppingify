@@ -121,13 +121,14 @@ public class CartApplicationServiceTests
     public async void GetActiveCart_CartOwnerWithActiveCart_ReturnsCart()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        cartOwner.CreateCart("My Cart");
+        var createdCart = cartOwner.CreateCart("My Cart");
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
+        _cartRepositoryMock.Setup(x => x.Get(createdCart.Id)).ReturnsAsync(createdCart);
 
         var cart = await _cartApplicationService.GetActiveCart(cartOwner.Id.Value);
 
-        Assert.Equal(cartOwner.ActiveCart, cart);
+        Assert.Equal(cartOwner.ActiveCart, cart?.Id);
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
 
@@ -161,15 +162,16 @@ public class CartApplicationServiceTests
     public async void UpdateCartList_WithValidData_Successfully()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        cartOwner.CreateCart("My Cart");
+        var cart = cartOwner.CreateCart("My Cart");
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
+        _cartRepositoryMock.Setup(x => x.Get(cart.Id)).ReturnsAsync(cart);
 
         var cartItems = _cartItemFaker.Generate(5);
 
         await _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems);
 
-        Assert.Equal(cartItems, cartOwner.ActiveCart?.CartItems);
+        Assert.Equal(cartItems, cart.CartItems);
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
 
@@ -208,8 +210,8 @@ public class CartApplicationServiceTests
     public async void UpdateCartList_CartOwnerWithNotActiveCart_ThrowsException()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        cartOwner.CreateCart("My Cart");
-        cartOwner.ActiveCart?.Complete();
+        var cart = cartOwner.CreateCart("My Cart");
+        cart.Complete();
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
 
@@ -225,8 +227,8 @@ public class CartApplicationServiceTests
     public async void UpdateCartList_CartOwnerWithCanceledCart_ThrowsException()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        cartOwner.CreateCart("My Cart");
-        cartOwner.ActiveCart?.Cancel();
+        var cart = cartOwner.CreateCart("My Cart");
+        cart.Cancel();
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
 
@@ -242,13 +244,15 @@ public class CartApplicationServiceTests
     public async void CompleteCart_WithValidData_Successfully()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        cartOwner.CreateCart("My Cart");
+        var cart = cartOwner.CreateCart("My Cart");
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
+        _cartRepositoryMock.Setup(x => x.Get(cart.Id)).ReturnsAsync(cart);
 
         await _cartApplicationService.CompleteCart(cartOwner.Id.Value);
 
-        _cartRepositoryMock.Verify(x => x.Add(It.IsAny<Shoppingify.Cart.Domain.Cart>()), Times.Once);
+        Assert.Null(cartOwner.ActiveCart);
+        Assert.Equal(CartState.Completed, cart.State);
     }
 
     [Fact]
@@ -282,8 +286,8 @@ public class CartApplicationServiceTests
     public async void CompleteCart_CompleteCartThrowsException_ThrowsException()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        cartOwner.CreateCart("My Cart");
-        cartOwner.ActiveCart?.Complete();
+        var cart = cartOwner.CreateCart("My Cart");
+        cart.Complete();
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
 
@@ -295,13 +299,15 @@ public class CartApplicationServiceTests
     public async void CancelCart_WithValidData_Successfully()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        cartOwner.CreateCart("My Cart");
+        var cart = cartOwner.CreateCart("My Cart");
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
+        _cartRepositoryMock.Setup(x => x.Get(cart.Id)).ReturnsAsync(cart);
 
         await _cartApplicationService.CancelCart(cartOwner.Id.Value);
 
-        _cartRepositoryMock.Verify(x => x.Add(It.IsAny<Shoppingify.Cart.Domain.Cart>()), Times.Once);
+        Assert.Null(cartOwner.ActiveCart);
+        Assert.Equal(CartState.Canceled, cart.State);
     }
 
     [Fact]
@@ -335,8 +341,8 @@ public class CartApplicationServiceTests
     public async void CancelCart_CancelCartThrowsException_ThrowsException()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        cartOwner.CreateCart("My Cart");
-        cartOwner.ActiveCart?.Cancel();
+        var cart = cartOwner.CreateCart("My Cart");
+        cart.Cancel();
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwner.Id)).ReturnsAsync(cartOwner);
 

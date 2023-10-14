@@ -21,24 +21,13 @@ public class CartOwnerTest
     }
 
     [Fact]
-    public void CartOwner_CreateCart_WithValidData_Successfully()
+    public void CartOwner_WithoutActiveCart_CreatesSuccessfully()
     {
         // Arrange
-        var cartOwner = new CartOwner
-        {
-            Id = new CartOwnerId(""),
-            ActiveCart = new Shoppingify.Cart.Domain.Cart
-            {
-                Id = new CartId(Guid.Empty),
-                Name = "New Cart",
-                CartOwnerId = new CartOwnerId(""),
-                CreatedAt = DateTime.Now,
-            }
-        };
+        var cartOwner = _cartOwnerFaker.Generate();
 
         // Assert
-        Assert.NotNull(cartOwner.ActiveCart);
-        Assert.Equal("New Cart", cartOwner.ActiveCart.Name);
+        Assert.Null(cartOwner.ActiveCart);
     }
 
     [Fact]
@@ -48,14 +37,14 @@ public class CartOwnerTest
         var cartOwner = _cartOwnerFaker.Generate();
         var cartItems = _cartItemFaker.Generate(10);
         // Act
-        cartOwner.CreateCart("New Cart", cartItems);
+        var cart = cartOwner.CreateCart("New Cart", cartItems);
 
         // Assert
-        Assert.NotNull(cartOwner.ActiveCart);
-        Assert.Equal("New Cart", cartOwner.ActiveCart.Name);
-        Assert.Equal(cartItems.Count, cartOwner.ActiveCart.CartItems.Count);
+        Assert.Equal(cart.Id, cartOwner.ActiveCart);
+        Assert.Equal("New Cart", cart.Name);
+        Assert.Equal(cartItems.Count, cart.CartItems.Count);
         Assert.True(cartItems.All(ci =>
-            cartOwner.ActiveCart.CartItems.Any(i => i.Product == ci.Product && i.Quantity == ci.Quantity)));
+            cart.CartItems.Any(i => i.Product == ci.Product && i.Quantity == ci.Quantity)));
     }
 
     [Fact]
