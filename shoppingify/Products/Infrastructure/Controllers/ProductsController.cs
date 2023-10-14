@@ -52,7 +52,7 @@ public class ProductsController : ControllerBase
 
         var createdProduct = await _applicationService.Add(id, product);
 
-        return CreatedAtAction(nameof(Get), new { id = createdProduct.Id }, product);
+        return CreatedAtAction(nameof(Add), new { id = createdProduct.Id }, product);
     }
 
     [HttpDelete("{id:guid}")]
