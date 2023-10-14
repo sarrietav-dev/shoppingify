@@ -4,7 +4,7 @@ public class Cart
 {
     private CartState _state = CartState.Active;
     public required CartId Id { get; init; }
-    public DateTime CreatedAt { get; init; } = DateTime.Now;
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
     public required CartOwnerId CartOwnerId { get; init; }
     public required string Name { get; init; }
     public ICollection<CartItem> CartItems { get; private set; } = new List<CartItem>();
