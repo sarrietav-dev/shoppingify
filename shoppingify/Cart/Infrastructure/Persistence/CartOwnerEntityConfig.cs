@@ -11,8 +11,8 @@ public class CartOwnerEntityConfig : IEntityTypeConfiguration<CartOwner>
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Id).ValueGeneratedNever()
             .HasConversion(id => id.Value, value => new CartOwnerId(value));
-        builder.HasOne<Domain.Cart>(owner => owner.ActiveCart)
-            .WithOne()
-            .HasForeignKey<Domain.Cart>(cart => cart.CartOwnerId);
+        builder.Property(c => c.ActiveCart)
+            .HasConversion(id => id == null ? (Guid?)null : id.Value,
+                value => value != null ? new CartId(value.Value) : null);
     }
 }

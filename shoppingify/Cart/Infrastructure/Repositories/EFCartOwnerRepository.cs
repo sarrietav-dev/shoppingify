@@ -19,6 +19,6 @@ internal class EfCartOwnerRepository : ICartOwnerRepository
 
     public async Task<CartOwner?> Get(CartOwnerId id)
     {
-        return await _context.CartOwners.Include(x => x.ActiveCart).FirstOrDefaultAsync(x => x.Id == id);
+        return await _context.CartOwners.FirstOrDefaultAsync(x => x.Id == id);
     }
 }
