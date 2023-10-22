@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Shoppingify.Cart.Application;
-using shoppingify.Cart.Application.DTOs;
+using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 using Shoppingify.Cart.Infrastructure.Controllers;
 

@@ -8,7 +8,7 @@ using Shoppingify;
 
 #nullable disable
 
-namespace shoppingify.Migrations
+namespace Shoppingify.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

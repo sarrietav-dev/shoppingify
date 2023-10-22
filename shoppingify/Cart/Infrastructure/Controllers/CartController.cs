@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Shoppingify.Cart.Application;
-using shoppingify.Cart.Application.DTOs;
+using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Infrastructure.Controllers;
@@ -56,7 +56,7 @@ public class CartController : ControllerBase
 
             if (cartId == null) return StatusCode(500);
 
-            return CreatedAtAction(nameof(GetActiveCart), new { cartOwnerId }, cartId);
+            return CreatedAtAction(nameof(GetActiveCart), new { cartOwnerId }, new { id = cartId.Value });
         }
         catch (InvalidOperationException)
         {

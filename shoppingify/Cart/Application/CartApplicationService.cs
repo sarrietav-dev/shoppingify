@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using shoppingify.Cart.Application.DTOs;
+﻿using MapsterMapper;
+using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Application;

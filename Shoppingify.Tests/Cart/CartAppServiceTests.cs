@@ -1,9 +1,9 @@
-using AutoMapper;
 using Bogus;
+using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shoppingify.Cart.Application;
-using shoppingify.Cart.Application.DTOs;
+using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Tests.Cart;
@@ -16,13 +16,13 @@ public class CartApplicationServiceTests
     private readonly Faker<CartDto> _cartFakerDto;
     private readonly Mock<ICartOwnerRepository> _cartOwnerRepositoryMock;
     private readonly Mock<ICartRepository> _cartRepositoryMock;
-    private readonly Mock<Mapper> _mapper;
+    private readonly Mock<IMapper> _mapper;
 
     public CartApplicationServiceTests()
     {
         _cartRepositoryMock = new Mock<ICartRepository>();
         _cartOwnerRepositoryMock = new Mock<ICartOwnerRepository>();
-        _mapper = new Mock<Mapper>();
+        _mapper = new Mock<IMapper>();
         var loggerMock = new Mock<ILogger<CartApplicationService>>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         unitOfWorkMock.Setup(x => x.SaveChangesAsync(default)).Returns(Task.CompletedTask);

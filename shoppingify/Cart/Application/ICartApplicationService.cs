@@ -1,4 +1,4 @@
-using shoppingify.Cart.Application.DTOs;
+using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Application;

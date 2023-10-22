@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace shoppingify.Migrations
+namespace Shoppingify.Migrations
 {
     /// <inheritdoc />
     public partial class ModifyCartOwner : Migration

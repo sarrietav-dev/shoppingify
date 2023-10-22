@@ -1,5 +1,8 @@
+using System.Reflection;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +13,6 @@ using Shoppingify.Cart.Domain;
 using Shoppingify.Cart.Infrastructure.Repositories;
 using Shoppingify.IAM.Application;
 using Shoppingify.IAM.Infrastructure;
-using Shoppingify.Lib;
 using Shoppingify.Products.Application;
 using Shoppingify.Products.Domain;
 using Shoppingify.Products.Infrastructure.Persistence;
@@ -34,6 +36,13 @@ builder.Services.AddLogging(x =>
     }
 );
 
+builder.Services.AddMapster();
+var mapCfg = TypeAdapterConfig.GlobalSettings;
+mapCfg.Scan(Assembly.GetExecutingAssembly());
+
+builder.Services.AddSingleton(mapCfg);
+builder.Services.AddScoped<IMapper, ServiceMapper>();
+
 builder.Services.AddTransient<ICartOwnerRepository, EfCartOwnerRepository>();
 builder.Services.AddTransient<IAuthenticationProviderService, FakeAuthenticationProvider>();
 builder.Services.AddTransient<ICartApplicationService, CartApplicationService>();
@@ -41,7 +50,6 @@ builder.Services.AddTransient<IProductApplicationService, ProductApplicationServ
 builder.Services.AddTransient<ICartRepository, EfCartRepository>();
 builder.Services.AddTransient<IProductRepository, EfProductRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
