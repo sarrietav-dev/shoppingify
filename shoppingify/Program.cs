@@ -10,6 +10,7 @@ using Shoppingify.Cart.Domain;
 using Shoppingify.Cart.Infrastructure.Repositories;
 using Shoppingify.IAM.Application;
 using Shoppingify.IAM.Infrastructure;
+using Shoppingify.Lib;
 using Shoppingify.Products.Application;
 using Shoppingify.Products.Domain;
 using Shoppingify.Products.Infrastructure.Persistence;
@@ -40,7 +41,7 @@ builder.Services.AddTransient<IProductApplicationService, ProductApplicationServ
 builder.Services.AddTransient<ICartRepository, EfCartRepository>();
 builder.Services.AddTransient<IProductRepository, EfProductRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

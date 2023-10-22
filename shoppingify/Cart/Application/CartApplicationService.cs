@@ -1,4 +1,6 @@
-﻿using Shoppingify.Cart.Domain;
+﻿using AutoMapper;
+using shoppingify.Cart.Application.DTOs;
+using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Application;
 
@@ -8,14 +10,16 @@ public class CartApplicationService : ICartApplicationService
     private readonly ICartRepository _cartRepository;
     private readonly ILogger _logger;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
     public CartApplicationService(ICartRepository cartRepository, ICartOwnerRepository cartOwnerRepository,
-        ILogger<CartApplicationService> logger, IUnitOfWork unitOfWork)
+        ILogger<CartApplicationService> logger, IUnitOfWork unitOfWork, IMapper mapper)
     {
         _cartRepository = cartRepository;
         _cartOwnerRepository = cartOwnerRepository;
         _logger = logger;
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<CartId?> CreateCart(string cartOwnerId, string name)
@@ -52,9 +56,10 @@ public class CartApplicationService : ICartApplicationService
         }
     }
 
-    public async Task<CartId?> CreateCart(string cartOwnerId, string name, IEnumerable<CartItem> cartItems)
+    public async Task<CartId?> CreateCart(string cartOwnerId, string name, IEnumerable<CartItemDto> cartItems)
     {
         var cartOwner = await GetCartOwner(cartOwnerId);
+        var items = _mapper.Map<IEnumerable<CartItem>>(cartItems);
 
         try
         {
@@ -64,14 +69,14 @@ public class CartApplicationService : ICartApplicationService
                 {
                     Id = new CartOwnerId(cartOwnerId)
                 };
-                var cart = cartOwner.CreateCart(name, cartItems);
+                var cart = cartOwner.CreateCart(name, items);
                 await _cartOwnerRepository.Add(cartOwner);
                 await _cartRepository.Add(cart);
                 await _unitOfWork.SaveChangesAsync();
                 return cart.Id;
             }
 
-            var createdCart = cartOwner.CreateCart(name, cartItems);
+            var createdCart = cartOwner.CreateCart(name, items);
 
             _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart,
                 cartOwner.Id);
@@ -87,7 +92,7 @@ public class CartApplicationService : ICartApplicationService
         }
     }
 
-    public async Task<Domain.Cart?> GetActiveCart(string cartOwnerId)
+    public async Task<CartDto?> GetActiveCart(string cartOwnerId)
     {
         var cartOwner = await GetCartOwner(cartOwnerId);
 
@@ -101,10 +106,10 @@ public class CartApplicationService : ICartApplicationService
 
         var cart = await _cartRepository.Get(cartOwner.ActiveCart);
 
-        return cart;
+        return _mapper.Map<CartDto>(cart);
     }
 
-    public async Task UpdateCartList(string ownerId, IEnumerable<CartItem> cartItems)
+    public async Task UpdateCartList(string ownerId, IEnumerable<CartItemDto> cartItems)
     {
         var cartOwner = await GetCartOwner(ownerId);
 
@@ -126,7 +131,8 @@ public class CartApplicationService : ICartApplicationService
 
         try
         {
-            cart.UpdateList(cartItems);
+            var items = _mapper.Map<IEnumerable<CartItem>>(cartItems);
+            cart.UpdateList(items);
             await _unitOfWork.SaveChangesAsync();
         }
         catch (InvalidOperationException)
@@ -205,9 +211,10 @@ public class CartApplicationService : ICartApplicationService
         }
     }
 
-    public async Task<IEnumerable<Domain.Cart>> GetCarts(string cartOwnerId)
+    public async Task<IEnumerable<CartDto>> GetCarts(string cartOwnerId)
     {
-        return await _cartRepository.GetAll(cartOwnerId);
+        var carts = await _cartRepository.GetAll(cartOwnerId);
+        return _mapper.Map<IEnumerable<CartDto>>(carts);
     }
 
     private async Task<CartOwner?> GetCartOwner(string cartOwnerId)

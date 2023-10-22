@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Shoppingify.Cart.Application;
+using shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 using Shoppingify.Cart.Infrastructure.Controllers;
 
@@ -13,28 +14,23 @@ public class CartControllerTests
 {
     private readonly Mock<ICartApplicationService> _cartApplicationServiceMock;
     private readonly CartController _cartController;
-    private readonly Faker<Shoppingify.Cart.Domain.Cart> _cartFaker;
-    private readonly Faker<CartItem> _cartItemFaker;
+    private readonly Faker<CartDto> _cartFaker;
+    private readonly Faker<CartItemDto> _cartItemFaker;
 
     public CartControllerTests()
     {
         _cartApplicationServiceMock = new Mock<ICartApplicationService>();
         _cartController = new CartController(_cartApplicationServiceMock.Object);
-        _cartFaker = new Faker<Shoppingify.Cart.Domain.Cart>()
-            .RuleFor(x => x.Id, f => new CartId(f.Random.Guid()))
-            .RuleFor(x => x.Name, f => f.Random.String2(10))
-            .RuleFor(x => x.CartOwnerId, f => new CartOwnerId(f.Random.Guid().ToString()))
-            .RuleFor(x => x.CartItems, f => f.Make(3, () => new CartItem
-            {
-                Product = new ProductId(f.Random.Guid()),
-                Quantity = f.Random.Int(1, 10),
-                Status = f.PickRandom<CartItemStatus>()
-            }));
-
-        _cartItemFaker = new Faker<CartItem>()
-            .RuleFor(x => x.Product, f => new ProductId(f.Random.Guid()))
+        _cartItemFaker = new Faker<CartItemDto>()
+            .RuleFor(x => x.ProductId, f => f.Random.Guid().ToString())
             .RuleFor(x => x.Quantity, f => f.Random.Int(1, 10))
-            .RuleFor(x => x.Status, f => f.PickRandom<CartItemStatus>());
+            .RuleFor(x => x.Status, f => f.PickRandom<CartItemStatus>().ToString());
+        _cartFaker = new Faker<CartDto>()
+            .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.Name, f => f.Random.String2(10))
+            .RuleFor(x => x.CartOwnerId, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.CartItems, _ => _cartItemFaker.Generate(3));
+
 
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(new[]
@@ -105,7 +101,7 @@ public class CartControllerTests
         // Arrange
 
         _cartApplicationServiceMock.Setup(x => x.GetActiveCart(It.IsAny<string>()))
-            .ReturnsAsync((Shoppingify.Cart.Domain.Cart?)null);
+            .ReturnsAsync((CartDto?)null);
 
         // Act
         var result = await _cartController.GetActiveCart();
@@ -139,7 +135,7 @@ public class CartControllerTests
         var name = "My cart";
         var items = _cartItemFaker.Generate(3);
         _cartApplicationServiceMock
-            .Setup(x => x.CreateCart(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<CartItem>>()))
+            .Setup(x => x.CreateCart(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<CartItemDto>>()))
             .ReturnsAsync(new CartId(cartId));
 
         // Act
@@ -194,7 +190,7 @@ public class CartControllerTests
         };
 
         // Act
-        var result = await _cartController.CreateCart(new CreateCartCommand("My cart", new List<CartItem>()));
+        var result = await _cartController.CreateCart(new CreateCartCommand("My cart", new List<CartItemDto>()));
 
         // Assert
         Assert.IsType<BadRequestResult>(result);
@@ -240,7 +236,7 @@ public class CartControllerTests
         };
 
         // Act
-        var result = await _cartController.UpdateCartList(new List<CartItem>());
+        var result = await _cartController.UpdateCartList(new List<CartItemDto>());
 
         // Assert
         Assert.IsType<BadRequestResult>(result);
