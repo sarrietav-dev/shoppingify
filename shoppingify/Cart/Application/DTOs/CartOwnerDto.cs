@@ -1,3 +1,7 @@
 ﻿namespace Shoppingify.Cart.Application.DTOs;
 
-public record CartOwnerDto(string Id, string ActiveCartId);
+public class CartOwnerDto
+{
+    public required string Id { get; init; }
+    public required string ActiveCartId { get; init; }
+}

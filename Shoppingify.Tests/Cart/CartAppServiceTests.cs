@@ -116,8 +116,9 @@ public class CartApplicationServiceTests
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwnerId)).ReturnsAsync((CartOwner?)null);
 
-        await _cartApplicationService.CreateCart(cartOwnerId.Value, "My Cart", cartItems);
-
+        var cartId = await _cartApplicationService.CreateCart(cartOwnerId.Value, "My Cart", cartItems);
+        
+        Assert.NotNull(cartId);
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwnerId), Times.Once);
         _cartOwnerRepositoryMock.Verify(x => x.Add(It.IsAny<CartOwner>()), Times.Once);
     }

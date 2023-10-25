@@ -106,7 +106,10 @@ public class CartApplicationService : ICartApplicationService
 
         var cart = await _cartRepository.Get(cartOwner.ActiveCart);
 
-        return _mapper.Map<CartDto>(cart);
+        if (cart is not null) return _mapper.Map<CartDto>(cart);
+
+        _logger.LogError("Cart {Id} from Owner {OwnerId} not found", cartOwner.ActiveCart, cartOwner.Id);
+        return null;
     }
 
     public async Task UpdateCartList(string ownerId, IEnumerable<CartItemDto> cartItems)
