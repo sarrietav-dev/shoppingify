@@ -17,5 +17,5 @@ public record CartItem
         }
     }
 
-    public required CartItemStatus Status { get; init; }
+    public CartItemStatus Status { get; init; } = CartItemStatus.Unchecked;
 }

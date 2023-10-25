@@ -3,34 +3,43 @@ namespace Shoppingify.Cart.Domain;
 public class Cart
 {
     private CartState _state = CartState.Active;
+    private ICollection<CartItem> _cartItems = new List<CartItem>();
     public required CartId Id { get; init; }
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
     public required CartOwnerId CartOwnerId { get; init; }
     public required string Name { get; init; }
-    public ICollection<CartItem> CartItems { get; private set; } = new List<CartItem>();
+
+    public ICollection<CartItem> CartItems
+    {
+        get => _cartItems;
+        init => _cartItems = value ?? throw new InvalidOperationException("Cart items cannot be null");
+    }
 
     public CartState State
     {
         get => _state;
-        private set
+        init =>
+            _state = SetCartState(value);
+    }
+
+    private static CartState SetCartState(CartState state)
+    {
+        return state switch
         {
-            _state = _state switch
-            {
-                CartState.Completed => throw new InvalidOperationException("Cannot change state of a completed cart"),
-                CartState.Canceled => throw new InvalidOperationException("Cannot change state of a canceled cart"),
-                _ => value
-            };
-        }
+            CartState.Completed => throw new InvalidOperationException("Cannot change state of a completed cart"),
+            CartState.Canceled => throw new InvalidOperationException("Cannot change state of a canceled cart"),
+            _ => state
+        };
     }
 
     public void Complete()
     {
-        State = CartState.Completed;
+        _state = SetCartState(CartState.Completed);
     }
 
     public void Cancel()
     {
-        State = CartState.Canceled;
+        _state = SetCartState(CartState.Canceled);
     }
 
     public void UpdateList(IEnumerable<CartItem> cartItems)
@@ -38,7 +47,7 @@ public class Cart
         if (State != CartState.Active)
             throw new InvalidOperationException("Cannot update a non-active cart");
 
-        CartItems = cartItems.ToList();
+        _cartItems = cartItems.ToList();
     }
 
     public override bool Equals(object? obj)
