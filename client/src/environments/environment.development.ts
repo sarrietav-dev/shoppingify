@@ -9,5 +9,5 @@ export const environment = {
     measurementId: 'G-BKP7NXK10P',
   },
   production: false,
-  baseUrl: 'http://localhost:5116',
+  baseUrl: 'http://localhost:5183/api/v1/me',
 };

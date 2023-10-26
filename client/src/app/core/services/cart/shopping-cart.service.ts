@@ -1,20 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {environment} from 'src/environments/environment';
 
 type Cart = {
   id: string;
   name: string;
-  lineItems: LineItem[];
-  cartCount: number;
-  itemCount: number;
-  checkedItems: number;
+  cartItems: CartItem[];
+  createdAt: Date;
 }
 
-type LineItem = {
+type CartItemStatus = "Checked" | "Unchecked";
+
+type CartItem = {
   quantity: number;
-  isChecked: boolean;
+  status: CartItemStatus;
   product: Product;
 }
 
@@ -30,11 +30,16 @@ type Product = {
   providedIn: 'root',
 })
 export class ShoppingCartService {
-  private baseUrl = `${environment.baseUrl}/api/ShoppingCart`;
+  private baseUrl = `${environment.baseUrl}/active-cart`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  getCart(id: string) {
-    return this.http.get<Cart>(this.baseUrl + `/${id}`);
+  getActiveCart(id: string) {
+    return this.http.get<Cart>(this.baseUrl);
+  }
+
+  createActiveCart(cart: Omit<Cart, 'createdAt'>) {
+    return this.http.post<{ id: string }>(this.baseUrl, cart);
   }
 }
