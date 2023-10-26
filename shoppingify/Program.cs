@@ -33,6 +33,18 @@ builder.Services.AddLogging(x =>
     }
 );
 
+const string myOrigins = "_myOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddTransient<ICartOwnerRepository, EfCartOwnerRepository>();
 builder.Services.AddTransient<IAuthenticationProviderService, FakeAuthenticationProvider>();
 builder.Services.AddTransient<ICartApplicationService, CartApplicationService>();
@@ -74,6 +86,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(myOrigins);
 
 app.UseAuthorization();
 
