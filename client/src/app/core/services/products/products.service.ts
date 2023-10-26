@@ -1,26 +1,27 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { Product } from '../../models/Product';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {environment} from 'src/environments/environment';
+import {Product} from '../../models/Product';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private baseUrl = environment.baseUrl;
+  private baseUrl = `${environment.baseUrl}/products`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getProducts() {
-    return this.http.get<Product[]>(`${this.baseUrl}/api/products`);
+    return this.http.get<Product[]>(this.baseUrl);
   }
 
   getProduct(id: string) {
-    return this.http.get<Product>(`${this.baseUrl}/api/products/${id}`);
+    return this.http.get<Product>(`${this.baseUrl}/${id}`);
   }
 
   createProduct(product: Omit<Product, 'id'>) {
-    return this.http.post<Product>(`${this.baseUrl}/api/products`, product);
+    return this.http.post<Product>(this.baseUrl, product);
   }
 
   getCategories() {
@@ -28,6 +29,6 @@ export class ProductsService {
   }
 
   deleteProduct(id: string) {
-    return this.http.delete(`${this.baseUrl}/api/products/${id}`);
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }
