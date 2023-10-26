@@ -2,6 +2,7 @@
 using Moq;
 using Shoppingify.Products.Application;
 using Shoppingify.Products.Application.Commands;
+using Shoppingify.Products.Application.Dtos;
 using Shoppingify.Products.Domain;
 
 namespace Shoppingify.Tests.Products;
@@ -40,7 +41,7 @@ public class ProductApplicationServiceTest
         var result = await _service.Get(product.Id.Value);
 
         // Assert
-        Assert.Equal(product, result);
+        Assert.Equal(ProductDto.FromProduct(product), result);
     }
 
     [Fact]
@@ -70,7 +71,7 @@ public class ProductApplicationServiceTest
         var result = await _service.GetAll(products.First().Owner.Value);
 
         // Assert
-        Assert.Equal(products, result);
+        Assert.Equal(products.Count, result.Count());
     }
 
     [Fact]

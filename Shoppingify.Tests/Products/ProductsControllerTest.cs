@@ -6,6 +6,7 @@ using Moq;
 using Shoppingify.IAM.Application;
 using Shoppingify.Products.Application;
 using Shoppingify.Products.Application.Commands;
+using Shoppingify.Products.Application.Dtos;
 using Shoppingify.Products.Domain;
 using Shoppingify.Products.Infrastructure.Controllers;
 
@@ -16,20 +17,20 @@ public class ProductsControllerTest
     private readonly Mock<IProductApplicationService> _applicationServiceMock;
     private readonly Mock<IAuthenticationProviderService> _authenticationProviderServiceMock;
     private readonly ProductsController _controller;
-    private readonly Faker<Product> _productFaker;
+    private readonly Faker<ProductDto> _productFaker;
 
     public ProductsControllerTest()
     {
         _applicationServiceMock = new Mock<IProductApplicationService>();
         _authenticationProviderServiceMock = new Mock<IAuthenticationProviderService>();
         _controller = new ProductsController(_applicationServiceMock.Object);
-        _productFaker = new Faker<Product>()
-            .RuleFor(p => p.Id, f => new ProductId(f.Random.Guid()))
+        _productFaker = new Faker<ProductDto>()
+            .RuleFor(p => p.Id, f => f.Random.Guid().ToString())
             .RuleFor(p => p.Name, f => f.Random.String())
             .RuleFor(p => p.Category, f => f.Random.String())
             .RuleFor(p => p.Note, f => f.Random.String())
             .RuleFor(p => p.Image, f => f.Random.String())
-            .RuleFor(p => p.Owner, f => new ProductOwner(f.Random.String()));
+            .RuleFor(p => p.Owner, f => f.Random.String());
 
         var user = new ClaimsPrincipal(
             new ClaimsIdentity(new[]
@@ -49,7 +50,7 @@ public class ProductsControllerTest
     {
         // Arrange
         var id = Guid.NewGuid();
-        _applicationServiceMock.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync((Product?)null);
+        _applicationServiceMock.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync((ProductDto?)null);
 
         // Act
         var result = await _controller.Get(id);
@@ -57,7 +58,7 @@ public class ProductsControllerTest
         // Assert
         Assert.IsType<NotFoundResult>(result);
     }
-    
+
     [Fact]
     public async Task Get_WhenUserIsNotAuthenticated_ReturnsBadRequest()
     {
@@ -82,13 +83,13 @@ public class ProductsControllerTest
         _applicationServiceMock.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(product);
 
         // Act
-        var result = await _controller.Get(product.Id.Value);
+        var result = await _controller.Get(Guid.NewGuid());
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(product, okResult.Value);
     }
-    
+
     [Fact]
     public async Task GetAll_WhenUserIsNotAuthenticated_ReturnsBadRequest()
     {
@@ -121,13 +122,13 @@ public class ProductsControllerTest
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(products, okResult.Value);
     }
-    
+
     [Fact]
     public async Task GetAll_WhenNoProducts_ReturnsOk()
     {
         // Arrange
         var id = Guid.NewGuid();
-        var products = new List<Product>();
+        var products = new List<ProductDto>();
         _applicationServiceMock.Setup(x => x.GetAll(It.IsAny<string>())).ReturnsAsync(products);
 
         // Act
@@ -155,7 +156,7 @@ public class ProductsControllerTest
         Assert.IsType<CreatedAtActionResult>(result);
         _applicationServiceMock.Verify(x => x.Add(It.IsAny<string>(), product), Times.Once);
     }
-    
+
     [Fact]
     public async Task Add_WhenUserIsNotAuthenticated_ReturnsBadRequest()
     {
@@ -189,7 +190,7 @@ public class ProductsControllerTest
         Assert.IsType<OkResult>(result);
         _applicationServiceMock.Verify(x => x.Delete(productId), Times.Once);
     }
-    
+
     [Fact]
     public async Task Delete_WhenUserIsNotAuthenticated_ReturnsBadRequest()
     {
