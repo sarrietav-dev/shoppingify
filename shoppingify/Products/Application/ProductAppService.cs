@@ -1,4 +1,5 @@
 using Shoppingify.Products.Application.Commands;
+using Shoppingify.Products.Application.Dtos;
 using Shoppingify.Products.Domain;
 
 namespace Shoppingify.Products.Application;
@@ -14,17 +15,21 @@ public class ProductApplicationService : IProductApplicationService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Product?> Get(Guid productId)
+    public async Task<ProductDto?> Get(Guid productId)
     {
-        return await _repository.Get(new ProductId(productId));
+        var product = await _repository.Get(new ProductId(productId));
+
+        return product is null ? null : ProductDto.FromProduct(product);
     }
 
-    public async Task<IEnumerable<Product>> GetAll(string productOwnerId)
+    public async Task<IEnumerable<ProductDto>> GetAll(string productOwnerId)
     {
-        return await _repository.GetAll(new ProductOwner(productOwnerId));
+        var product = await _repository.GetAll(new ProductOwner(productOwnerId));
+        
+        return product.Select(ProductDto.FromProduct);
     }
 
-    public async Task<Product> Add(string ownerId, AddProductCommand product)
+    public async Task<ProductDto> Add(string ownerId, AddProductCommand product)
     {
         var newProduct = new Product
         {
@@ -39,7 +44,7 @@ public class ProductApplicationService : IProductApplicationService
         await _repository.Add(newProduct);
         await _unitOfWork.SaveChangesAsync();
 
-        return newProduct;
+        return ProductDto.FromProduct(newProduct);
     }
 
     public async Task Delete(Guid productId)

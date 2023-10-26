@@ -1,4 +1,5 @@
-﻿using Shoppingify.Cart.Domain;
+﻿using Shoppingify.Cart.Application.DTOs;
+using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Application;
 
@@ -52,9 +53,10 @@ public class CartApplicationService : ICartApplicationService
         }
     }
 
-    public async Task<CartId?> CreateCart(string cartOwnerId, string name, IEnumerable<CartItem> cartItems)
+    public async Task<CartId?> CreateCart(string cartOwnerId, string name, IEnumerable<CartItemDto> cartItems)
     {
         var cartOwner = await GetCartOwner(cartOwnerId);
+        var items = cartItems.Select(ci => ci.ToCartItem());
 
         try
         {
@@ -64,14 +66,14 @@ public class CartApplicationService : ICartApplicationService
                 {
                     Id = new CartOwnerId(cartOwnerId)
                 };
-                var cart = cartOwner.CreateCart(name, cartItems);
+                var cart = cartOwner.CreateCart(name, items);
                 await _cartOwnerRepository.Add(cartOwner);
                 await _cartRepository.Add(cart);
                 await _unitOfWork.SaveChangesAsync();
                 return cart.Id;
             }
 
-            var createdCart = cartOwner.CreateCart(name, cartItems);
+            var createdCart = cartOwner.CreateCart(name, items);
 
             _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart,
                 cartOwner.Id);
@@ -87,7 +89,7 @@ public class CartApplicationService : ICartApplicationService
         }
     }
 
-    public async Task<Domain.Cart?> GetActiveCart(string cartOwnerId)
+    public async Task<CartDto?> GetActiveCart(string cartOwnerId)
     {
         var cartOwner = await GetCartOwner(cartOwnerId);
 
@@ -101,10 +103,13 @@ public class CartApplicationService : ICartApplicationService
 
         var cart = await _cartRepository.Get(cartOwner.ActiveCart);
 
-        return cart;
+        if (cart is not null) return CartDto.ToCartDto(cart);
+
+        _logger.LogError("Cart {Id} from Owner {OwnerId} not found", cartOwner.ActiveCart, cartOwner.Id);
+        return null;
     }
 
-    public async Task UpdateCartList(string ownerId, IEnumerable<CartItem> cartItems)
+    public async Task UpdateCartList(string ownerId, IEnumerable<CartItemDto> cartItems)
     {
         var cartOwner = await GetCartOwner(ownerId);
 
@@ -126,7 +131,8 @@ public class CartApplicationService : ICartApplicationService
 
         try
         {
-            cart.UpdateList(cartItems);
+            var items = cartItems.Select(ci => ci.ToCartItem());
+            cart.UpdateList(items);
             await _unitOfWork.SaveChangesAsync();
         }
         catch (InvalidOperationException)
@@ -205,9 +211,10 @@ public class CartApplicationService : ICartApplicationService
         }
     }
 
-    public async Task<IEnumerable<Domain.Cart>> GetCarts(string cartOwnerId)
+    public async Task<IEnumerable<CartDto>> GetCarts(string cartOwnerId)
     {
-        return await _cartRepository.GetAll(cartOwnerId);
+        var carts = await _cartRepository.GetAll(cartOwnerId);
+        return carts.Select(CartDto.ToCartDto);
     }
 
     private async Task<CartOwner?> GetCartOwner(string cartOwnerId)

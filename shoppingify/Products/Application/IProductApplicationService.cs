@@ -1,12 +1,13 @@
 using Shoppingify.Products.Application.Commands;
+using Shoppingify.Products.Application.Dtos;
 using Shoppingify.Products.Domain;
 
 namespace Shoppingify.Products.Application;
 
 public interface IProductApplicationService
 {
-    Task<Product?> Get(Guid productId);
-    Task<IEnumerable<Product>> GetAll(string productOwnerId);
-    Task<Product> Add(string ownerId, AddProductCommand product);
+    Task<ProductDto?> Get(Guid productId);
+    Task<IEnumerable<ProductDto>> GetAll(string productOwnerId);
+    Task<ProductDto> Add(string ownerId, AddProductCommand product);
     Task Delete(Guid productId);
 }

@@ -9,7 +9,7 @@ using Shoppingify;
 
 #nullable disable
 
-namespace shoppingify.Migrations
+namespace Shoppingify.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20231014191540_ModifyCartOwner")]

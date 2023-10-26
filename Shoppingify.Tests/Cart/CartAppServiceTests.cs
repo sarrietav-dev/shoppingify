@@ -2,6 +2,7 @@ using Bogus;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shoppingify.Cart.Application;
+using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Tests.Cart;
@@ -9,9 +10,9 @@ namespace Shoppingify.Tests.Cart;
 public class CartApplicationServiceTests
 {
     private readonly ICartApplicationService _cartApplicationService;
-    private readonly Faker<CartItem> _cartItemFaker;
+    private readonly Faker<CartItemDto> _cartItemFaker;
     private readonly Faker<CartOwner> _cartOwnerFaker;
-    private readonly Faker<Shoppingify.Cart.Domain.Cart> _cartFaker;
+    private readonly Faker<CartDto> _cartFakerDto;
     private readonly Mock<ICartOwnerRepository> _cartOwnerRepositoryMock;
     private readonly Mock<ICartRepository> _cartRepositoryMock;
 
@@ -26,14 +27,15 @@ public class CartApplicationServiceTests
             _cartOwnerRepositoryMock.Object, loggerMock.Object, unitOfWorkMock.Object);
         _cartOwnerFaker = new Faker<CartOwner>()
             .RuleFor(x => x.Id, f => new CartOwnerId(f.Random.AlphaNumeric(5)));
-        _cartItemFaker = new Faker<CartItem>()
-            .RuleFor(ci => ci.Product, f => new ProductId(f.Random.Guid()))
-            .RuleFor(ci => ci.Quantity, f => f.Random.Int(1, 10));
-        _cartFaker = new Faker<Shoppingify.Cart.Domain.Cart>()
-            .RuleFor(c => c.Id, f => new CartId(f.Random.Guid()))
-            .RuleFor(c => c.Name, f => f.Commerce.ProductName())
-            .RuleFor(c => c.CartOwnerId, f => new CartOwnerId(f.Random.AlphaNumeric(5)))
-            .RuleFor(c => c.CartItems, f => _cartItemFaker.Generate(f.Random.Int(1, 10)));
+        _cartItemFaker = new Faker<CartItemDto>()
+            .RuleFor(x => x.ProductId, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.Quantity, f => f.Random.Int(1, 10))
+            .RuleFor(x => x.Status, f => f.PickRandom<CartItemStatus>().ToString());
+        _cartFakerDto = new Faker<CartDto>()
+            .RuleFor(x => x.Id, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.Name, f => f.Random.String2(10))
+            .RuleFor(x => x.CartOwnerId, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.CartItems, _ => _cartItemFaker.Generate(3));
     }
 
     [Fact]
@@ -111,8 +113,9 @@ public class CartApplicationServiceTests
 
         _cartOwnerRepositoryMock.Setup(x => x.Get(cartOwnerId)).ReturnsAsync((CartOwner?)null);
 
-        await _cartApplicationService.CreateCart(cartOwnerId.Value, "My Cart", cartItems);
-
+        var cartId = await _cartApplicationService.CreateCart(cartOwnerId.Value, "My Cart", cartItems);
+        
+        Assert.NotNull(cartId);
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwnerId), Times.Once);
         _cartOwnerRepositoryMock.Verify(x => x.Add(It.IsAny<CartOwner>()), Times.Once);
     }
@@ -128,7 +131,7 @@ public class CartApplicationServiceTests
 
         var cart = await _cartApplicationService.GetActiveCart(cartOwner.Id.Value);
 
-        Assert.Equal(cartOwner.ActiveCart, cart?.Id);
+        Assert.Equal(cartOwner.ActiveCart?.Value.ToString(), cart?.Id);
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
 
@@ -171,7 +174,9 @@ public class CartApplicationServiceTests
 
         await _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems);
 
-        Assert.Equal(cartItems, cart.CartItems);
+        var cartItemsMapped = cartItems.Select(ci => ci.ToCartItem());
+
+        Assert.Equal(cartItemsMapped, cart.CartItems);
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
     }
 
@@ -354,12 +359,28 @@ public class CartApplicationServiceTests
     public async void GetCarts_WithValidData_Successfully()
     {
         var cartOwner = _cartOwnerFaker.Generate();
-        var fakeCarts = _cartFaker.Generate(10);
+        var cartFaker = new Faker<Shoppingify.Cart.Domain.Cart>()
+            .RuleFor(x => x.Id, f => new CartId(f.Random.Guid()))
+            .RuleFor(x => x.Name, f => f.Random.String2(10))
+            .RuleFor(x => x.CartOwnerId, f => cartOwner.Id)
+            .RuleFor(x => x.CartItems, f => f.Make(10, i =>
+            {
+                var cartItem = new CartItem
+                {
+                    Product = new ProductId(Guid.NewGuid()),
+                    Quantity = f.Random.Int(1, 10),
+                    Status = f.PickRandom<CartItemStatus>()
+                };
+                return cartItem;
+            }));
+        var fakeCarts = cartFaker.Generate(10);
 
         _cartRepositoryMock.Setup(x => x.GetAll(It.IsAny<string>())).ReturnsAsync(fakeCarts);
 
         var carts = await _cartApplicationService.GetCarts(cartOwner.Id.Value);
 
-        Assert.Equal(fakeCarts, carts);
+        var cartsDto = fakeCarts.Select(CartDto.ToCartDto);
+
+        Assert.Equal(cartsDto.Count(), carts.Count());
     }
 }

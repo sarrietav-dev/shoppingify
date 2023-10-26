@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Shoppingify.Cart.Application;
+using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Infrastructure.Controllers;
@@ -55,7 +56,7 @@ public class CartController : ControllerBase
 
             if (cartId == null) return StatusCode(500);
 
-            return CreatedAtAction(nameof(GetActiveCart), new { cartOwnerId }, cartId);
+            return CreatedAtAction(nameof(GetActiveCart), new { cartOwnerId }, new { id = cartId.Value });
         }
         catch (InvalidOperationException)
         {
@@ -64,7 +65,7 @@ public class CartController : ControllerBase
     }
 
     [HttpPut("active-cart/items")]
-    public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItem> cartItems)
+    public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItemDto> cartItems)
     {
         var ownerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -116,4 +117,4 @@ public class CartController : ControllerBase
     }
 }
 
-public record CreateCartCommand(string Name, IEnumerable<CartItem> CartItems);
+public record CreateCartCommand(string Name, IEnumerable<CartItemDto> CartItems);
