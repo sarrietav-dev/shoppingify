@@ -1,8 +1,5 @@
-using System.Reflection;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using Mapster;
-using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -35,13 +32,6 @@ builder.Services.AddLogging(x =>
         x.AddSerilog(dispose: true);
     }
 );
-
-builder.Services.AddMapster();
-var mapCfg = TypeAdapterConfig.GlobalSettings;
-mapCfg.Scan(Assembly.GetExecutingAssembly());
-
-builder.Services.AddSingleton(mapCfg);
-builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 builder.Services.AddTransient<ICartOwnerRepository, EfCartOwnerRepository>();
 builder.Services.AddTransient<IAuthenticationProviderService, FakeAuthenticationProvider>();

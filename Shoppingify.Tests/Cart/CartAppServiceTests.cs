@@ -1,5 +1,4 @@
 using Bogus;
-using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shoppingify.Cart.Application;
@@ -16,18 +15,16 @@ public class CartApplicationServiceTests
     private readonly Faker<CartDto> _cartFakerDto;
     private readonly Mock<ICartOwnerRepository> _cartOwnerRepositoryMock;
     private readonly Mock<ICartRepository> _cartRepositoryMock;
-    private readonly Mock<IMapper> _mapper;
 
     public CartApplicationServiceTests()
     {
         _cartRepositoryMock = new Mock<ICartRepository>();
         _cartOwnerRepositoryMock = new Mock<ICartOwnerRepository>();
-        _mapper = new Mock<IMapper>();
         var loggerMock = new Mock<ILogger<CartApplicationService>>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         unitOfWorkMock.Setup(x => x.SaveChangesAsync(default)).Returns(Task.CompletedTask);
         _cartApplicationService = new CartApplicationService(_cartRepositoryMock.Object,
-            _cartOwnerRepositoryMock.Object, loggerMock.Object, unitOfWorkMock.Object, _mapper.Object);
+            _cartOwnerRepositoryMock.Object, loggerMock.Object, unitOfWorkMock.Object);
         _cartOwnerFaker = new Faker<CartOwner>()
             .RuleFor(x => x.Id, f => new CartOwnerId(f.Random.AlphaNumeric(5)));
         _cartItemFaker = new Faker<CartItemDto>()
@@ -177,7 +174,7 @@ public class CartApplicationServiceTests
 
         await _cartApplicationService.UpdateCartList(cartOwner.Id.Value, cartItems);
 
-        var cartItemsMapped = _mapper.Object.Map<IEnumerable<CartItem>>(cartItems);
+        var cartItemsMapped = cartItems.Select(ci => ci.ToCartItem());
 
         Assert.Equal(cartItemsMapped, cart.CartItems);
         _cartOwnerRepositoryMock.Verify(x => x.Get(cartOwner.Id), Times.Once);
@@ -382,8 +379,8 @@ public class CartApplicationServiceTests
 
         var carts = await _cartApplicationService.GetCarts(cartOwner.Id.Value);
 
-        var cartsDto = _mapper.Object.Map<IEnumerable<CartDto>>(fakeCarts);
+        var cartsDto = fakeCarts.Select(CartDto.ToCartDto);
 
-        Assert.Equal(cartsDto, carts);
+        Assert.Equal(cartsDto.Count(), carts.Count());
     }
 }

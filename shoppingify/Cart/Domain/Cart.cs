@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Shoppingify.Cart.Domain;
 
 public class Cart
@@ -22,9 +24,9 @@ public class Cart
             _state = SetCartState(value);
     }
 
-    private static CartState SetCartState(CartState state)
+    private CartState SetCartState(CartState state)
     {
-        return state switch
+        return State switch
         {
             CartState.Completed => throw new InvalidOperationException("Cannot change state of a completed cart"),
             CartState.Canceled => throw new InvalidOperationException("Cannot change state of a canceled cart"),

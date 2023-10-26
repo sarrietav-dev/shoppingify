@@ -1,5 +1,4 @@
-﻿using MapsterMapper;
-using Shoppingify.Cart.Application.DTOs;
+﻿using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
 
 namespace Shoppingify.Cart.Application;
@@ -10,16 +9,14 @@ public class CartApplicationService : ICartApplicationService
     private readonly ICartRepository _cartRepository;
     private readonly ILogger _logger;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
 
     public CartApplicationService(ICartRepository cartRepository, ICartOwnerRepository cartOwnerRepository,
-        ILogger<CartApplicationService> logger, IUnitOfWork unitOfWork, IMapper mapper)
+        ILogger<CartApplicationService> logger, IUnitOfWork unitOfWork)
     {
         _cartRepository = cartRepository;
         _cartOwnerRepository = cartOwnerRepository;
         _logger = logger;
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
     }
 
     public async Task<CartId?> CreateCart(string cartOwnerId, string name)
@@ -59,7 +56,7 @@ public class CartApplicationService : ICartApplicationService
     public async Task<CartId?> CreateCart(string cartOwnerId, string name, IEnumerable<CartItemDto> cartItems)
     {
         var cartOwner = await GetCartOwner(cartOwnerId);
-        var items = _mapper.Map<IEnumerable<CartItem>>(cartItems);
+        var items = cartItems.Select(ci => ci.ToCartItem());
 
         try
         {
@@ -106,7 +103,7 @@ public class CartApplicationService : ICartApplicationService
 
         var cart = await _cartRepository.Get(cartOwner.ActiveCart);
 
-        if (cart is not null) return _mapper.Map<CartDto>(cart);
+        if (cart is not null) return CartDto.ToCartDto(cart);
 
         _logger.LogError("Cart {Id} from Owner {OwnerId} not found", cartOwner.ActiveCart, cartOwner.Id);
         return null;
@@ -134,7 +131,7 @@ public class CartApplicationService : ICartApplicationService
 
         try
         {
-            var items = _mapper.Map<IEnumerable<CartItem>>(cartItems);
+            var items = cartItems.Select(ci => ci.ToCartItem());
             cart.UpdateList(items);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -217,7 +214,7 @@ public class CartApplicationService : ICartApplicationService
     public async Task<IEnumerable<CartDto>> GetCarts(string cartOwnerId)
     {
         var carts = await _cartRepository.GetAll(cartOwnerId);
-        return _mapper.Map<IEnumerable<CartDto>>(carts);
+        return carts.Select(CartDto.ToCartDto);
     }
 
     private async Task<CartOwner?> GetCartOwner(string cartOwnerId)
