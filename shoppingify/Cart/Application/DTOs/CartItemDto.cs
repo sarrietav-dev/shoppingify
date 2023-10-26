@@ -6,7 +6,7 @@ public record CartItemDto
 {
     public required string ProductId { get; init; }
     public int Quantity { get; init; }
-    public string? Status { get; init; }
+    public string? Status { get; init; } = CartItemStatus.Unchecked.ToString();
 
     public static CartItemDto ToCartItemDto(CartItem cartItem)
     {

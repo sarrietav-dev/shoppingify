@@ -74,6 +74,7 @@ public class CartApplicationService : ICartApplicationService
             }
 
             var createdCart = cartOwner.CreateCart(name, items);
+            await _cartRepository.Add(createdCart);
 
             _logger.LogInformation("Cart {Id} created for cart owner {CartOwnerId}", cartOwner.ActiveCart,
                 cartOwner.Id);
