@@ -1,6 +1,6 @@
 ﻿namespace Shoppingify.Cart.Application.DTOs;
 
-public class CartDto
+public record CartDto
 {
     public string? Id { get; init; }
     public required string Name { get; init; }

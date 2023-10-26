@@ -2,7 +2,7 @@
 
 namespace Shoppingify.Products.Application.Dtos;
 
-public class ProductDto
+public record ProductDto
 {
     public required string Id { get; init; }
     public required string Owner { get; init; }
