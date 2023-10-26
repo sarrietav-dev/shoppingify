@@ -1,7 +1,5 @@
-﻿using Mapster;
-using Shoppingify.Cart.Application.DTOs;
+﻿using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
-using Shoppingify.Common.Mappings;
 
 namespace Shoppingify.Tests.Mappings;
 
@@ -32,7 +30,7 @@ public class MappingTests
             }
         };
 
-        var dto = cart.Adapt<CartDto>();
+        var dto = CartDto.ToCartDto(cart);
 
         Assert.Equal(cart.Id.Value.ToString(), dto.Id);
         Assert.Equal(cart.Name, dto.Name);
@@ -50,6 +48,7 @@ public class MappingTests
             Name = "Hey",
             State = CartState.Active.ToString(),
             CartOwnerId = "id",
+            CreatedAt = DateTime.UtcNow,
             CartItems = new List<CartItemDto>
             {
                 new()
@@ -67,7 +66,7 @@ public class MappingTests
             }
         };
 
-        var cart = dto.Adapt<Shoppingify.Cart.Domain.Cart>();
+        var cart = dto.ToCart();
 
         Assert.Equal(cart.Id.Value.ToString(), dto.Id);
         Assert.Equal(cart.Name, dto.Name);
@@ -76,68 +75,68 @@ public class MappingTests
     }
 
     [Fact]
-    public void Map_CartIdToString_ShouldWork()
+    public void Map_CartItemToDto_ShouldWork()
     {
-        var guid = Guid.NewGuid();
-        var cartId = new CartId(guid);
+        var cartItem = new CartItem()
+        {
+            Product = new ProductId(Guid.NewGuid()),
+            Quantity = 1,
+            Status = CartItemStatus.Unchecked
+        };
 
-        var str = cartId.Adapt<string>();
+        var dto = CartItemDto.ToCartItemDto(cartItem);
 
-        Assert.Equal(guid.ToString(), str);
+        Assert.Equal(cartItem.Product.Value.ToString(), dto.ProductId);
+        Assert.Equal(cartItem.Quantity, dto.Quantity);
+        Assert.Equal(cartItem.Status.ToString(), dto.Status);
     }
 
     [Fact]
-    public void Map_CartOwnerIdToString_ShouldWork()
+    public void Map_DtoToCartItem_ShouldWork()
     {
         var guid = Guid.NewGuid();
-        var cartOwnerId = new CartOwnerId(guid.ToString());
+        var dto = new CartItemDto
+        {
+            ProductId = guid.ToString(),
+            Quantity = 1,
+            Status = CartItemStatus.Unchecked.ToString()
+        };
 
-        var str = cartOwnerId.Adapt<string>();
+        var cartItem = dto.ToCartItem();
 
-        Assert.Equal(guid.ToString(), str);
+        Assert.Equal(cartItem.Product.Value.ToString(), dto.ProductId);
+        Assert.Equal(cartItem.Quantity, dto.Quantity);
+        Assert.Equal(cartItem.Status.ToString(), dto.Status);
     }
 
     [Fact]
-    public void Map_ProductIdToString_ShouldWork()
+    public void Map_CartOwnerToDto_ShouldWork()
     {
-        var guid = Guid.NewGuid();
-        var productId = new ProductId(guid);
+        var cartOwner = new CartOwner
+        {
+            Id = new CartOwnerId(Guid.NewGuid().ToString()),
+            ActiveCart = new CartId(Guid.NewGuid())
+        };
 
-        var str = productId.Adapt<string>();
+        var dto = CartOwnerDto.ToCartOwnerDto(cartOwner);
 
-        Assert.Equal(guid.ToString(), str);
+        Assert.Equal(cartOwner.Id.Value, dto.Id);
+        Assert.Equal(cartOwner.ActiveCart.ToString(), dto.ActiveCartId);
     }
 
     [Fact]
-    public void Map_StringToCartId_ShouldWork()
+    public void Map_DtoToCartOwner_ShouldWork()
     {
         var guid = Guid.NewGuid();
-        var str = guid.ToString();
+        var dto = new CartOwnerDto
+        {
+            Id = guid.ToString(),
+            ActiveCartId = Guid.NewGuid().ToString()
+        };
 
-        var cartId = str.Adapt<CartId>();
+        var cartOwner = dto.ToCartOwner();
 
-        Assert.Equal(guid, cartId.Value);
-    }
-
-    [Fact]
-    public void Map_StringToCartOwnerId_ShouldWork()
-    {
-        var guid = Guid.NewGuid();
-        var str = guid.ToString();
-
-        var cartOwnerId = str.Adapt<CartOwnerId>();
-
-        Assert.Equal(guid.ToString(), cartOwnerId.Value);
-    }
-
-    [Fact]
-    public void Map_StringToProductId_ShouldWork()
-    {
-        var guid = Guid.NewGuid();
-        var str = guid.ToString();
-
-        var productId = str.Adapt<ProductId>();
-
-        Assert.Equal(guid, productId.Value);
+        Assert.Equal(cartOwner.Id.Value, dto.Id);
+        Assert.Equal(cartOwner.ActiveCart?.ToString(), dto.ActiveCartId);
     }
 }

@@ -8,11 +8,14 @@ public class CartItemDto
     public int Quantity { get; init; }
     public string? Status { get; init; }
 
-    public CartItemDto(Domain.CartItem cartItem)
+    public static CartItemDto ToCartItemDto(CartItem cartItem)
     {
-        ProductId = cartItem.Product.ToString();
-        Quantity = cartItem.Quantity;
-        Status = cartItem.Status.ToString();
+        return new CartItemDto
+        {
+            ProductId = cartItem.Product.ToString(),
+            Quantity = cartItem.Quantity,
+            Status = cartItem.Status.ToString(),
+        };
     }
 
     public CartItem ToCartItem()

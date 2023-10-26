@@ -4,13 +4,16 @@ namespace Shoppingify.Cart.Application.DTOs;
 
 public class CartOwnerDto
 {
-    public string Id { get; init; }
+    public required string Id { get; init; }
     public string? ActiveCartId { get; init; }
 
-    public CartOwnerDto(CartOwner cartOwner)
+    public static CartOwnerDto ToCartOwnerDto(CartOwner cartOwner)
     {
-        Id = cartOwner.Id.ToString();
-        ActiveCartId = cartOwner.ActiveCart?.ToString();
+        return new CartOwnerDto
+        {
+            Id = cartOwner.Id.ToString(),
+            ActiveCartId = cartOwner.ActiveCart?.ToString()
+        };
     }
 
     public CartOwner ToCartOwner()

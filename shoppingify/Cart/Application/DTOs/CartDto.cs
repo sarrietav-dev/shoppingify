@@ -3,20 +3,23 @@
 public class CartDto
 {
     public string? Id { get; init; }
-    public string Name { get; init; }
-    public IEnumerable<CartItemDto> CartItems { get; init; }
+    public required string Name { get; init; }
+    public required IEnumerable<CartItemDto> CartItems { get; init; }
     public DateTime CreatedAt { get; init; }
-    public string State { get; init; }
-    public string CartOwnerId { get; init; }
+    public required string State { get; init; }
+    public required string CartOwnerId { get; init; }
 
-    public CartDto(Domain.Cart cart)
+    public static CartDto ToCartDto(Domain.Cart cart)
     {
-        Id = cart.Id.ToString();
-        Name = cart.Name;
-        CartItems = cart.CartItems.Select(ci => new CartItemDto(ci));
-        CreatedAt = cart.CreatedAt;
-        State = cart.State.ToString();
-        CartOwnerId = cart.CartOwnerId.ToString();
+        return new CartDto
+        {
+            Id = cart.Id.ToString(),
+            Name = cart.Name,
+            CartItems = cart.CartItems.Select(CartItemDto.ToCartItemDto),
+            CreatedAt = cart.CreatedAt,
+            State = cart.State.ToString(),
+            CartOwnerId = cart.CartOwnerId.ToString(),
+        };
     }
 
     public Domain.Cart ToCart()
