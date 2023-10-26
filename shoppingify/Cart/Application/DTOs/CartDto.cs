@@ -1,4 +1,6 @@
-﻿namespace Shoppingify.Cart.Application.DTOs;
+﻿using System.Text.Json.Serialization;
+
+namespace Shoppingify.Cart.Application.DTOs;
 
 public record CartDto
 {
@@ -7,7 +9,8 @@ public record CartDto
     public required IEnumerable<CartItemDto> CartItems { get; init; }
     public DateTime CreatedAt { get; init; }
     public required string State { get; init; }
-    public required string CartOwnerId { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    public string? CartOwnerId { get; init; }
 
     public static CartDto ToCartDto(Domain.Cart cart)
     {
@@ -15,7 +18,20 @@ public record CartDto
         {
             Id = cart.Id.ToString(),
             Name = cart.Name,
-            CartItems = cart.CartItems.Select(CartItemDto.ToCartItemDto),
+            CartItems = cart.CartItems.Select(CartItemDtoWithoutProduct.ToCartItemDto),
+            CreatedAt = cart.CreatedAt,
+            State = cart.State.ToString(),
+            CartOwnerId = cart.CartOwnerId.ToString(),
+        };
+    }
+
+    public static CartDto ToCartDto(Domain.Cart cart, IEnumerable<CartItemDto> cartItems)
+    {
+        return new CartDto
+        {
+            Id = cart.Id.ToString(),
+            Name = cart.Name,
+            CartItems = cartItems,
             CreatedAt = cart.CreatedAt,
             State = cart.State.ToString(),
             CartOwnerId = cart.CartOwnerId.ToString(),
@@ -31,7 +47,7 @@ public record CartDto
             CartItems = CartItems.Select(ci => ci.ToCartItem()).ToList(),
             CreatedAt = CreatedAt,
             State = Enum.Parse<Domain.CartState>(State),
-            CartOwnerId = new Domain.CartOwnerId(CartOwnerId)
+            CartOwnerId = new Domain.CartOwnerId(CartOwnerId ?? throw new InvalidOperationException() )
         };
 
         return cart;

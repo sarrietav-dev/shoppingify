@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Shoppingify.Cart.Application;
 using Shoppingify.Cart.Application.DTOs;
@@ -39,7 +40,7 @@ public class CartController : ControllerBase
         var cart = await _cartApplicationService.GetActiveCart(cartOwnerId);
 
         if (cart == null) return NoContent();
-
+        
         return Ok(cart);
     }
 
@@ -65,7 +66,7 @@ public class CartController : ControllerBase
     }
 
     [HttpPut("active-cart/items")]
-    public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItemDto> cartItems)
+    public async Task<IActionResult> UpdateCartList([FromBody] IEnumerable<CartItemDtoWithoutProduct> cartItems)
     {
         var ownerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -117,4 +118,4 @@ public class CartController : ControllerBase
     }
 }
 
-public record CreateCartCommand(string Name, IEnumerable<CartItemDto> CartItems);
+public record CreateCartCommand(string Name, IEnumerable<CartItemDtoWithoutProduct> CartItems);

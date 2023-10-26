@@ -1,11 +1,15 @@
-﻿using Shoppingify.Products.Domain;
+﻿using System.Text.Json.Serialization;
+using Shoppingify.Products.Domain;
 
 namespace Shoppingify.Products.Application.Dtos;
 
 public record ProductDto
 {
     public required string Id { get; init; }
-    public required string Owner { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    public string? Owner { get; init; }
+
     public required string Name { get; init; }
     public required string Category { get; init; }
     public string? Note { get; init; }
@@ -16,7 +20,7 @@ public record ProductDto
         return new Product
         {
             Id = new ProductId(Guid.Parse(Id)),
-            Owner = new ProductOwner(Owner),
+            Owner = new ProductOwner(Owner ?? throw new InvalidOperationException()),
             Name = Name,
             Category = Category,
             Note = Note,

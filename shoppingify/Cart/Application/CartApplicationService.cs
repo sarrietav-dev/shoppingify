@@ -1,5 +1,6 @@
 ﻿using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
+using Shoppingify.Products.Application;
 
 namespace Shoppingify.Cart.Application;
 
@@ -7,16 +8,19 @@ public class CartApplicationService : ICartApplicationService
 {
     private readonly ICartOwnerRepository _cartOwnerRepository;
     private readonly ICartRepository _cartRepository;
+    private readonly IProductApplicationService _productApplicationService;
     private readonly ILogger _logger;
     private readonly IUnitOfWork _unitOfWork;
 
     public CartApplicationService(ICartRepository cartRepository, ICartOwnerRepository cartOwnerRepository,
-        ILogger<CartApplicationService> logger, IUnitOfWork unitOfWork)
+        ILogger<CartApplicationService> logger, IUnitOfWork unitOfWork,
+        IProductApplicationService productApplicationService)
     {
         _cartRepository = cartRepository;
         _cartOwnerRepository = cartOwnerRepository;
         _logger = logger;
         _unitOfWork = unitOfWork;
+        _productApplicationService = productApplicationService;
     }
 
     public async Task<CartId?> CreateCart(string cartOwnerId, string name)
@@ -53,7 +57,8 @@ public class CartApplicationService : ICartApplicationService
         }
     }
 
-    public async Task<CartId?> CreateCart(string cartOwnerId, string name, IEnumerable<CartItemDto> cartItems)
+    public async Task<CartId?> CreateCart(string cartOwnerId, string name,
+        IEnumerable<CartItemDtoWithoutProduct> cartItems)
     {
         var cartOwner = await GetCartOwner(cartOwnerId);
         var items = cartItems.Select(ci => ci.ToCartItem());
@@ -104,13 +109,31 @@ public class CartApplicationService : ICartApplicationService
 
         var cart = await _cartRepository.Get(cartOwner.ActiveCart);
 
-        if (cart is not null) return CartDto.ToCartDto(cart);
+        if (cart is not null)
+        {
+            var productsTasks =
+                cart.CartItems.Select(p => _productApplicationService.Get(Guid.Parse(p.Product.ToString())));
+
+            var products = await Task.WhenAll(productsTasks);
+
+            IEnumerable<CartItemDtoWithProduct> cartItems = cart.CartItems
+                .Zip(products, (cartItem, product) => new CartItemDtoWithProduct
+                {
+                    Product = product ?? throw new InvalidOperationException(),
+                    Quantity = cartItem.Quantity,
+                    Status = cartItem.Status.ToString()
+                }).ToList();
+
+            var cartDto = CartDto.ToCartDto(cart, cartItems);
+
+            return cartDto;
+        }
 
         _logger.LogError("Cart {Id} from Owner {OwnerId} not found", cartOwner.ActiveCart, cartOwner.Id);
         return null;
     }
 
-    public async Task UpdateCartList(string ownerId, IEnumerable<CartItemDto> cartItems)
+    public async Task UpdateCartList(string ownerId, IEnumerable<CartItemDtoWithoutProduct> cartItems)
     {
         var cartOwner = await GetCartOwner(ownerId);
 

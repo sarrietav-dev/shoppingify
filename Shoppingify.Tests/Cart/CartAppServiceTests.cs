@@ -4,30 +4,30 @@ using Moq;
 using Shoppingify.Cart.Application;
 using Shoppingify.Cart.Application.DTOs;
 using Shoppingify.Cart.Domain;
+using Shoppingify.Products.Application;
 
 namespace Shoppingify.Tests.Cart;
 
 public class CartApplicationServiceTests
 {
     private readonly ICartApplicationService _cartApplicationService;
-    private readonly Faker<CartItemDto> _cartItemFaker;
+    private readonly Faker<CartItemDtoWithoutProduct> _cartItemFaker;
     private readonly Faker<CartOwner> _cartOwnerFaker;
     private readonly Faker<CartDto> _cartFakerDto;
-    private readonly Mock<ICartOwnerRepository> _cartOwnerRepositoryMock;
-    private readonly Mock<ICartRepository> _cartRepositoryMock;
+    private readonly Mock<ICartOwnerRepository> _cartOwnerRepositoryMock = new();
+    private readonly Mock<ICartRepository> _cartRepositoryMock = new();
+    private readonly Mock<IProductApplicationService> _productApplicationServiceMock = new();
 
     public CartApplicationServiceTests()
     {
-        _cartRepositoryMock = new Mock<ICartRepository>();
-        _cartOwnerRepositoryMock = new Mock<ICartOwnerRepository>();
         var loggerMock = new Mock<ILogger<CartApplicationService>>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         unitOfWorkMock.Setup(x => x.SaveChangesAsync(default)).Returns(Task.CompletedTask);
         _cartApplicationService = new CartApplicationService(_cartRepositoryMock.Object,
-            _cartOwnerRepositoryMock.Object, loggerMock.Object, unitOfWorkMock.Object);
+            _cartOwnerRepositoryMock.Object, loggerMock.Object, unitOfWorkMock.Object, _productApplicationServiceMock.Object);
         _cartOwnerFaker = new Faker<CartOwner>()
             .RuleFor(x => x.Id, f => new CartOwnerId(f.Random.AlphaNumeric(5)));
-        _cartItemFaker = new Faker<CartItemDto>()
+        _cartItemFaker = new Faker<CartItemDtoWithoutProduct>()
             .RuleFor(x => x.ProductId, f => f.Random.Guid().ToString())
             .RuleFor(x => x.Quantity, f => f.Random.Int(1, 10))
             .RuleFor(x => x.Status, f => f.PickRandom<CartItemStatus>().ToString());

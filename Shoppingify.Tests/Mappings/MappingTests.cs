@@ -49,7 +49,7 @@ public class MappingTests
             State = CartState.Active.ToString(),
             CartOwnerId = "id",
             CreatedAt = DateTime.UtcNow,
-            CartItems = new List<CartItemDto>
+            CartItems = new List<CartItemDtoWithoutProduct>
             {
                 new()
                 {
@@ -84,7 +84,7 @@ public class MappingTests
             Status = CartItemStatus.Unchecked
         };
 
-        var dto = CartItemDto.ToCartItemDto(cartItem);
+        var dto = CartItemDtoWithoutProduct.ToCartItemDto(cartItem);
 
         Assert.Equal(cartItem.Product.Value.ToString(), dto.ProductId);
         Assert.Equal(cartItem.Quantity, dto.Quantity);
@@ -95,7 +95,7 @@ public class MappingTests
     public void Map_DtoToCartItem_ShouldWork()
     {
         var guid = Guid.NewGuid();
-        var dto = new CartItemDto
+        var dto = new CartItemDtoWithoutProduct
         {
             ProductId = guid.ToString(),
             Quantity = 1,
