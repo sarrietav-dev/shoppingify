@@ -35,7 +35,7 @@ export class ShoppingCartService {
   constructor(private http: HttpClient) {
   }
 
-  getActiveCart(id: string) {
+  getActiveCart() {
     return this.http.get<Cart>(this.baseUrl);
   }
 

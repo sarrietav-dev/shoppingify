@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {BehaviorSubject, map, Observable} from 'rxjs';
+import {ShoppingCartService} from "../../../../core/services/cart/shopping-cart.service";
 
 @Component({
   selector: 'app-edit-shopping-list',
@@ -11,45 +12,32 @@ export class EditShoppingListComponent implements OnInit {
   @Output('changeState') changeStateEvent =
     new EventEmitter<ShoppingCartState>();
 
-  items$ = new BehaviorSubject<
-    {
-      category: string;
-      items: { id: string; name: string; amount: number; isChecked: boolean }[];
-    }[]
-  >([
-    {
-      category: 'Fruits',
-      items: [
-        { id: '1', isChecked: false, name: 'Apple', amount: 1 },
-        { id: '2', isChecked: false, name: 'Banana', amount: 2 },
-        { id: '3', isChecked: false, name: 'Orange', amount: 3 },
-      ],
-    },
-    {
-      category: 'Vegetables',
-      items: [
-        { id: '4', isChecked: false, name: 'Tomato', amount: 4 },
-        { id: '5', isChecked: false, name: 'Potato', amount: 5 },
-        { id: '6', isChecked: false, name: 'Onion', amount: 6 },
-      ],
-    },
-    {
-      category: 'Meat',
-      items: [
-        { id: '7', isChecked: false, name: 'Chicken', amount: 7 },
-        { id: '8', isChecked: false, name: 'Beef', amount: 8 },
-        { id: '9', isChecked: false, name: 'Pork', amount: 9 },
-      ],
-    },
-  ]);
+  constructor(private cartService: ShoppingCartService) {
+  }
 
-  items: {
+  items: Observable<{
     category: string;
-    items: { id: string; name: string; amount: number; isChecked: boolean }[];
-  }[] = [];
+    items: { id: string; name: string; amount: number; status: boolean }[];
+  }[]> = new BehaviorSubject([]);
 
   ngOnInit() {
-    this.items$.subscribe((items) => (this.items = items));
+    this.items = this.cartService.getActiveCart().pipe(
+      map((cart) => {
+        return cart.cartItems.map((cartItem) => {
+          return {
+            category: cartItem.product.category,
+            items: [
+              {
+                id: cartItem.product.id,
+                name: cartItem.product.name,
+                amount: cartItem.quantity,
+                status: cartItem.status === 'Checked',
+              },
+            ],
+          };
+        });
+      })
+    );
   }
 
   toggleListState() {
@@ -119,13 +107,13 @@ export class EditShoppingListComponent implements OnInit {
     id: string;
     name: string;
     amount: number;
-    isChecked: boolean;
+    status: boolean;
     category: string;
     index: number;
   } | null {
     for (const [index, category] of this.items.entries()) {
       const item = category.items.find((i) => i.id === id);
-      if (item) return { ...item, category: category.category, index };
+      if (item) return {...item, category: category.category, index};
     }
 
     return null;
@@ -136,7 +124,7 @@ export class EditShoppingListComponent implements OnInit {
   ): { index: number; category: string } | null {
     for (const [index, category] of this.items.entries()) {
       if (category.category === categoryName)
-        return { index, category: category.category };
+        return {index, category: category.category};
     }
 
     return null;
